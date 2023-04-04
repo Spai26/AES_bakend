@@ -16,12 +16,12 @@ if (!verific_Path) {
 //dirname me da la posicion en la carpeta actual
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const pathStorage = `${__dirname}/../Storage`;
+    const pathStorage = `${process.cwd()}/src/storage`;
     cb(null, pathStorage);
   },
   filename: function (req, file, cb) {
     const ext = file.originalname.split(".").pop();
-    const filename = `file.${Date.now()}.${ext}`;
+    const filename = `${Date.now()}.${ext}`;
     cb(null, filename);
   },
 });

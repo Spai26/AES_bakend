@@ -2,6 +2,8 @@ const { Router } = require("express");
 const errohander = require("../middleware/handlerError");
 const fs = require("fs");
 const UserController = require("../controller/user.controller");
+const upload = require("../controller/storage");
+const uploadMiddleware = require("../utils/handlerStorage");
 const routes = Router();
 
 /**
@@ -28,7 +30,25 @@ const a = fs.readdirSync(PATH_ROUTES).filter((file) => {
   );
 });
  */
-routes.get("/", UserController.getAllorSearchUser);
-routes.post("/", UserController.createUser);
+/* routes.get("/", UserController.getAllorSearchUser); */
+
+routes.get("/", (req, res) => {
+  res.writeHead(200, { "content-type": "text/html" });
+  res.end(`<h1>Upload Your File Here :)</h1>
+    <form
+        action="/"
+        method="post"
+        enctype="multipart/form-data"
+    >
+        <fieldset>
+            <legend>Upload your file</legend>
+            <label for="photo">File:</label>
+            <input type="file" name="image" id="image" />
+            
+        </fieldset>
+        <button type="submit">Upload</button>
+    </form>`);
+});
+routes.post("/", uploadMiddleware.single("image"), upload);
 
 module.exports = routes;

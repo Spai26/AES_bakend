@@ -4,7 +4,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 
-const routes = require("../routes/index");
+const routes = require("../routes");
 const server = express();
 
 server.use(cors());

@@ -1,26 +1,34 @@
 const { Router } = require("express");
-const authRoute = require("./Auth.routes");
-const userRoute = require("./users.routes");
-const countryRoute = require("./Country.routes");
-const eventRoute = require("./event.routes");
-const event_client = require("./event_client.routes");
-const blogRoute = require("./Blogs.routes");
 const errohander = require("../middleware/handlerError");
-const categoryRoutes = require('./Category.routes')
-
+const fs = require("fs");
+const UserController = require("../controller/user.controller");
 const routes = Router();
 
-routes.use("/users", userRoute);
-routes.use("/auth", authRoute);
-routes.use("/event", eventRoute);
-routes.use("/event_client", event_client);
-routes.use("/blogs", blogRoute);
-routes.use("/country", countryRoute);
-routes.use('/categoryBlogs', categoryRoutes)
-routes.use(errohander);
+/**
+ * !TODO: Esta ruta es dinamica no se necesita agregar ninguna ruta adicional que sean rutas claras y especificas
+ */
+const PATH_ROUTES = __dirname;
+const removeExtends = (filename) => {
+  //user.routes.js
+  return filename.split(".").shift();
+};
 
-routes.get("/", (req, res) => {
-  res.send("this root page");
+const a = fs.readdirSync(PATH_ROUTES).filter((file) => {
+  const fileClean = removeExtends(file);
+  if (fileClean !== "index") {
+    routes.use(`/${fileClean}`, require(`./${file}`));
+  } else {
+    routes.use(errohander);
+  }
 });
+
+/* routes.get("/", (req, res) => {
+  res.send(
+    "this root page, If you are here, everything is fine 🧑 ✈ ☯  /para los spanglish si estas aqui es que todo esta bien 🙂🔥🔥🔥🔥   "
+  );
+});
+ */
+routes.get("/", UserController.getAllorSearchUser);
+routes.post("/", UserController.createUser);
 
 module.exports = routes;

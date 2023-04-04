@@ -30,7 +30,7 @@ const a = fs.readdirSync(PATH_ROUTES).filter((file) => {
   );
 });
  */
-/* routes.get("/", UserController.getAllorSearchUser); */
+routes.get("/", UserController.getAllorSearchUser);
 
 routes.get("/", (req, res) => {
   res.writeHead(200, { "content-type": "text/html" });

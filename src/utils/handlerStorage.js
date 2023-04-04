@@ -1,5 +1,6 @@
 const multer = require("multer");
 const fs = require("fs");
+const path = require("path");
 
 /**
  * !TODO: Funcion servira como middleware en caso tenga que subir un archivo al servidor.
@@ -7,10 +8,20 @@ const fs = require("fs");
  */
 
 //verifico si existe la carpeta para crearlo
-const verific_Path = fs.existsSync("./storage");
 
-if (!verific_Path) {
-  fs.mkdirSync("./storage");
+let storageCreated = false;
+const storagePath = path.join(__dirname, "src", "storage");
+
+if (!storageCreated && !fs.existsSync(storagePath)) {
+  try {
+    fs.mkdirSync(storagePath, { recursive: true });
+    console.log("La carpeta se creó exitosamente.");
+    storageCreated = true;
+  } catch (err) {
+    console.error("Error al crear la carpeta:", err);
+  }
+} else {
+  console.log("La carpeta ya se ha creado anteriormente 🙂 .");
 }
 
 //dirname me da la posicion en la carpeta actual

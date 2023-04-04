@@ -3,6 +3,6 @@ const port = 3001 || process.env.PORT;
 
 server.listen(port, () => {
   console.log(
-    `your application runing! check here :) => http://localhost:${port}`
+    `your application runing! check here 🔥  => http://localhost:${port}`
   );
 });

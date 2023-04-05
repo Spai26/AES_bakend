@@ -1,6 +1,6 @@
 {
   "name": "projectaes_backup",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "this project is test api-rest with express and mongodb",
   "main": "index.js",
   "scripts": {

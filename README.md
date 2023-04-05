@@ -9,7 +9,7 @@ for run project exec
 #file structure
 
     *src
-        - *config => carpeta para configuracion previa para el uso de las librerias, base de datos, etc
+        - *config => carpeta para configuracion previa para el uso de las librerias, base de datos, aplicaciones o apis externas
         - *controllers => Esta carpeta es para la comunicacion entre la base de datos y las peticiones que realize el usuario
         - *libs => carpeta para el uso de funciones o script de ayuda
         - *handlers => carpeta para manejo de peticiones

@@ -1,34 +1,22 @@
 const mongoose = require("mongoose");
-const {
-  DB_CONN,
-  DB_HOST,
-  DB_NAME,
-  DB_USER,
-  DB_PASS,
-  DB_PORT,
-  DB_URL,
-} = require("./variable.env");
-const listaDeCategorias = require('../database/BlogValidate/blogValidate')
-const listaDeUsuarios = require('../database/UserValidate/userValidate')
+
+const DB_CONN = process.env.DB_CONNECTION;
+const DB_HOST = process.env.DB_HOST;
+const DB_NAME = process.env.DB_DATABASE;
+const DB_USER = process.env.DB_USERNAME;
+const DB_PASS = process.env.DB_PASSWORD;
+const DB_URL = process.env.DB_URL;
 
 const url = `${DB_CONN}+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`;
-const connect = mongoose
+
+mongoose
   .connect(url || DB_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    autoIndex: false,
+    useUnifiedTopology: true,    
   })
-  .then(() => console.log("connected to the database  successfully "))
-  .catch((err) => console.log(err));
-
-const disconnectBD = () => {
-  mongoose.connection.close();
-};
-
-listaDeCategorias();
-listaDeUsuarios()
-
-module.exports = {
-  connect,
-  disconnectBD,
-};
+  .then(() =>
+    console.log(`connected to the database  successfully is time Work! `)
+  )
+  .catch((error) =>
+    console.log(`Error de conexion verifica las credenciales: ${error}`)
+  );

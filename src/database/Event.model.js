@@ -7,13 +7,9 @@ const Event = new Schema(
     date: { type: String },
     location: { type: String, require: true },
     description: { type: String, require: true },
+    slug : { type: String, slug: "title" },
     subscribers: [],
-    category: [
-      {
-        ref: "",
-        type: Schema.Types.ObjectId,
-      },
-    ],
+    category: [],
     deleted: { type: Boolean, default: false }, //para el borrado lógico
   },
   {

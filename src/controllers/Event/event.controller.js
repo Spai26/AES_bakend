@@ -19,6 +19,13 @@ const addEventByName = async (title) => {
     return event;
 };
 
+const addEventBySlog = async (slug) => {
+    const name = { $regex: new RegExp(`^${slug}$`, 'i')};
+
+    const event = await Event.findOne({ slug: name });
+    return event;
+};
+
 const getEventSubscribers = async (eventId) => {
     let event = await Event.findById(eventId);
     let eventSubscribs =  await Event_Client.find({ event: event.title });
@@ -46,7 +53,7 @@ const editEvent = async (id, title, frontpage, date, location, description, cate
     const event = await Event.findById(id);
   
     if (!event) {
-    return res.status(404).json({ message: "Event not found" });
+    return res.status(500).json({ message: "EVENT NOT FOUND" });
     }
     // Actualiza las propiedades del evento
     event.title = title;
@@ -66,6 +73,7 @@ module.exports = {
     addEventsDb,
     addEventById,
     addEventByName,
+    addEventBySlog,
     getEventSubscribers,
     createEvent,
     editEvent

@@ -34,14 +34,6 @@ const getallBlogs = async () => {
   return result;
 };
 
-/* 
-const getBlogforName = async ({ slug }) => {
-  const result = await Blog.findOne({
-    title: { $regex: new RegExp(`^${slug}$`, "i") },
-  });
-  return result;
-}; */
-
 const updateforName = async ({ slug, title, description, image, status }) => {
   let result = await Blog.findOne({
     title: { $regex: new RegExp(`^${slug}$`, "i") },
@@ -90,63 +82,10 @@ const addCategoryNameInBlog = async ({ slug, category, titleBlog }) => {
     `Categoria agregada con exito al modelo blog con el title: ${titleBlog}`
   );
 };
-/* 
-const deleteCategoryToBlog = async ({ slug, category, BlogTitle }) => {
-  const categoryDelete = await Categoria.findOne({
-    name: { $regex: new RegExp(`^${category}$`, "i") },
-  });
-  const categoryName = categoryDelete._id;
 
-  let blogg = await Blog.findOne({
-    title: { $regex: new RegExp(`^${BlogTitle}$`, "i") },
-  });
-  let userr = await User.findOne({
-    username: { $regex: new RegExp(`^${slug}$`, "i") },
-  });
-
-  if (!blogg) {
-    throw new Error(`No se ah encontrado el blog con el titulo: ${BlogTitle}`);
-  } else {
-    if (userr.blogs.some((e) => e.categories === categoryName.toString())) {
-      userr.blogs = userr.blogs.filter(
-        (e) => !e.categories.toString().includes(categoryName.toString())
-      );
-      await userr.save();
-    }
-    blogg.categories = blogg.categories.filter(
-      (e) => e.toString() !== categoryName.toString()
-    );
-    await blogg.save();
-
-    throw new Error(
-      `Se ha eliminado correctamente la categoria: ${category}, en el Blog con el title: ${slug}`
-    );
- */
 const getBlogforName = async (slug) => {
   const findSlug = await Blog.findOne({ slug: slug });
   return findSlug;
-  /*  try {
-    if (!slug && !title) {
-      throw new Error("Debe ingresar un título o un slug");
-    }
-
-    if (slug && typeof slug !== "string") {
-      throw new Error("El valor de slug no es válido");
-    }
-
-    let result;
-    if (slug) {
-      result = await Blog.find({ slug: slug }).populate("categories");
-    } else {
-      result = await Blog.find({
-        title: { $regex: new RegExp(title, "i") },
-      }).populate("categories");
-    }
-
-    return result;
-  } catch (error) {
-    throw new Error(`Error en la búsqueda del blog: ${error.message}`);
-  } */
 };
 
 const getByIdBlogs = async ({ id }) => {
@@ -246,10 +185,9 @@ module.exports = {
   getBlogforName,
   updateforId,
   getallBlogs,
-
+  updateforName,
   addCategoryNameInBlog,
   deleteCategoryToBlog,
-
   getByIdBlogs,
   deleteCategoryToBlog,
   deleteBlogController,

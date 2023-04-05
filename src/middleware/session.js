@@ -1,17 +1,17 @@
 const { verifyToken } = require("../middleware/generateToken");
-const { handlerHttpErrror } = require("../middleware/handlerHttpError");
+const { handlerHttpError } = require("../utils/handlerHttpError");
 const User = require("../database/User.model");
 
 const authmiddleware = async (req, res, next) => {
   try {
     if (!req.headers.authorization) {
-      handlerHttpErrror(res, "NO_TIENES_PODER_AQUI", 402);
+      handlerHttpError(res, "NO_TIENES_PODER_AQUI", 402);
     }
 
     const token = req.headers.authorization.split(" ").pop();
 
     if (!token) {
-      handlerHttpErrror(res, "Acceso No valido", 401);
+      handlerHttpError(res, "Acceso No valido", 401);
     }
 
     const verified = await verifyToken(token);
@@ -21,7 +21,7 @@ const authmiddleware = async (req, res, next) => {
 
     next();
   } catch (error) {
-    next(error);
+    handlerHttpError(res, "ERROR_SESSION_NO_AUTHORIZE", 500);
   }
 };
 

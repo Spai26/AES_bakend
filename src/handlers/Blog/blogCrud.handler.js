@@ -35,26 +35,7 @@ const getBlogByName = async (req, res, next) => {
     res.status(500).json({ message: "ERROR_SLUG_NO_VALIDO" });
   }
 
-  /* const { slug } = req.query;
-  try {
-    const result = await BlogController.getBlogforName({ slug: slug });
-
-  const { slug, title } = req.query;
-
-
-  if (title || slug) {
-    try {
-      const result = await BlogController.getBlogforName({
-        title: title,
-        slug: slug,
-      });
-      return res.status(200).json(result);
-    } catch (error) {
-      next(error);
-    }
-  } else {
-    throw new Error("Debe ingresar busqueda ppor title o por slug");
-  } */
+  
 };
 
 const getById = async (req, res, next) => {

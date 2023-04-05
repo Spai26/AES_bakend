@@ -1,3 +1,4 @@
+const mongooseDelete = require("mongoose-delete");
 const { Schema, model, Types } = require("mongoose");
 const bcrypt = require("bcryptjs");
 
@@ -11,6 +12,8 @@ const UserSchema = new Schema(
     versionKey: false,
   }
 );
+
+UserSchema.plugin(mongooseDelete, { overrideMethods: "all" });
 
 UserSchema.statics.encryptPassword = async (password) => {
   const salt = await bcrypt.genSalt(10);

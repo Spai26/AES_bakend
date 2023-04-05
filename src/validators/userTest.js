@@ -8,4 +8,11 @@ const validatorCreateUser = [
     return validateResults(req, res, next);
   },
 ];
-module.exports = { validatorCreateUser };
+
+const validatorGetItem = [
+  check("id").exists().notEmpty().isMongoId(),
+  (req, res, next) => {
+    return validateResults(req, res, next);
+  },
+];
+module.exports = { validatorCreateUser, validatorGetItem };

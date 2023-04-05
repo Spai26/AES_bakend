@@ -1,5 +1,5 @@
 const { matchedData } = require("express-validator");
-const { UserTest } = require("../models");
+const UserTest = require("../models/nosql/UserTest");
 const { handlerHttpError } = require("../utils/handlerHttpError");
 
 /**
@@ -31,7 +31,7 @@ const createUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     req = matchedData(req);
-    console.log(req)
+    console.log(req);
     const { id } = req;
     console.log(id);
     const data = await UserTest.delete({ _id: id });

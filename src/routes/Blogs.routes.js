@@ -11,7 +11,7 @@ const blogRoute = Router();
 
 //https://projectaes-production.up.railway.app/blogs/
 
-blogRoute.get("/", SearchOrAllBlogs);
+blogRoute.get("/",authmiddleware, SearchOrAllBlogs);
 blogRoute.post("/", handerCrudBlog.createNewBlog);
 blogRoute.get("/search", handerCrudBlog.getBlogByName);
 blogRoute.post("/categoria", addCategoryToBlog);

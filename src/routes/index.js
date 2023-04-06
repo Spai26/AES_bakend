@@ -23,7 +23,7 @@ fs.readdirSync(PATH_ROUTES).filter((file) => {
   }
 });
 
-routes.get("/dashboard", authmiddleware, (req, res) => {
+/* routes.get("/dashboard", authmiddleware, (req, res) => {
   res.send(
     "this root page, If you are here, everything is fine 🧑 ✈ ☯  /para los spanglish si estas aqui es que todo esta bien 🙂🔥🔥🔥🔥   "
   );
@@ -34,7 +34,7 @@ routes.get("/auth/login", (req, res) => {
   res.end(`<h1>Upload Your File Here :)</h1>
     <form
         action="/dashboard"
-        method="get"
+        method="post"
         enctype="multipart/form-data"
     >
         <fieldset>
@@ -47,6 +47,6 @@ routes.get("/auth/login", (req, res) => {
         <button type="submit">Upload</button>
     </form>`);
 });
-routes.post("/auth/login", LoginUser);
+routes.post("/auth/login", LoginUser); */
 
 module.exports = routes;

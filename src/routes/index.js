@@ -21,20 +21,11 @@ fs.readdirSync(PATH_ROUTES).filter((file) => {
   }
 });
 
-/* routes.get("/", (req, res) => {
+routes.get("/", (req, res) => {
   res.send(
     "this root page, If you are here, everything is fine 🧑 ✈ ☯  /para los spanglish si estas aqui es que todo esta bien 🙂🔥🔥🔥🔥   "
   );
-}); */
+});
 
-const userController = require("../controller/user.controller");
 
-const {
-  validatorCreateUser,
-  validatorGetItem,
-} = require("../validators/userTest");
-
-routes.get("/", userController.getAllorSearchUser);
-routes.post("/", validatorCreateUser, userController.createUser);
-routes.delete("/:id", validatorGetItem, userController.deleteUser);
 module.exports = routes;

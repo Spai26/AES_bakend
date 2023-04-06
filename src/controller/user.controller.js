@@ -1,5 +1,5 @@
 const { matchedData } = require("express-validator");
-const UserTest = require("../models/UserTest");
+const {UserTest} = require("../models/");
 const { handlerHttpError } = require("../utils/handlerHttpError");
 
 /**

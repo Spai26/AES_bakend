@@ -1,41 +1,33 @@
-/* const User = require("../../database/User.model"); */
-/* const Role = require("../../database/Role.model"); */
+const { user } = require("../../models");
 const { createdToken, verifyToken } = require("../../middleware/generateToken");
+const { handlerHttpError } = require("../../utils/handlerHttpError");
 
-/**
- * contorlador de login
- * @param {*} email
- * @param {*} password
- * @returns
- */
-const validateLogin = async (email, password) => {
-  const user = await User.findOne({ email: email });
+const authLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const isExits = await user.findOne({ email: email });
 
-  if (!user) {
-    return "Usuario o email no coincide";
+    if (!isExits) {
+      handlerHttpError(res, "Usuario o email no coincide", 400);
+    }
+
+    const validatePassword = await user.comparePassword(
+      password,
+      isExits.password
+    );
+
+    //401
+    if (!validatePassword) {
+      handlerHttpError(res, "La contraseña es erronea", 406);
+    }
+    const token = createdToken(isExits);
+    res.cookie("token", token);
+    res.status(202).json({ succes: true });
+  } catch (error) {
+    handlerHttpError(res, "Datos incorrectos", 400);
   }
-
-  const validatePassword = await User.comparePassword(password, user.password);
-
-  //401
-  if (!validatePassword) {
-    return "La contraseña es erronea";
-  }
-  const token = createdToken(user);
-
-  return token;
 };
-
-/**
- * Controlador de registro de usuario
- * @param {*} firstname
- * @param {*} lastname
- * @param {*} username
- * @param {*} email
- * @param {*} password
- * @returns
- */
-
+/* 
 const registerLogin = async (
   firstname,
   lastname,
@@ -72,8 +64,8 @@ const registerLogin = async (
 
   return data;
 };
-
+ */
 module.exports = {
-  validateLogin,
-  registerLogin,
+  authLogin,
+  /*  registerLogin, */
 };

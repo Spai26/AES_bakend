@@ -10,7 +10,7 @@ const getAllItems = async (req, res) => {
     const data = await role.find({});
 
     !data.length
-      ? handlerHttpError(res, "No se encontro los permisos", 204)
+      ? handlerHttpError(res, "No hay roles creados", 501)
       : res.send(data);
   } catch (error) {
     handlerHttpError(res, "ERROR al asignar permisos", 400);

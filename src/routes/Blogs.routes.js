@@ -1,25 +1,42 @@
 const { Router } = require("express");
-const handerCrudBlog = require("../handlers/Blog/blogCrud.handler");
-const SearchOrAllBlogs = require("../handlers/Blog/blog.handlers");
-const deleteCategoriaInBlog = require("../handlers/Blog/blogDeleteCategoria.handlers");
-const deleteBlog = require("../handlers/Blog/blogDelete.handlers");
-const addCategoryToBlog = require("../handlers/Blog/addCategoryInBlog.handlers");
 const authmiddleware = require("../middleware/session");
-const { handlerHttpError } = require("../middleware/handlerHttpError");
+const {
+    validatorCreateBlog,
+    validatorGetBlogByName,
+    validatorGetBlogBySlug,
+    validatorGetBlogById,
+    validatorAddCategoryInBlog,
+    validatorDeleteCategoryInBlog,
+    validatorUpdateBlog,
+    validatorDeleteBlogById
+} = require('../validators/blogTest')
+const {
+    getItemsBlogs,
+    createBlog,
+    getBlogBySlug,
+    getBlogByName,
+    getBlogById,
+    addCategoryToBlog,
+    deleteCategoryToBlog,
+    updateBlogById,
+    deleteBlogById,
+} = require('../controller/blog.controller')
 
 const blogRoute = Router();
 
 //https://projectaes-production.up.railway.app/blogs/
+//,authmiddleware
+blogRoute.get("/", authmiddleware, getItemsBlogs);
+blogRoute.post("/", validatorCreateBlog, createBlog);
 
-blogRoute.get("/",authmiddleware, SearchOrAllBlogs);
-blogRoute.post("/", handerCrudBlog.createNewBlog);
-blogRoute.get("/search", handerCrudBlog.getBlogByName);
-blogRoute.post("/categoria", addCategoryToBlog);
-blogRoute.delete("/categoria", deleteCategoriaInBlog);
-blogRoute.get("/:blogId", handerCrudBlog.getById);
-blogRoute.put("/:id/update", handerCrudBlog.updateBlogbyId);
-blogRoute.delete("/:id", deleteBlog);
-blogRoute.post("/:id/addCategory", addCategoryToBlog);
-blogRoute.delete("/:id/deleteCategory", deleteCategoriaInBlog);
+blogRoute.get('/name', validatorGetBlogByName, getBlogByName)
+blogRoute.get("/search", validatorGetBlogBySlug, getBlogBySlug);
+
+blogRoute.get("/:id", validatorGetBlogById, getBlogById);
+blogRoute.put("/:id/update", validatorUpdateBlog, updateBlogById);
+blogRoute.delete("/:id", validatorDeleteBlogById, deleteBlogById);
+
+blogRoute.post("/:id/addCategory", validatorAddCategoryInBlog, addCategoryToBlog);
+blogRoute.delete("/:id/deleteCategory", validatorDeleteCategoryInBlog, deleteCategoryToBlog);
 
 module.exports = blogRoute;

@@ -1,13 +1,24 @@
 const {Router} = require('express')
-const getAllCategory = require('../handlers/CategoryBlogs/BlogCategory.handlers')
-const newCategory = require('../handlers/CategoryBlogs/NewCategorie.handlers')
-const modificCategory = require('../handlers/CategoryBlogs/modificCategoryInDb.handlers')
-const deleteCategory = require('../handlers/CategoryBlogs/deleteCategory.handlers') 
+// const authmiddleware = require('../middleware/session')
+const {
+  newCategory,
+  getAllCategory,
+  updateCategory,
+  deleteCategory 
+} = require('../controller/category.controller')
+const {
+   validatorNewCategory,
+   validatorUpdateCategory,
+   validatorDeleteCategory 
+} = require('../validators/categoryTest')
+
 const categoryRoutes = Router()
 
+//, authmiddleware agregar, si es necesario
 categoryRoutes.get('/', getAllCategory)
-categoryRoutes.post('/', newCategory)
-categoryRoutes.put('/', modificCategory)
-categoryRoutes.delete('/:id', deleteCategory)
+categoryRoutes.post('/', validatorNewCategory, newCategory)
+
+categoryRoutes.put('/:id', validatorUpdateCategory, updateCategory)
+categoryRoutes.delete('/:id', validatorDeleteCategory, deleteCategory)
 
 module.exports = categoryRoutes

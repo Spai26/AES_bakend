@@ -1,5 +1,7 @@
 const models = {
-  userTest: require("./nosql/UserTest"),
+  UserTest: require("./nosql/UserTest"),
+  BlogModel: require('./nosql/BlogModel'),
+  CategoryModel: require('./nosql/CategoryModel')
 };
 
 module.exports = models;

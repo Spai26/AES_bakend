@@ -1,6 +1,6 @@
 // const {isAuthorized} = require('../../controllers/User/users.controller')
 const {updateUserFields} = require('../../controllers/User/users.controller')
-const User = require('../../database/User.model')
+/* const User = require('../../database/User.model') */
 const uploadImage = require('../../middleware/generateImage')
 
 const toggleUser = async (req, res, next) => {

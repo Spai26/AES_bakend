@@ -4,8 +4,24 @@ const bcrypt = require("bcryptjs");
 
 const UserSchema = new Schema(
   {
+    firstname: { type: String, require: true },
+    lastname: { type: String, require: true },
     email: { type: String, unique: true },
     password: { type: String, require: true },
+    lastLogin: { type: Date },
+    avatar: { type: String },
+    status: { type: String, enum: ["active", "desactive"], default: "active" },
+    role: {
+      type: Schema.Types.ObjectId,
+      ref: "Role",
+    },
+
+    blogs: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Blog",
+      },
+    ],
   },
   {
     timestamps: true,
@@ -24,4 +40,4 @@ UserSchema.statics.comparePassword = async (password, recivePassword) => {
   return await bcrypt.compare(password, recivePassword);
 };
 
-module.exports = model("UserTest", UserSchema);
+module.exports = model("User", UserSchema);

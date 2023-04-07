@@ -1,13 +1,7 @@
 const { Router } = require("express");
-
+const getAllItems = require("../controller/Role");
 const roleRoute = Router();
 
-const roleHandler = require("../handlers/Roles/role.handler")
-
-roleRoute.get('/', roleHandler.getAllRoles)
-roleRoute.get('/:id', roleHandler.getRoleById)
-roleRoute.put('/:id', roleHandler.addPermissionToRole)
-roleRoute.post('/', roleHandler.createRole)
-
+roleRoute.get("/", getAllItems);
 
 module.exports = roleRoute;

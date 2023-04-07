@@ -7,7 +7,7 @@ const cors = require("cors");
 const routes = require("../routes");
 const server = express();
 
-server.use(cors());
+server.use(cors({ credentials: true, origin: process.env.ORIGIN }));
 server.use(express.json());
 server.use(express.static("storage"));
 server.use(morgan("dev"));

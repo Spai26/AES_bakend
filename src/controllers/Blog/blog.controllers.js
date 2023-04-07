@@ -1,8 +1,8 @@
 const Categoria = require("../../database/CategoriasBlog.model");
 const Blog = require("../../database/Blog.model");
 const uploadImage = require("../../middleware/generateImage");
-
-const User = require("../../database/User.model");
+/* 
+const User = require("../../database/User.model"); */
 
 const createNewBlog = async (title, description, image, status, category) => {
   const newPostforBlog = new Blog({
@@ -26,7 +26,7 @@ const createNewBlog = async (title, description, image, status, category) => {
 
 const getallBlogs = async () => {
   const result = await Blog.find({});
-
+  console.log(result);
   if (!result.length) {
     throw new Error("Necesitas crear al menos un post");
   }

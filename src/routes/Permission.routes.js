@@ -1,11 +1,7 @@
 const { Router } = require("express");
-
+const getAllItems = require("../controller/Permission");
 const permissionRoute = Router();
 
-const permissionHandler = require("../handlers/Permission/permission.handler")
-
-permissionRoute.get('/', permissionHandler.getAllPermissions)
-permissionRoute.post('/', permissionHandler.createPermission)
-
+permissionRoute.get("/", getAllItems);
 
 module.exports = permissionRoute;

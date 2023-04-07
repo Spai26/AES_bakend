@@ -9,10 +9,8 @@ const { handlerHttpError } = require("../middleware/handlerHttpError");
 
 const blogRoute = Router();
 
-//https://projectaes-production.up.railway.app/blogs/
-
-blogRoute.get("/",authmiddleware, SearchOrAllBlogs);
-blogRoute.post("/", handerCrudBlog.createNewBlog);
+blogRoute.get("/", SearchOrAllBlogs);
+blogRoute.post("/", authmiddleware, handerCrudBlog.createNewBlog);
 blogRoute.get("/search", handerCrudBlog.getBlogByName);
 blogRoute.post("/categoria", addCategoryToBlog);
 blogRoute.delete("/categoria", deleteCategoriaInBlog);

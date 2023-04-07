@@ -1,6 +1,6 @@
 const { verifyToken } = require("../middleware/generateToken");
 const { handlerHttpError } = require("../utils/handlerHttpError");
-const User = require("../database/User.model");
+/* const User = require("../database/User.model"); */
 
 const authmiddleware = async (req, res, next) => {
   try {
@@ -19,6 +19,7 @@ const authmiddleware = async (req, res, next) => {
     const user = await User.findOne({ _id: verified.id });
     req.user = user;
 
+    console.log(user);
     next();
   } catch (error) {
     handlerHttpError(res, "ERROR_SESSION_NO_AUTHORIZE", 500);

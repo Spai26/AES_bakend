@@ -1,5 +1,5 @@
-const User = require("../../database/User.model");
-const Role = require("../../database/Role.model");
+/* const User = require("../../database/User.model"); */
+/* const Role = require("../../database/Role.model"); */
 const { createdToken, verifyToken } = require("../../middleware/generateToken");
 
 /**

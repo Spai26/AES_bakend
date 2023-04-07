@@ -1,5 +1,7 @@
 const models = {
-  userTest: require("./nosql/UserTest"),
+  user: require("./nosql/User"),
+  role: require("./nosql/Role"),
+  permission: require("./nosql/Permission"),
 };
 
 module.exports = models;

@@ -1,6 +1,6 @@
 const { matchedData } = require("express-validator");
 const { handlerHttpError } = require("../utils/handlerHttpError");
-const  BlogModel  = require("../models/nosql/BlogModel");
+const  BlogTest  = require("../models/nosql/BlogTest");
 const uploadImage = require("../middleware/generateImage");
 
 /**
@@ -10,7 +10,7 @@ const uploadImage = require("../middleware/generateImage");
  */
 const getItemsBlogs = async (req, res) => {
  try{
-   const data = await BlogModel.find({});
+   const data = await BlogTest.find({});
    res.send({ data: data });
  } catch(error){
   handlerHttpError(res, `ALGO_HA_SALIDO_MAL`, 404)
@@ -27,7 +27,7 @@ const createBlog = async (req, res) => {
   const {title, description, image} = req.body
   try {
     // const bodyData = matchedData(body)
-    const result = new BlogModel({
+    const result = new BlogTest({
       title: title,
       description: description,
       image: image
@@ -48,7 +48,7 @@ const createBlog = async (req, res) => {
 const getBlogBySlug = async(req, res) => {
   try{
     const {slug} = req.query;
-    const result = await BlogModel.findOne({slug: slug})
+    const result = await BlogTest.findOne({slug: slug})
 
     if(result){
       res.status(200).send({result})
@@ -69,7 +69,7 @@ const getBlogByName = async (req, res) => {
   const {name} = req.query;
 
   try{
-    const result = await BlogModel.find({name: {$regex: new RegExp(`${name}`, 'i')}})
+    const result = await BlogTest.find({name: {$regex: new RegExp(`${name}`, 'i')}})
     if(result){
       res.status(200).json({result})
     }
@@ -87,7 +87,7 @@ const getBlogById = async (req, res) => {
   const {id} = req.params;
 
   try{
-    const result = await BlogModel.findById(id)
+    const result = await BlogTest.findById(id)
     res.status(200).json({result})
   }catch(error){
     handlerHttpError(res, `ERROR_OCURRIDO_EN_LA_PETICION`, 400)
@@ -103,7 +103,7 @@ const getBlogById = async (req, res) => {
 const addCategoryToBlog = async (req, res) => {
   const {id} = req.params
   const {category} = req.body;
-  const result = await BlogModel.findById(id)
+  const result = await BlogTest.findById(id)
   try{
     if(result){
       //implementar logica para que a su vez se guarde en la db de categorias
@@ -130,7 +130,7 @@ const deleteCategoryToBlog = async (req, res) => {
   const {category} = req.body;
   
   try{
-    const result = await BlogModel.findById(id)
+    const result = await BlogTest.findById(id)
     if(result){
       result.category = result.category.filter((e) => e !== category)
       await result.save()
@@ -152,7 +152,7 @@ const deleteCategoryToBlog = async (req, res) => {
 const updateBlogById = async (req, res) => {
   const {id} = req.params;
   const {title, description, image, status} = req.body;
-  const result = await BlogModel.findById(id)
+  const result = await BlogTest.findById(id)
 
    try{
      console.log(result)
@@ -179,7 +179,7 @@ const deleteBlogById = async (req, res) => {
   const {id} = req.params;
 
   try{
-    const result = await BlogModel.delete({_id: id})
+    const result = await BlogTest.delete({_id: id})
     res.status(200).json({result})
   }catch(error){
     handlerHttpError(res, `ERROR_OCURRIDO_EN_LA_PETICION`, 400)

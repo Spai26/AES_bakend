@@ -74,9 +74,9 @@ const getBlogBySlugOrName = async(req, res) => {
       }
     }catch(error){
       handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`)
-    }
   }
-}
+ } 
+}  
 
 /**
  * !TODO: traer un blog por su id

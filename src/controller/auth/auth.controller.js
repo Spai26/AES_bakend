@@ -25,7 +25,7 @@ const authLogin = async (req, res) => {
     const token = createdToken(isExits);
 
     res.cookie("token", token);
-    res.status(202).json({ succes: true });
+    res.status(202).json({ success: true });
   } catch (error) {
     handlerHttpError(res, "Datos incorrectos", 400);
   }

@@ -5,7 +5,7 @@ const addCategoryToBlog = async (req, res, next) => {
    let {category} = req.body;
    
    if(id && category){
-    const result = await blog.addCategoryInBlogs({id: id, category: category})
+    const result = await blog.addCategoryInBlog({id: id, category: category})
     res.status(200).json(result)
    }else{
     throw new Error(`Faltan campos ! Debe ingresar el slug del Blog y categoria a agregar`)

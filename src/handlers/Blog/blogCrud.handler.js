@@ -2,20 +2,22 @@ const BlogController = require("../../controllers/Blog/blog.controllers");
 
 //crear un nuevo post - blog
 const createNewBlog = async (req, res, next) => {
-  const { title, description, image, status, category } = req.body;
+  const { title, description, image, status, category, tags } = req.body;
 
   if (!title || !description || !image || !category) {
     return res.json({
       message: `Por favor ingresa todos los campos requeridos`,
     });
   }
+
   try {
     const result = BlogController.createNewBlog(
       title,
       description,
       image,
       status,
-      category
+      category,
+      tags
     );
     result
       ? res.status(200).json({ message: "Post creado" })
@@ -26,43 +28,22 @@ const createNewBlog = async (req, res, next) => {
 };
 
 //detalle de post - blog
-const getBlogByName = async (req, res, next) => {
+const getBlogBySlug = async (req, res, next) => {
   const { slug } = req.query;
   try {
-    const result = await BlogController.getBlogforName(slug);
+    const result = await BlogController.getBlogBySlug(slug);
     return res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: "ERROR_SLUG_NO_VALIDO" });
   }
-
-  /* const { slug } = req.query;
-  try {
-    const result = await BlogController.getBlogforName({ slug: slug });
-
-  const { slug, title } = req.query;
-
-
-  if (title || slug) {
-    try {
-      const result = await BlogController.getBlogforName({
-        title: title,
-        slug: slug,
-      });
-      return res.status(200).json(result);
-    } catch (error) {
-      next(error);
-    }
-  } else {
-    throw new Error("Debe ingresar busqueda ppor title o por slug");
-  } */
-};
+}
 
 const getById = async (req, res, next) => {
-  const { blogId } = req.params;
+  const { id } = req.params;
 
-  if (blogId) {
+  if (id) {
     try {
-      const result = await BlogController.getByIdBlogs({ id: blogId });
+      const result = await BlogController.getByBlogId({ id: id });
       res.status(200).json(result);
     } catch (err) {
       next(err);
@@ -75,7 +56,7 @@ const getById = async (req, res, next) => {
 //actualizar post - blog
 const updateBlogbyId = async (req, res, next) => {
   const { id } = req.params;
-  const { title, description, image, status } = req.body;
+  const { title, description, image, category, status, tags } = req.body;
 
   try {
     const result = await BlogController.updateforId({
@@ -84,6 +65,8 @@ const updateBlogbyId = async (req, res, next) => {
       description: description,
       image: image,
       status: status,
+      category: category,
+      tags: tags
     });
 
     res.status(200).json(result);
@@ -92,9 +75,43 @@ const updateBlogbyId = async (req, res, next) => {
   }
 };
 
+const addTagToBlog = async (req, res, next) => {
+  const {name} = req.body;
+  const {id} = req.params;
+
+  if(name && id){
+    try{
+      const result = await BlogController.addTagController({id: id, name: name})
+      res.status(200).json(result)
+    }catch(err){
+      next(err)
+    }
+  }else{
+    res.status(400).json(`Debe ingresar el id y nombre de tags`)
+  }
+}
+
+const deleteTagInBlog = async ( req, res, next ) => {
+  const {id} = req.params;
+  const {name} = req.body;
+
+  if(name && id){
+    try{
+      const result = await BlogController.deleteTagInBlogController({id: id, name: name})
+      res.status(200).json(result)
+    }catch(err){
+      next(err)
+    }
+  }else{
+    res.status(400).json(`Debe pasar todos los campos`)
+  }
+}
+
 module.exports = {
   createNewBlog,
-  getBlogByName,
+  getBlogBySlug,
   updateBlogbyId,
   getById,
+  addTagToBlog,
+  deleteTagInBlog
 };

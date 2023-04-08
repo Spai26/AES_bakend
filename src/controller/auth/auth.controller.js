@@ -21,8 +21,8 @@ const authLogin = async (req, res) => {
       handlerHttpError(res, "La contraseña es erronea", 406);
     }
     const token = createdToken(isExits);
-    res.cookie("token", token);
-    res.status(202).json({ succes: true });
+    /* res.cookie("token", token); */
+    res.status(202).json({ token });
   } catch (error) {
     handlerHttpError(res, "Datos incorrectos", 400);
   }

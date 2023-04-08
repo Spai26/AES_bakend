@@ -8,7 +8,7 @@ const {
 } = require("../validators/User");
 const userRoute = Router();
 
-userRoute.get("/", userController.getAllItems);
+userRoute.get("/", authmiddleware, userController.getAllItems);
 userRoute.post("/", validatorCreateUser, userController.createUser);
 userRoute.get("/:id", validatorGetItems, userController.detailUser);
 userRoute.put("/:id", validatorGetItems, userController.updateUser);

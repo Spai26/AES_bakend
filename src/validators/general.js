@@ -9,6 +9,14 @@ const validateItem = [
   },
 ];
 
+const valideteNameItem = [
+  check("name").exists().notEmpty(),
+  (req, res, next) => {
+    return validateResults(req, res, next);
+  },
+];
+
 module.exports = {
   validateItem,
+  valideteNameItem,
 };

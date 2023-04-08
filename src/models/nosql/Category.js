@@ -1,24 +1,17 @@
-const {model, Schema, Types} = require('mongoose')
-const mongooseDelete = require('mongoose-delete')
+const { model, Schema } = require("mongoose");
 
-const CategorySchema = new Schema({
-    _id: {
-        type: Schema.Types.ObjectId,
-        auto: true,
-    },
+const CategorySchema = new Schema(
+  {
     name: {
-        type: String,
-        required: true,
+      type: String,
+      unique: true,
+      required: true,
     },
-    createdInDb: {
-        type: Boolean,
-        default: true
-    }
-}, {
+  },
+  {
     versionKey: false,
-    timestamps: true
-})
+    timestamps: true,
+  }
+);
 
-CategorySchema.plugin(mongooseDelete, { overrideMethods: 'all' })
-
-module.exports = model('CategoryTest', CategorySchema)
+module.exports = model("Category", CategorySchema);

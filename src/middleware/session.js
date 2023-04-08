@@ -5,13 +5,15 @@ const { user } = require("../models/");
 const isAuth = async (req, res, next) => {
   try {
     if (!req.headers.authorization) {
-      return handlerHttpError(res, "NO_TIENES_PODER_AQUI", 402);
+      handlerHttpError(res, "NO_TIENES_PODER_AQUI", 402);
+      return;
     }
 
     const token = req.headers.authorization.split(" ").pop();
 
     if (!token) {
-      return handlerHttpError(res, "Acceso No valido", 401);
+      handlerHttpError(res, "Acceso No valido", 401);
+      return;
     }
 
     const verified = await verifyToken(token);

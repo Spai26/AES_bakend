@@ -1,10 +1,9 @@
 const handlerHttpError = require("../utils/handlerHttpError");
 const { category } = require("../models/");
+const { matchedData } = require("express-validator");
 
 /**
  * !TODO: obtener todas las categorias
- * @param {*} req
- * @param {*} res
  */
 const getAllCategory = async (req, res) => {
   try {
@@ -15,94 +14,70 @@ const getAllCategory = async (req, res) => {
 
     res.status(200).json(result);
   } catch (error) {
-    handlerHttpError(res, "ERROR_getItems_category");
+    handlerHttpError(res, "ERROR_getItems_category", 500);
   }
-
-  /*  if (nombre) {
-    try {
-      const result = await CategoryModel.find({
-        name: { $regex: new RegExp(`${nombre}`, "i") },
-      });
-      if (result.length > 0) {
-        res.status(200).json({ result });
-      } else {
-        handlerHttpError(
-          res,
-          `ERROR_NO_EXISTE_COINCIDENCIAS_DE_CATEGORIAS_CON_ESE_NOMBRE`,
-          404
-        );
-      }
-    } catch (error) {
-      handlerHttpError(res, `ERROR_OCURRIDO_EN_LA_PETICION`, 400);
-    }
-  } else {
-    try {
-      const result = await CategoryModel.find({});
-      res.status(200).json({ result });
-    } catch (error) {
-      handlerHttpError(res, `ERROR_OCURRIDO_EN_LA_PETICION`, 400);
-    }
-  } */
 };
 
 /**
  * !TODO: crear una nueva categoria
- * @param {*} req
- * @param {*} res
- * @return newCategory
  */
 const newCategory = async (req, res) => {
-  const { categoria } = req.body;
+  const { name } = matchedData(req);
 
   try {
-    const result = new CategoryModel({ name: categoria });
+    const result = new category({ name: name });
     await result.save();
 
-    res.status(200).json({ result });
+    res.status(200).json(result);
   } catch (error) {
-    handlerHttpError(res, `ERROR_OCURRIDO_EN_LA_PETICION`, 400);
+    handlerHttpError(
+      res,
+      "Categoria no creada, algo inesperado paso o ya existe",
+      400
+    );
   }
 };
 
 /**
- * @param {*} req
- * @param {*} res
- * @return updateCategory
+ * !TODO: actualizar categoria
  */
 const updateCategory = async (req, res) => {
-  const { id } = req.params;
-  const { categoria } = req.body;
-
   try {
-    const result = await CategoryModel.findById(id);
+    const { id } = req.params;
 
-    if (result.name !== categoria) {
-      result.name = categoria;
-      await result.save(result);
+    await category.findByIdAndUpdate({ _id: id }, req.body);
 
-      res.status(200).json({ result });
-    } else {
-      handlerHttpError(res, `ERROR_CATEGORIA_YA_EXISTE_EN_LA_DB`, 400);
-    }
+    /* console.log(result) */
+    res.status(202).json({ message: "categoria actualizada" });
   } catch (error) {
-    handlerHttpError(res, `ERROR_OCURRIDO_EN_LA_PETICION`, 400);
+    console.error(error);
+    handlerHttpError(res, "Error al actualizar o ya existe", 400);
   }
 };
 
 /**
- * @param {*} req
- * @param {*} res
+ * !TODO: Eliminacion de la categoria
  */
 const deleteCategory = async (req, res) => {
-  const { id } = req.params;
-
   try {
-    await CategoryModel.findByIdAndDelete(id);
+    req = matchedData(req);
+    const { id } = req;
+
+    const isExist = await category.findOne({ _id: id });
+
+    if (!isExist) {
+      handlerHttpError(res, "Categoria no encontrada", 404);
+      return;
+    }
+
+    await category.deleteOne({ _id: id });
+
     res.status(200).json({
-      message: `CATEGORIA:CON_EL_ID: ${id}, ELIMINADA_CON_EXITO_DE_LA_DB`,
+      message: "categoria eliminada",
     });
   } catch (error) {
-    handlerHttpError(res, `ERROR_OCURRIDO_EN_LA_PETICION`, 400);
+    console.error(error);
+    handlerHttpError(res, "Algo inesperado sucedio!", 400);
   }
 };
 

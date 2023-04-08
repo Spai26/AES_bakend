@@ -31,7 +31,7 @@ const getAllItems = async (req, res) => {
 const createUser = async (req, res) => {
   try {
     const { email, roles, ...body } = matchedData(req);
-    console.log(roles);
+    /* console.log(roles); */
     const data = new user({
       firstname: body.firstname,
       lastname: body.lastname,

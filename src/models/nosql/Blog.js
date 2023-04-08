@@ -6,7 +6,7 @@ const mongooseDelete = require("mongoose-delete");
 
 const BlogSchema = new Schema(
   {
-    title: { type: String, required: true },
+    title: { type: String, required: true, unique: true },
     slug: { type: String, slug: "title" },
     status: {
       type: String,
@@ -43,7 +43,6 @@ BlogSchema.statics.updateSlug = async function (id) {
   await blog.save();
   return blog;
 };
-
 
 BlogSchema.plugin(mongooseDelete, { overrideMethods: "all" });
 

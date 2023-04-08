@@ -24,11 +24,15 @@ const authLogin = async (req, res) => {
     }
     const token = createdToken(isExits);
 
-    /* res.cookie("token", token); */
+    res.cookie("token", token);
     res.status(202).json({ success: true, token });
   } catch (error) {
     handlerHttpError(res, "Datos incorrectos", 400);
   }
+};
+
+const logOut = (req, res) => {
+  res.cookie("token", "").json({ success: false });
 };
 /* 
 const registerLogin = async (
@@ -70,5 +74,6 @@ const registerLogin = async (
  */
 module.exports = {
   authLogin,
+  logOut,
   /*  registerLogin, */
 };

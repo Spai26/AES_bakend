@@ -6,17 +6,20 @@ const authmiddleware = async (req, res, next) => {
   try {
     if (!req.headers.authorization) {
       handlerHttpError(res, "NO_TIENES_PODER_AQUI", 402);
+      return;
     }
 
     const token = req.headers.authorization.split(" ").pop();
 
     if (!token) {
       handlerHttpError(res, "Acceso No valido", 401);
+      return;
     }
 
     const verified = await verifyToken(token);
 
     const foundUser = await user.findOne({ _id: verified.id });
+    console.log("from session", foundUser);
     req.user = foundUser;
 
     next();

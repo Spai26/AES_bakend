@@ -1,6 +1,6 @@
 const { user } = require("../../models");
-const { createdToken, verifyToken } = require("../../middleware/generateToken");
-const { handlerHttpError } = require("../../utils/handlerHttpError");
+const { createdToken } = require("../../middleware/generateToken");
+const handlerHttpError = require("../../utils/handlerHttpError");
 
 const authLogin = async (req, res) => {
   try {
@@ -9,6 +9,7 @@ const authLogin = async (req, res) => {
 
     if (!isExits) {
       handlerHttpError(res, "Usuario o email no coincide", 400);
+      return;
     }
 
     const validatePassword = await user.comparePassword(
@@ -19,10 +20,12 @@ const authLogin = async (req, res) => {
     //401
     if (!validatePassword) {
       handlerHttpError(res, "La contraseña es erronea", 406);
+      return;
     }
     const token = createdToken(isExits);
-    /* res.cookie("token", token); */
-    res.status(202).json({ token });
+
+    res.cookie("token", token);
+    res.status(202).json({ succes: true, token });
   } catch (error) {
     handlerHttpError(res, "Datos incorrectos", 400);
   }

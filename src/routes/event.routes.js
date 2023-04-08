@@ -1,10 +1,8 @@
 const { Router } = require("express");
-/* const enventHandlers = require("../handlers/Event/event.handler")
- */
+const eventController = require("../controller/events");
+
 const eventRouter = Router();
-eventRouter.get("/", (req, res) => {
-  res.send({ data: "event" });
-});
+
 /* eventRouter.post("/", enventHandlers.CreateEvent);
 eventRouter.get("/", enventHandlers.AddEvents);
 eventRouter.get("/:id", enventHandlers.AddEventById);

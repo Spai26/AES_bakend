@@ -11,7 +11,7 @@ const UserSchema = new Schema(
     lastLogin: { type: Date },
     avatar: { type: String },
     status: { type: String, enum: ["active", "desactive"], default: "active" },
-    role: {
+    roles: {
       type: Schema.Types.ObjectId,
       ref: "Role",
     },

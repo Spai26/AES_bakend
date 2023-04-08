@@ -5,20 +5,7 @@ const validatorCreateBlog = [
   check("title").exists().notEmpty(),
   check("description").exists().notEmpty(),
   check("image").exists().notEmpty(),
-  (req, res, next) => {
-    return validateResults(req, res, next);
-  },
-];
-
-const validatorGetBlogBySlug = [
-  check('slug').exists().notEmpty(),
-  (req, res, next) => {
-    return validateResults(req, res, next);
-  }
-]
-
-const validatorGetBlogByName = [
-  check('name').exists().notEmpty(),
+  check('category').exists().notEmpty(),
   (req, res, next) => {
     return validateResults(req, res, next);
   }
@@ -53,6 +40,7 @@ const validatorUpdateBlog = [
   check('description').exists().notEmpty(),
   check('image').exists().notEmpty(),
   check('status').exists().notEmpty(),
+  check('category').exists().notEmpty(),
   (req, res, next) => {
     return validateResults(req, res, next)
   }
@@ -67,12 +55,9 @@ const validatorDeleteBlogById = [
 
 module.exports = { 
   validatorCreateBlog,
-  validatorGetBlogByName,
-  validatorGetBlogBySlug,
   validatorGetBlogById,
   validatorAddCategoryInBlog,
   validatorDeleteCategoryInBlog,
   validatorUpdateBlog,
   validatorDeleteBlogById 
-};
-  
+}

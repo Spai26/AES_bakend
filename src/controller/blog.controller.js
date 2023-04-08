@@ -1,6 +1,8 @@
 const { matchedData } = require("express-validator");
 const { handlerHttpError } = require("../utils/handlerHttpError");
+const {functionMiddlewareNewArray} = require('../middleware/functions')
 const  BlogModel  = require("../models/nosql/BlogModel");
+const CategoryModel = require('../models/nosql/CategoryModel')
 const uploadImage = require("../middleware/generateImage");
 
 /**
@@ -15,7 +17,7 @@ const getItemsBlogs = async (req, res) => {
  } catch(error){
   handlerHttpError(res, `ALGO_HA_SALIDO_MAL`, 404)
  }
-};
+}
 
 /**
  * !TODO: crear un blog en nuestro modelo
@@ -24,57 +26,55 @@ const getItemsBlogs = async (req, res) => {
  * @return newBlog
  */
 const createBlog = async (req, res) => {
-  const {title, description, image} = req.body
+  const {title, description, image, category} = req.body
+
   try {
-    // const bodyData = matchedData(body)
+    const newCategoryArray = await functionMiddlewareNewArray({category: category}, (error) => {
+      handlerHttpError(res, error)})
+    
     const result = new BlogModel({
       title: title,
       description: description,
-      image: image
+      image: image,
+      category: newCategoryArray
     })
-    await result.save()
-    res.status(200).json(result);
+      await result.save()
+      res.status(200).json({result})
   } catch (error) {
-    handlerHttpError(res, "ERROR_FN_CREATEBLOG");
-  }
-};
-
-/**
- * !TODO: obtener blog por medio de un slug
- * @param {*} req
- * @param {*} res
- * @return blogBySlug
- */
-const getBlogBySlug = async(req, res) => {
-  try{
-    const {slug} = req.query;
-    const result = await BlogModel.findOne({slug: slug})
-
-    if(result){
-      res.status(200).send({result})
-    }else{
-      handlerHttpError(res, `NO_SE_HA_ENCONTRADO_EL_BLOG`, 404)
-    }
-  }catch(error){
-    handlerHttpError(res, 'ERROR_EN_BUSQUEDA_POR_SLUG', 400)
+    handlerHttpError(res, "ERROR_EN_CREATE_BLOG", 400);
   }
 }
 
 /**
- * !TODO: traer un blog por su nombre
- * @param {*} req 
+ * !TODO: obtener blog por medio de un slug o por name
+ * @param {*} req
  * @param {*} res
+ * @return blogBySlugOrName
  */
-const getBlogByName = async (req, res) => {
-  const {name} = req.query;
-
-  try{
-    const result = await BlogModel.find({name: {$regex: new RegExp(`${name}`, 'i')}})
-    if(result){
-      res.status(200).json({result})
+const getBlogBySlugOrName = async(req, res) => {
+  const {slug} = req.query;
+  const {title} = req.query;
+  
+  if(slug && !title){
+    try{
+      const result = await BlogModel.findOne({slug: slug}) 
+      if(result){
+        res.status(200).send({result})
+      }else{
+        handlerHttpError(res, `NO_SE_HA_ENCONTRADO_EL_BLOG`, 404)
+      }
+    }catch(error){
+      handlerHttpError(res, 'ERROR_EN_BUSQUEDA_POR_SLUG', 400)
     }
-  }catch(error){
-    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`)
+  }else{
+    try{
+      const result = await BlogModel.find({title: {$regex: new RegExp(`${title}`, 'i')}})
+      if(result){
+        res.status(200).json({result})
+      }
+    }catch(error){
+      handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`)
+    }
   }
 }
 
@@ -106,11 +106,14 @@ const addCategoryToBlog = async (req, res) => {
   const result = await BlogModel.findById(id)
   try{
     if(result){
-      //implementar logica para que a su vez se guarde en la db de categorias
-      result.category.push(category)
-      await result.save()
-
-      res.status(200).json({result});
+      let ress = await CategoryModel.findOne({name: category})
+      if(!ress){
+       let newCategory = new CategoryModel({name: category})
+       await newCategory.save()     
+       result.category.push(category)
+       await result.save()
+       res.status(200).json({result})
+      }
     }else{
       handlerHttpError(res, `ERROR_NO_SE_ENCONTRO_ESE_ID`, 404)
     }
@@ -151,17 +154,20 @@ const deleteCategoryToBlog = async (req, res) => {
  */
 const updateBlogById = async (req, res) => {
   const {id} = req.params;
-  const {title, description, image, status} = req.body;
-  const result = await BlogModel.findById(id)
+  const {title, description, image, category, status} = req.body;
+  
+  try{
+    const result = await BlogModel.findById(id)
+    const newCategoryArray = await functionMiddlewareNewArray({category: category}, (error) => {
+      handlerHttpError(res, error)})     
 
-   try{
-     console.log(result)
      if(result){
        result.title = title
        result.description = description
        result.image = image
+       result.category = newCategoryArray
        result.status = status
- 
+
        await result.save()
        res.status(201).json({result})
      }
@@ -189,8 +195,7 @@ const deleteBlogById = async (req, res) => {
 module.exports = { 
   getItemsBlogs, 
   createBlog,
-  getBlogByName,
-  getBlogBySlug,
+  getBlogBySlugOrName,
   getBlogById,
   addCategoryToBlog,
   deleteCategoryToBlog,

@@ -2,8 +2,6 @@ const { Router } = require("express");
 const authmiddleware = require("../middleware/session");
 const {
     validatorCreateBlog,
-    validatorGetBlogByName,
-    validatorGetBlogBySlug,
     validatorGetBlogById,
     validatorAddCategoryInBlog,
     validatorDeleteCategoryInBlog,
@@ -13,8 +11,7 @@ const {
 const {
     getItemsBlogs,
     createBlog,
-    getBlogBySlug,
-    getBlogByName,
+    getBlogBySlugOrName,
     getBlogById,
     addCategoryToBlog,
     deleteCategoryToBlog,
@@ -25,15 +22,15 @@ const {
 const blogRoute = Router();
 
 //https://projectaes-production.up.railway.app/blogs/
-//,authmiddleware
-blogRoute.get("/", authmiddleware, getItemsBlogs);
+
+//authmiddleware
+blogRoute.get("/", getItemsBlogs);
 blogRoute.post("/", validatorCreateBlog, createBlog);
 
-blogRoute.get('/name', validatorGetBlogByName, getBlogByName)
-blogRoute.get("/search", validatorGetBlogBySlug, getBlogBySlug);
+blogRoute.get("/search", getBlogBySlugOrName);
 
 blogRoute.get("/:id", validatorGetBlogById, getBlogById);
-blogRoute.put("/:id/update", validatorUpdateBlog, updateBlogById);
+blogRoute.put("/:id", validatorUpdateBlog, updateBlogById);
 blogRoute.delete("/:id", validatorDeleteBlogById, deleteBlogById);
 
 blogRoute.post("/:id/addCategory", validatorAddCategoryInBlog, addCategoryToBlog);

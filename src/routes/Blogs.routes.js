@@ -5,17 +5,15 @@ const deleteCategoriaInBlog = require("../handlers/Blog/blogDeleteCategoria.hand
 const deleteBlog = require("../handlers/Blog/blogDelete.handlers");
 const addCategoryToBlog = require("../handlers/Blog/addCategoryInBlog.handlers");*/
 /* const blogController = require("../controller/blog/blog.controller"); */
-
+const blogController = require("../controller/blog/blog.controller");
 const blogRoute = Router();
 
-blogRoute.get("/", (req, res) => {
-  res.send({ data: "blog" });
-});
-/* blogRoute.get("/", SearchOrAllBlogs);
+/* blogRoute.get("/", SearchOrAllBlogs); */
 blogRoute.post("/", blogController.createBlog);
-blogRoute.get("/:id", blogController.detailBlog);
+/* blogRoute.get("/:id", blogController.detailBlog); */
 blogRoute.put("/:id", blogController.updateBlogById);
-blogRoute.delete("/:id", blogController.deleteBlog); */
+/* blogRoute.delete("/:id", blogController.deleteBlog); */
+blogRoute.get("/search", );
 /* blogRoute.get("/search", handerCrudBlog.getBlogByName);
 blogRoute.post("/categoria", addCategoryToBlog);
 blogRoute.delete("/categoria", deleteCategoriaInBlog);

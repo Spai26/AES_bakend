@@ -1,11 +1,10 @@
 const { Schema, model, default: mongoose } = require("mongoose");
 var slug = require("mongoose-slug-generator");
 mongoose.plugin(slug);
-const mongooseDelete = require('mongoose-delete');
+const mongooseDelete = require("mongoose-delete");
 
 const BlogSchema = new Schema(
   {
-    _id: { type: Schema.Types.ObjectId, auto: true },
     title: { type: String, required: true },
     slug: { type: String, slug: "title" },
     status: {
@@ -14,14 +13,12 @@ const BlogSchema = new Schema(
     },
     description: { type: String, required: true },
     image: { type: String, required: true },
-    author: String,
-    category: [{ type: String }],
-    // categories: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "Category",
-    //   },
-    // ],
+    categories: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Category",
+      },
+    ],
   },
   {
     timestamps: true,
@@ -29,6 +26,6 @@ const BlogSchema = new Schema(
   }
 );
 
-BlogSchema.plugin(mongooseDelete, { overrideMethods: "all" })
+BlogSchema.plugin(mongooseDelete, { overrideMethods: "all" });
 
-module.exports = model("BlogTest", BlogSchema);
+module.exports = model("Blog", BlogSchema);

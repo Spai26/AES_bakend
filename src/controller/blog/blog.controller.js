@@ -1,7 +1,4 @@
 const { matchedData } = require("express-validator");
-const { handlerHttpError } = require("../utils/handlerHttpError");
-const  BlogModel  = require("../models/nosql/BlogModel");
-const uploadImage = require("../middleware/generateImage");
 
 /**
  * obtener la lista de blogs
@@ -9,12 +6,12 @@ const uploadImage = require("../middleware/generateImage");
  * @param {*} res
  */
 const getItemsBlogs = async (req, res) => {
- try{
-   const data = await BlogModel.find({});
-   res.send({ data: data });
- } catch(error){
-  handlerHttpError(res, `ALGO_HA_SALIDO_MAL`, 404)
- }
+  try {
+    const data = await BlogModel.find({});
+    res.send({ data: data });
+  } catch (error) {
+    handlerHttpError(res, `ALGO_HA_SALIDO_MAL`, 404);
+  }
 };
 
 /**
@@ -24,59 +21,64 @@ const getItemsBlogs = async (req, res) => {
  * @return newBlog
  */
 const createBlog = async (req, res) => {
-  const {title, description, image} = req.body
+  const { title, description, image } = req.body;
   try {
     // const bodyData = matchedData(body)
     const result = new BlogModel({
       title: title,
       description: description,
-      image: image
-    })
-    await result.save()
+      image: image,
+    });
+    await result.save();
     res.status(200).json(result);
   } catch (error) {
     handlerHttpError(res, "ERROR_FN_CREATEBLOG");
   }
 };
 
+const detailBlog = async (req, res) => {
+  res.send({ data: here });
+};
 /**
  * !TODO: obtener blog por medio de un slug
  * @param {*} req
  * @param {*} res
  * @return blogBySlug
  */
-const getBlogBySlug = async(req, res) => {
-  try{
-    const {slug} = req.query;
-    const result = await BlogModel.findOne({slug: slug})
+const getBlogBySlug = async (req, res) => {
+  try {
+    const { slug } = req.query;
+    const result = await BlogModel.findOne({ slug: slug });
 
-    if(result){
-      res.status(200).send({result})
-    }else{
-      handlerHttpError(res, `NO_SE_HA_ENCONTRADO_EL_BLOG`, 404)
+    if (result) {
+      res.status(200).send({ result });
+    } else {
+      handlerHttpError(res, `NO_SE_HA_ENCONTRADO_EL_BLOG`, 404);
     }
-  }catch(error){
-    handlerHttpError(res, 'ERROR_EN_BUSQUEDA_POR_SLUG', 400)
+  } catch (error) {
+    handlerHttpError(res, "ERROR_EN_BUSQUEDA_POR_SLUG", 400);
   }
-}
+};
 
 /**
  * !TODO: traer un blog por su nombre
- * @param {*} req 
+ * @param {*} req
  * @param {*} res
  */
 const getBlogByName = async (req, res) => {
-  const {name} = req.query;
+  const { name } = req.query;
 
-  try{
-    const result = await BlogModel.find({name: {$regex: new RegExp(`${name}`, 'i')}})
-    if(result){
-      res.status(200).json({result})
+  try {
+    const result = await BlogModel.find({
+      name: { $regex: new RegExp(`${name}`, "i") },
+    });
+    if (result) {
+      res.status(200).json({ result });
     }
-  }catch(error){
-    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`)
+  } catch (error) {
+    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`);
   }
-}
+};
 
 /**
  * !TODO: traer un blog por su id
@@ -84,15 +86,15 @@ const getBlogByName = async (req, res) => {
  * @param {*} res
  */
 const getBlogById = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
 
-  try{
-    const result = await BlogModel.findById(id)
-    res.status(200).json({result})
-  }catch(error){
-    handlerHttpError(res, `ERROR_OCURRIDO_EN_LA_PETICION`, 400)
+  try {
+    const result = await BlogModel.findById(id);
+    res.status(200).json({ result });
+  } catch (error) {
+    handlerHttpError(res, `ERROR_OCURRIDO_EN_LA_PETICION`, 400);
   }
-}
+};
 
 /**
  * !TODO: agregar una categoria a un blog
@@ -101,93 +103,93 @@ const getBlogById = async (req, res) => {
  * @return createdBlog
  */
 const addCategoryToBlog = async (req, res) => {
-  const {id} = req.params
-  const {category} = req.body;
-  const result = await BlogModel.findById(id)
-  try{
-    if(result){
+  const { id } = req.params;
+  const { category } = req.body;
+  const result = await BlogModel.findById(id);
+  try {
+    if (result) {
       //implementar logica para que a su vez se guarde en la db de categorias
-      result.category.push(category)
-      await result.save()
+      result.category.push(category);
+      await result.save();
 
-      res.status(200).json({result});
-    }else{
-      handlerHttpError(res, `ERROR_NO_SE_ENCONTRO_ESE_ID`, 404)
+      res.status(200).json({ result });
+    } else {
+      handlerHttpError(res, `ERROR_NO_SE_ENCONTRO_ESE_ID`, 404);
     }
-  }catch(error){
-    handlerHttpError(res, `ERROR_ALGO_SALIO_MAL_EN_LA_PETICION`, 400)
+  } catch (error) {
+    handlerHttpError(res, `ERROR_ALGO_SALIO_MAL_EN_LA_PETICION`, 400);
   }
-}
+};
 
 /**
  * !TODO: eliminar una categoria del array
- * @param {*} req 
+ * @param {*} req
  * @param {*} res
- * @return deleteCategoryInBlog 
+ * @return deleteCategoryInBlog
  */
 const deleteCategoryToBlog = async (req, res) => {
-  const {id} = req.params;
-  const {category} = req.body;
-  
-  try{
-    const result = await BlogModel.findById(id)
-    if(result){
-      result.category = result.category.filter((e) => e !== category)
-      await result.save()
-      res.status(200).json({message: `Categoria eliminada con exito`})
-    }else{
-      handlerHttpError(res, `ERROR_NO_SE_ENCONTRO_EL_ID`, 404)
-    } 
-  }catch(error){
-    handlerHttpError(res, `ERROR_ALGO_SALIO_MAL_EN_LA_PETICION`, 400)
+  const { id } = req.params;
+  const { category } = req.body;
+
+  try {
+    const result = await BlogModel.findById(id);
+    if (result) {
+      result.category = result.category.filter((e) => e !== category);
+      await result.save();
+      res.status(200).json({ message: `Categoria eliminada con exito` });
+    } else {
+      handlerHttpError(res, `ERROR_NO_SE_ENCONTRO_EL_ID`, 404);
+    }
+  } catch (error) {
+    handlerHttpError(res, `ERROR_ALGO_SALIO_MAL_EN_LA_PETICION`, 400);
   }
-}
+};
 
 /**
  * !TODO: actualizar datos del blog
- * @param {*} req 
+ * @param {*} req
  * @param {*} res
- * @return updateBlog 
+ * @return updateBlog
  */
 const updateBlogById = async (req, res) => {
-  const {id} = req.params;
-  const {title, description, image, status} = req.body;
-  const result = await BlogModel.findById(id)
+  const { id } = req.params;
+  const { title, description, image, status } = req.body;
+  const result = await BlogModel.findById(id);
 
-   try{
-     console.log(result)
-     if(result){
-       result.title = title
-       result.description = description
-       result.image = image
-       result.status = status
- 
-       await result.save()
-       res.status(201).json({result})
-     }
-   }catch(error){
-     handlerHttpError(res, `ERROR_OCURRIDO_EN_LA_PETICION`, 400)
-   }
-}   
+  try {
+    console.log(result);
+    if (result) {
+      result.title = title;
+      result.description = description;
+      result.image = image;
+      result.status = status;
+
+      await result.save();
+      res.status(201).json({ result });
+    }
+  } catch (error) {
+    handlerHttpError(res, `ERROR_OCURRIDO_EN_LA_PETICION`, 400);
+  }
+};
 
 /**
  * !TODO: eliminar un blog por id
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const deleteBlogById = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
 
-  try{
-    const result = await BlogModel.delete({_id: id})
-    res.status(200).json({result})
-  }catch(error){
-    handlerHttpError(res, `ERROR_OCURRIDO_EN_LA_PETICION`, 400)
+  try {
+    const result = await BlogModel.delete({ _id: id });
+    res.status(200).json({ result });
+  } catch (error) {
+    handlerHttpError(res, `ERROR_OCURRIDO_EN_LA_PETICION`, 400);
   }
-}
+};
 
-module.exports = { 
-  getItemsBlogs, 
+module.exports = {
+  getItemsBlogs,
   createBlog,
   getBlogByName,
   getBlogBySlug,
@@ -195,5 +197,5 @@ module.exports = {
   addCategoryToBlog,
   deleteCategoryToBlog,
   updateBlogById,
-  deleteBlogById
-}
+  deleteBlogById,
+};

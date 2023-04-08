@@ -14,14 +14,7 @@ const UserSchema = new Schema(
     roles: {
       type: Schema.Types.ObjectId,
       ref: "Role",
-    },
-
-    blogs: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Blog",
-      },
-    ],
+    },    
   },
   {
     timestamps: true,

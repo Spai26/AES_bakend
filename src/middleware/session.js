@@ -1,6 +1,6 @@
 const { verifyToken } = require("../middleware/generateToken");
 const { handlerHttpError } = require("../utils/handlerHttpError");
-const UserTest = require("../models/nosql/UserTest");
+const User = require("../database/User.model");
 
 const authmiddleware = async (req, res, next) => {
   try {
@@ -16,7 +16,7 @@ const authmiddleware = async (req, res, next) => {
 
     const verified = await verifyToken(token);
 
-    const user = await UserTest.findOne({ _id: verified.id });
+    const user = await User.findOne({ _id: verified.id });
     req.user = user;
 
     next();

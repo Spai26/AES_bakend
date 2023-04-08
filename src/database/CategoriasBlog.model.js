@@ -1,7 +1,6 @@
 const {model, Schema, Types} = require('mongoose')
-const mongooseDelete = require('mongoose-delete')
 
-const CategorySchema = new Schema({
+const Categorias = new Schema({
     _id: {
         type: Schema.Types.ObjectId,
         auto: true,
@@ -19,6 +18,4 @@ const CategorySchema = new Schema({
     timestamps: true
 })
 
-CategorySchema.plugin(mongooseDelete, { overrideMethods: 'all' })
-
-module.exports = model('CategoryTest', CategorySchema)
+module.exports = model('Category', Categorias)

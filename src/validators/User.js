@@ -23,7 +23,7 @@ const validatorGetItems = [
 ];
 
 //actualizar
-const ValidatorUpdateItemUser = [
+const validateUpdate = [
   check("firstname").exists().notEmpty(),
   check("lastname").exists().notEmpty(),
   check("email").exists().notEmpty().isEmail(),
@@ -47,5 +47,5 @@ const validatorAuthLogin = [
 module.exports = {
   validatorGetItems,
   validatorCreateUser,
-  ValidatorUpdateItemUser,
+  validateUpdate,
 };

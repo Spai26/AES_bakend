@@ -5,7 +5,7 @@
  * @param {*} code
  */
 const handlerHttpError = (res, message = "PROCESO_NO_ESPERADO", code = 500) => {
-  res.status(code).json({ error: message });
+  return res.status(code).json({ error: message });
 };
 
 module.exports = handlerHttpError;

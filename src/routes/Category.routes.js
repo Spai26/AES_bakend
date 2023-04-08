@@ -3,13 +3,11 @@ const { Router } = require("express");
 const newCategory = require('../handlers/CategoryBlogs/NewCategorie.handlers')
 const modificCategory = require('../handlers/CategoryBlogs/modificCategoryInDb.handlers')
 const deleteCategory = require('../handlers/CategoryBlogs/deleteCategory.handlers')  */
+const categoryCtrl = require("../controller/category.controller");
 const categoryRoutes = Router();
 
-categoryRoutes.get("/", (req, res) => {
-  res.send({ data: "category" });
-});
-/* categoryRoutes.get('/', getAllCategory)
-categoryRoutes.post('/', newCategory)
+categoryRoutes.get("/", categoryCtrl.getAllCategory);
+/*categoryRoutes.post('/', newCategory)
 categoryRoutes.put('/', modificCategory)
 categoryRoutes.delete('/:id', deleteCategory) */
 

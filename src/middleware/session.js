@@ -2,24 +2,22 @@ const { verifyToken } = require("../middleware/generateToken");
 const { handlerHttpError } = require("../utils/handlerHttpError");
 const { user } = require("../models/");
 
-const authmiddleware = async (req, res, next) => {
+const isAuth = async (req, res, next) => {
   try {
     if (!req.headers.authorization) {
-      handlerHttpError(res, "NO_TIENES_PODER_AQUI", 402);
-      return;
+      return handlerHttpError(res, "NO_TIENES_PODER_AQUI", 402);
     }
 
     const token = req.headers.authorization.split(" ").pop();
 
     if (!token) {
-      handlerHttpError(res, "Acceso No valido", 401);
-      return;
+      return handlerHttpError(res, "Acceso No valido", 401);
     }
 
     const verified = await verifyToken(token);
 
     const foundUser = await user.findOne({ _id: verified.id });
-    console.log("from session", foundUser);
+
     req.user = foundUser;
 
     next();
@@ -28,4 +26,4 @@ const authmiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = authmiddleware;
+module.exports = isAuth;

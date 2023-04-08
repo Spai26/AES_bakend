@@ -1,5 +1,7 @@
 const { Router } = require("express");
 const userController = require("../controller/user/user.controller");
+/* const checkrol = require("../middleware/rol"); */
+const authmiddleware = require("../middleware/session");
 const {
   validatorCreateUser,
   validatorGetItems,

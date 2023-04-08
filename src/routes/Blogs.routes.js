@@ -5,8 +5,7 @@ const deleteCategoriaInBlog = require("../handlers/Blog/blogDeleteCategoria.hand
 const deleteBlog = require("../handlers/Blog/blogDelete.handlers");
 const addCategoryToBlog = require("../handlers/Blog/addCategoryInBlog.handlers");*/
 /* const blogController = require("../controller/blog/blog.controller"); */
-const authmiddleware = require("../middleware/session");
-const { handlerHttpError } = require("../middleware/handlerHttpError");
+
 const blogRoute = Router();
 
 blogRoute.get("/", (req, res) => {

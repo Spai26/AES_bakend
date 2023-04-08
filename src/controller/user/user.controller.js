@@ -10,8 +10,8 @@ const getAllItems = async (req, res) => {
   try {
     const data = await user
       .find({}, { password: 0, blogs: 0 })
-      /* .populate("roles", "name")
-      .exec(); */
+      .populate("role", "name")
+      .exec();
 
     !data.length
       ? handlerHttpError(res, "No hay usuarios creados", 204)

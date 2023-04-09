@@ -1,26 +1,26 @@
 const { Router } = require("express");
-const authRoute = require("./Auth.routes");
-const userRoute = require("./users.routes");
-const countryRoute = require("./Country.routes");
-const eventRoute = require("./event.routes");
-const event_client = require("./event_client.routes");
-const blogRoute = require("./Blogs.routes");
-const errohander = require("../middleware/handlerError");
-const categoryRoutes = require('./Category.routes')
+const fs = require("fs");
 
 const routes = Router();
 
-routes.use("/users", userRoute);
-routes.use("/auth", authRoute);
-routes.use("/event", eventRoute);
-routes.use("/event_client", event_client);
-routes.use("/blogs", blogRoute);
-routes.use("/country", countryRoute);
-routes.use('/categoryBlogs', categoryRoutes)
-routes.use(errohander);
+/**
+ * !TODO: Esta ruta es dinamica no se necesita agregar ninguna ruta adicional que sean rutas claras y especificas
+ */
+const PATH_ROUTES = __dirname;
+const removeExtends = (filename) => {
+  //user.routes.js
+  return filename.split(".").shift();
+};
 
-routes.get("/", (req, res) => {
-  res.send("this root page");
+fs.readdirSync(PATH_ROUTES).filter((file) => {
+  const fileClean = removeExtends(file);
+  if (fileClean !== "index") {
+    routes.use(`/${fileClean}`, require(`./${file}`));
+  } else {
+    routes.use("/notfound", (req, res) => {
+      res.status(404).json({ message: "Algo inesperado sucedio :') !" });
+    });
+  }
 });
 
 module.exports = routes;

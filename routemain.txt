@@ -1,0 +1,52 @@
+
+routes.get("/blogs", (req, res) => {
+  res.writeHead(200, { "content-type": "text/html" });
+  res.end(`<h1>Upload Your File Here :)</h1>
+    <form
+        action="/"
+        method="post"
+        enctype="multipart/form-data"
+    >
+        <fieldset>
+            <legend>Upload your file</legend>
+            <label for="photo">File:</label>
+            <input type="file" name="image" id="image" />
+            
+        </fieldset>
+        <button type="submit">Upload</button>
+    </form>`);
+});
+routes.post("/blogs", async (req, res) => {
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send("No files were uploaded.");
+  }
+  
+  // Extraemos el archivo de la request
+  // el nombre "file" debe coincidir
+  // con el valor del atributo name del input
+  const file = req.files.photo;
+  console.log(file);
+  // Extraemos la extensión del archivo
+  const extension = file.mimetype.split("/")[1];
+
+  // Aquí validamos alguna extensión en particular
+  // cualquier otra, devolverá un error
+  const validExtensions = ["png", "jpg", "pdf"];
+  if (!validExtensions.includes(extension)) {
+    return res.status(400).send("Not valid file extension");
+  }
+
+  // Hacemos uso de cloudinary para subir el archivo
+  const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
+    folder: "images", // Asignamos la carpeta de destino
+  });
+
+  // Extraemos la url pública del archivo en cloudinary
+  const { secure_url } = uploaded;
+
+  // Devolvemos una respuesta con la url del archivo
+  res.send(
+    `<p>File uploaded to cloudinary!</p>
+    <a href="${secure_url}">File here</a>`
+  );
+});

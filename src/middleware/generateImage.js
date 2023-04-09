@@ -1,14 +1,20 @@
 // Upload
 const cloudinary = require("../config/cloudinary");
 
+/**
+ * Generador de imagen con cloudinary
+ * @param {*} imagePath url
+ * @param {*} options {public_id, width, height, Crop}
+ * @returns
+ */
 const uploadImage = async (imagePath, options = {}) => {
   try {
     const result = await cloudinary.uploader.upload(imagePath, options);
 
-    return result;
+    return result.url;
   } catch (error) {
     if (error) {
-      throw new Error("la imagen no se cargo");
+      throw new Error("ERROR_CLOUDINARY: image no se cargo");
     }
   }
 };

@@ -1,13 +1,11 @@
-const {Router} = require('express')
-const getAllCategory = require('../handlers/CategoryBlogs/BlogCategory.handlers')
-const newCategory = require('../handlers/CategoryBlogs/NewCategorie.handlers')
-const modificCategory = require('../handlers/CategoryBlogs/modificCategoryInDb.handlers')
-const deleteCategory = require('../handlers/CategoryBlogs/deleteCategory.handlers') 
-const categoryRoutes = Router()
+const { Router } = require("express");
+const categoryCtrl = require("../controller/category.controller");
+const { validateItem, valideteNameItem } = require("../validators/general");
+const categoryRoutes = Router();
 
-categoryRoutes.get('/', getAllCategory)
-categoryRoutes.post('/', newCategory)
-categoryRoutes.put('/', modificCategory)
-categoryRoutes.delete('/:id', deleteCategory)
+categoryRoutes.get("/", categoryCtrl.getAllCategory);
+categoryRoutes.post("/", valideteNameItem, categoryCtrl.newCategory);
+categoryRoutes.put("/:id", validateItem, categoryCtrl.updateCategory);
+categoryRoutes.delete("/:id", validateItem, categoryCtrl.deleteCategory);
 
-module.exports = categoryRoutes
+module.exports = categoryRoutes;

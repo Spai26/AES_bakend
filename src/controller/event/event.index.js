@@ -1,5 +1,5 @@
 const eventController = require("./events.controller");
-const { searchEvent } = require("./searchEvent");
+const { searchEvent, searchBySlug } = require("./searchEvent");
 const handlerHttpError = require("../../utils/handlerHttpError");
 
 /**
@@ -7,12 +7,22 @@ const handlerHttpError = require("../../utils/handlerHttpError");
  */
 const SearchOrAllBlogs = async (req, res) => {
   const { search } = req.query;
-
+  const { slug } = req.query;
   //busqueda por titulo
   if (search) {
-    console.log("search =>");
+    console.log("search event =>");
     try {
       const result = await searchEvent(search);
+      return res.status(200).send(result);
+    } catch (error) {
+      handlerHttpError(res, "Este titulo no existe", 400);
+    }
+  }
+  //busqueda por slug
+  if (slug) {
+    console.log("slug event =>");
+    try {
+      const result = await searchBySlug(slug);
       return res.status(200).send(result);
     } catch (error) {
       handlerHttpError(res, "Este titulo no existe", 400);

@@ -45,7 +45,9 @@ const getDetailBlog = async (req, res) => {
     req = matchedData(req);
     const { id } = req;
 
-    const result = await blog.findOne({ _id: id });
+    const result = await blog
+      .findOne({ _id: id })
+      .populate("categories", "name");
     res.status(200).json(result);
   } catch (error) {
     handlerHttpError(res, "Blog no encontrado!", 404);
@@ -93,7 +95,7 @@ const deleteBlogLogic = async (req, res) => {
     const isExist = await blog.findOne({ _id: id });
 
     if (!isExist) {
-      return handlerHttpError(res, "Blog no encontrado!", 404);
+      return handlerHttpError(res, "Blog no existe!", 404);
     }
     const result = await blog.delete({ _id: id });
 

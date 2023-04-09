@@ -8,4 +8,14 @@ const searchEvent = async (search) => {
   return result;
 };
 
-module.exports = { searchEvent };
+/**
+ * !TODO: busqueda por slug debe ser ingresado conforme se genera
+ */
+const searchBySlug = async (slug) => {
+  const result = await event
+    .findOne({ slug: slug })
+    .populate("categories", "name");
+  return result;
+};
+
+module.exports = { searchEvent, searchBySlug };

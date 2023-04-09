@@ -2,6 +2,8 @@ const { matchedData } = require("express-validator");
 const { event } = require("../../models");
 const { customer } = require("../../models");
 const handlerHttpError = require("../../utils/handlerHttpError");
+const { isExist } = require("../../libs/findUser");
+const uploadImage = require("../../middleware/generateImage");
 /**
  * !TODO: listar todos los eventos
  */
@@ -19,10 +21,28 @@ const getAllEvents = async () => {
  */
 const createEvent = async (req, res) => {
   try {
-    const body = matchedData(req);
-    const data = new event(body);
-    const result = await data.save();
-    res.status(201).json(result);
+    const {
+      title,
+      frontpage,
+      description,
+      date,
+      location,
+      status,
+      categories,
+    } = req.body;
+
+    const data = new event({
+      title: title,
+      frontpage: await uploadImage(frontpage, { public_id: title }),
+      description: description,
+      date: date,
+      location: location,
+      status: status,
+      categories: categories,
+    });
+
+    await data.save();
+    res.status(201).json({ message: "Evento creado con éxito!" });
   } catch (error) {
     handlerHttpError(
       res,
@@ -39,6 +59,13 @@ const detailEventForid = async (req, res) => {
   try {
     req = matchedData(req);
     const { id } = req;
+
+    const isExist = await event.findOne({ _id: id });
+
+    if (!isExist) {
+      return handlerHttpError(res, "Evento no existe!", 404);
+    }
+
     const result = await event.findById(id);
     res.status(200).json(result);
   } catch (error) {
@@ -53,6 +80,11 @@ const updateEventByid = async (req, res) => {
   try {
     const { id } = req.params;
     const { body } = req;
+    const isExist = await event.findOne({ _id: id });
+
+    if (!isExist) {
+      return handlerHttpError(res, "Evento no existe!", 404);
+    }
 
     const data = await event.findOneAndUpdate(
       { _id: id },
@@ -60,7 +92,7 @@ const updateEventByid = async (req, res) => {
         $set: {
           title: body.title,
           location: body.location,
-          frontpage: body.frontpage,
+          frontpage: await uploadImage(body.frontpage),
           description: body.description,
           status: body.status,
           date: body.date,
@@ -70,78 +102,29 @@ const updateEventByid = async (req, res) => {
     );
     res.status(200).json({ message: "Evento actualizado" });
   } catch (error) {
-    handlerHttpError(res, "verifica los campos requeridos", 404);
+    console.error(error);
+    handlerHttpError(res, "Verifica los campos requeridos", 404);
   }
 };
 
-const deleteEventByid = async () => {
-  const allEvents = await event.find({});
-  return allEvents;
-};
+const deleteEventByid = async (req, res) => {
+  try {
+    req = matchedData(req);
+    const { id } = req;
 
-/* 
-const addEventByName = async (title) => {
-  const name = { $regex: new RegExp(`^${title}$`, "i") };
+    const isExist = await event.findOne({ _id: id });
 
-  const event = await Event.findOne({ title: name });
-  return event;
-};
+    if (!isExist) {
+      return handlerHttpError(res, "Evento no encontrado!", 404);
+    }
 
-const getEventSubscribers = async (eventId) => {
-  let event = await Event.findById(eventId);
-  let eventSubscribs = await Event_Client.find({ event: event.title });
-  let subscribs = eventSubscribs.map((obj) => obj._id);
-  event.subscribers = subscribs;
-  await event.save();
-  return event;
-};
-
-const createEvent = async (
-  title,
-  frontpage,
-  date,
-  location,
-  description,
-  category
-) => {
-  const newEvent = new Event({
-    title,
-    frontpage,
-    date,
-    location,
-    description,
-    category,
-  });
-  const results = await newEvent.save();
-  return results;
-};
-
-const editEvent = async (
-  id,
-  title,
-  frontpage,
-  date,
-  location,
-  description,
-  category
-) => {
-  const event = await Event.findById(id);
-
-  if (!event) {
-    return res.status(404).json({ message: "Event not found" });
+    const result = await event.delete({ _id: id });
+    res.status(200).json({ message: "Evento eliminado!" });
+    res.send({ data, id });
+  } catch (error) {
+    handlerHttpError(res, "Error al eliminar, intenta despues");
   }
-  // Actualiza las propiedades del evento
-  event.title = title;
-  event.frontpage = frontpage;
-  event.date = date;
-  event.location = location;
-  event.description = description;
-  event.category = category;
-
-  await event.save();
-
-  return event;
-}; */
+};
 
 module.exports = {
   getAllEvents,

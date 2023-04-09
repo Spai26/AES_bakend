@@ -5,7 +5,7 @@ const validateResults = require("../utils/handlerValidator");
 const validateNewBlog = [
   check("title").exists().notEmpty(),
   check("description").exists().notEmpty(),
-  check("status").exists().notEmpty().isBoolean(),
+  check("status").exists().notEmpty(),
   check("image").exists().notEmpty(),
   check("categories").exists().notEmpty().isMongoId(),
   (req, res, next) => {

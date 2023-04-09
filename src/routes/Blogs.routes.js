@@ -7,7 +7,7 @@ const isAuth = require("../middleware/session");
 const blogRoute = Router();
 
 blogRoute.get("/", SearchOrAllBlogs);
-blogRoute.post("/", isAuth, validateNewBlog, blogController.setCreateBlog);
+blogRoute.post("/", validateNewBlog, blogController.setCreateBlog);
 blogRoute.get("/:id", validateItem, blogController.getDetailBlog);
 blogRoute.put(
   "/:id",

@@ -10,7 +10,7 @@ const CategorySchema = new Schema(
   },
   {
     versionKey: false,
-    timestamps: true,
+    timestamps: false,
   }
 );
 

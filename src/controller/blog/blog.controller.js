@@ -1,7 +1,7 @@
 const { matchedData } = require("express-validator");
 const handlerHttpError = require("../../utils/handlerHttpError");
 const { blog } = require("../../models");
-
+const uploadImage = require("../../middleware/generateImage");
 /**
  *!TODO: obtener la lista de blogs
  * ?no lleva trycatch por que hay otro punto de control blog.index
@@ -17,11 +17,22 @@ const getAllBlogs = async () => {
  */
 const setCreateBlog = async (req, res) => {
   try {
-    const body = matchedData(req);
-    const data = new blog(body);
+    const { title, image, description, status, categories } = req.body;
+
+    const data = new blog({
+      title,
+      image: await uploadImage(image, { public_id: title }).then(
+        (result) => result
+      ),
+      description,
+      categories,
+      status,
+    });
+
     const result = await data.save();
-    res.status(200).json(result);
+    res.status(201).json(result);
   } catch (error) {
+    console.error(error);
     handlerHttpError(res, "Blog no creado, valida los campos");
   }
 };
@@ -54,7 +65,7 @@ const updateBlogById = async (req, res) => {
       {
         $set: {
           title: body.title,
-          image: body.image,
+          image: await uploadImage(body.image),
           description: body.description,
           status: body.status,
           categories: body.categories,

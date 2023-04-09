@@ -9,7 +9,7 @@ const BlogSchema = new Schema(
     title: { type: String, required: true, unique: true },
     slug: { type: String, slug: "title" },
     status: {
-      type: String,
+      type: Boolean,
       required: false,
     },
     description: { type: String, required: true },

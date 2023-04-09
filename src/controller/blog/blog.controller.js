@@ -7,7 +7,7 @@ const { blog } = require("../../models");
  * ?no lleva trycatch por que hay otro punto de control blog.index
  */
 const getAllBlogs = async () => {
-  const data = await blog.find({});
+  const data = await blog.find({}).populate("categories");
   return data;
 };
 

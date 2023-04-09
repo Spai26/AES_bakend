@@ -6,7 +6,7 @@ const handlerHttpError = require("../../utils/handlerHttpError");
  * !TODO: listar todos los eventos
  */
 const getAllEvents = async () => {
-  const allEvents = await event.find({});
+  const allEvents = await event.find({}).populate("categories", "name");
   /* .populate({
       path: "categories",
       populate: { path: "categoryId", model: "Category" },

@@ -1,7 +1,7 @@
 const { Schema, model, default: mongoose } = require("mongoose");
 var slug = require("mongoose-slug-generator");
 mongoose.plugin(slug);
-const slugify = require("mongoose-slug-generator").slugify;
+
 const mongooseDelete = require("mongoose-delete");
 
 const BlogSchema = new Schema(

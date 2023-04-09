@@ -1,12 +1,19 @@
 const { Router } = require("express");
-const eventController = require("../controller/events");
-
+const eventController = require("../controller/event/events.controller");
+const searchOrAllEvents = require("../controller/event/event.index");
+const { validatorAddEvent } = require("../validators/Event");
+const { validateItem } = require("../validators/general");
 const eventRouter = Router();
 
-/* eventRouter.post("/", enventHandlers.CreateEvent);
-eventRouter.get("/", enventHandlers.AddEvents);
-eventRouter.get("/:id", enventHandlers.AddEventById);
-eventRouter.get("/:eventId/subscribers", enventHandlers.GetEventSubscribersById);
-eventRouter.put("/:id", enventHandlers.UpdateEvent); */
+eventRouter.get("/", searchOrAllEvents);
+eventRouter.post("/", validatorAddEvent, eventController.createEvent);
+eventRouter.get("/:id", validateItem, eventController.detailEventForid);
+eventRouter.put(
+  "/:id",
+  validateItem,
+  validatorAddEvent,
+  eventController.updateEventByid
+);
+eventRouter.delete("/:id", validateItem, eventController.deleteEventByid);
 
 module.exports = eventRouter;

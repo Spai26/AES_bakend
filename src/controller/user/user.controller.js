@@ -56,9 +56,9 @@ const detailUser = async (req, res) => {
   try {
     req = matchedData(req);
     const { id } = req;
-    const data = await user.findById(id);
+    const result = await user.findById(id);
 
-    res.status(200).json(data);
+    res.status(200).json(result);
   } catch (error) {
     handlerHttpError(res, "Este registro no existe", 400);
   }

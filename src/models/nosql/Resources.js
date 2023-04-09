@@ -7,7 +7,9 @@ const { Schema, model } = require("mongoose");
 const ResourseSchema = new Schema(
   {
     name: { type: String },
+    pathname: { type: String },
     filename: { type: String },
+    url: { type: String },
   },
   {
     timestamps: true,
@@ -16,5 +18,4 @@ const ResourseSchema = new Schema(
 );
 
 ResourseSchema.plugin(mongooseDelete, { overrideMethods: "all" });
-
 module.exports = model("Resources", ResourseSchema);

@@ -7,7 +7,7 @@ const uploadImage = require("../../middleware/generateImage");
  * ?no lleva trycatch por que hay otro punto de control blog.index
  */
 const getAllBlogs = async () => {
-  const data = await blog.find({}).populate("categories");
+  const data = await blog.find({}).populate("categories", "name");
   return data;
 };
 

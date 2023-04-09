@@ -7,7 +7,10 @@ const uploadImage = require("../../middleware/generateImage");
  * ?no lleva trycatch por que hay otro punto de control blog.index
  */
 const getAllBlogs = async () => {
-  const data = await blog.find({}).populate("categories", "name");
+  const data = await blog
+    .find({})
+    .populate("categories", "name")
+    .populate("tags", "name");
   return data;
 };
 
@@ -72,6 +75,7 @@ const updateBlogById = async (req, res) => {
           description: body.description,
           status: body.status,
           categories: body.categories,
+          tags: body.tags,
         },
       }
     );

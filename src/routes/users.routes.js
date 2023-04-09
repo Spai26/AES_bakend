@@ -8,16 +8,16 @@ const {
 } = require("../validators/User");
 const userRoute = Router();
 
-userRoute.get("/", isAuth, userController.getAllItems);
-userRoute.post("/", isAuth, validatorCreateUser, userController.createUser);
+userRoute.get("/", userController.getAllItems);
+userRoute.post("/", validatorCreateUser, userController.createUser);
 userRoute.get("/:id", validatorGetItems, userController.detailUser);
 userRoute.put(
   "/:id",
-  isAuth,
+
   validatorGetItems,
   validateUpdate,
   userController.updateUser
 );
-userRoute.delete("/:id", isAuth, validatorGetItems, userController.deleteUser);
+userRoute.delete("/:id", validatorGetItems, userController.deleteUser);
 
 module.exports = userRoute;

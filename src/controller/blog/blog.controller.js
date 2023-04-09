@@ -26,11 +26,12 @@ const setCreateBlog = async (req, res) => {
       ),
       description,
       categories,
+      tags,
       status,
     });
 
-    const result = await data.save();
-    res.status(201).json(result);
+    await data.save();
+    res.status(201).json({ message: "Blog creado!" });
   } catch (error) {
     console.error(error);
     handlerHttpError(res, "Blog no creado, valida los campos");

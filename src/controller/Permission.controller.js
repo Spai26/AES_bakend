@@ -1,17 +1,20 @@
 const { matchedData } = require("express-validator");
-const { role } = require("../models");
+const { permission } = require("../models");
 const { handlerHttpError } = require("../utils/handlerHttpError");
 
 /**
- * !TODO: obtener la lista de roles
+ * !TODO: obtener la lista de permisos
  */
 const getAllItems = async (req, res) => {
   try {
-    const data = await role.find({});
+    const data = await permission.find({});
 
-    !data.length
-      ? handlerHttpError(res, "No hay roles creados", 501)
-      : res.send(data);
+    if (!data.length) {
+      handlerHttpError(res, "No hay permisos creados", 501);
+      return;
+    }
+
+    res.status(200).json(data);
   } catch (error) {
     handlerHttpError(res, "ERROR al asignar permisos", 400);
   }

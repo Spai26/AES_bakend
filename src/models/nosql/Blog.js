@@ -20,6 +20,12 @@ const BlogSchema = new Schema(
         ref: "Category",
       },
     ],
+    tags: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Tag",
+      },
+    ],
   },
   {
     timestamps: true,

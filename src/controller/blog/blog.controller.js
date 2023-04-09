@@ -51,7 +51,8 @@ const getDetailBlog = async (req, res) => {
 
     const result = await blog
       .findOne({ _id: id })
-      .populate("categories", "name");
+      .populate("categories", "name")
+      .populate("tags", "name");
     res.status(200).json(result);
   } catch (error) {
     handlerHttpError(res, "Blog no encontrado!", 404);
@@ -66,7 +67,7 @@ const updateBlogById = async (req, res) => {
     const { id } = req.params;
     const { body } = req;
 
-    const result = await blog.findByIdAndUpdate(
+    await blog.findByIdAndUpdate(
       { _id: id },
       {
         $set: {

@@ -8,7 +8,10 @@ const uploadImage = require("../../middleware/generateImage");
  * !TODO: listar todos los eventos
  */
 const getAllEvents = async () => {
-  const allEvents = await event.find({}).populate("categories", "name");
+  const allEvents = await event
+    .find({})
+    .populate("categories", "name")
+    .populate("tags", "name");
   /* .populate({
       path: "categories",
       populate: { path: "categoryId", model: "Category" },

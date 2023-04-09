@@ -1,23 +1,13 @@
-const handlerHttpError = require("../utils/handlerHttpError");
-const { tag } = require("../models");
+const handlerHttpError = require("../../utils/handlerHttpError");
+const { tag } = require("../../models");
 const { matchedData } = require("express-validator");
 
 /**
  * !TODO: obtener todas las categorias
  */
 const getAllTags = async (req, res) => {
-  try {
-    const result = await tag.find({});
-
-    if (!result.length) {
-      handlerHttpError(res, "No hay tags creadas", 404);
-      return;
-    }
-
-    res.status(200).json(result);
-  } catch (error) {
-    handlerHttpError(res, "ERROR_getItems_tags", 500);
-  }
+  const result = await tag.find({});
+  return result;
 };
 
 /**

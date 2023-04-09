@@ -9,6 +9,7 @@ const validatorAddEvent = [
   check("location").exists().notEmpty().isString(),
   check("description").exists().notEmpty().isString(),
   check("categories").exists().notEmpty().isMongoId(),
+  check("tags").exists().notEmpty().isMongoId(),
   (req, res, next) => {
     return validateResults(req, res, next);
   },

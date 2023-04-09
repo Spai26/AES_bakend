@@ -17,7 +17,7 @@ const getAllBlogs = async () => {
  */
 const setCreateBlog = async (req, res) => {
   try {
-    const { title, image, description, status, categories } = req.body;
+    const { title, image, description, status, categories, tags } = req.body;
 
     const data = new blog({
       title,

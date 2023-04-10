@@ -9,6 +9,7 @@ const cloudinary = require("../config/cloudinary");
  */
 const uploadImage = async (imagePath, options = {}) => {
   try {
+    console.log("clou", imagePath);
     const result = await cloudinary.uploader.upload(imagePath, options);
 
     return result.url;

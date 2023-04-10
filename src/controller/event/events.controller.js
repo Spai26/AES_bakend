@@ -74,7 +74,10 @@ const detailEventForid = async (req, res) => {
       return handlerHttpError(res, "Evento no existe!", 404);
     }
 
-    const result = await event.findById(id);
+    const result = await event
+      .findById(id)
+      .populate("categories", "name")
+      .populate("tags", "name");
     res.status(200).json(result);
   } catch (error) {
     handlerHttpError(res, "Este evento no valido");

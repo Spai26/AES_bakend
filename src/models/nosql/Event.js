@@ -12,6 +12,7 @@ const EventSchema = new Schema(
     location: { type: String, require: true },
     description: { type: String, require: true },
     slug: { type: String, slug: "title" },
+    status: { type: Boolean, require: false },
     categories: [
       {
         type: Schema.Types.ObjectId,

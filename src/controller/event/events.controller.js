@@ -40,7 +40,7 @@ const createEvent = async (req, res) => {
       title: title,
       frontpage: await uploadImage(frontpage, { public_id: title }),
       description: description,
-      date_ind: date_in,
+      date_in: date_in,
       date_out: date_out,
       location: location,
       status: status,
@@ -106,6 +106,7 @@ const updateEventByid = async (req, res) => {
           date_in: body.date,
           date_out: body.date,
           categories: body.categories,
+          tags: body.tags,
         },
       }
     );

@@ -8,6 +8,7 @@ const validatorCreateUser = [
   check("email").exists().notEmpty().isEmail(),
   check("password").exists().notEmpty(),
   check("roles").exists().notEmpty().isMongoId(),
+  check("status").isBoolean().notEmpty(),
 
   (req, res, next) => {
     return validateResults(req, res, next);
@@ -26,9 +27,8 @@ const validatorGetItems = [
 const validateUpdate = [
   check("firstname").exists().notEmpty(),
   check("lastname").exists().notEmpty(),
-  check("email").exists().notEmpty().isEmail(),
-  check("password").exists().notEmpty(),
-  check("status").exists().notEmpty(),  
+
+  check("status").exists().notEmpty(),
   check("roles").exists().notEmpty().isMongoId(),
   (req, res, next) => {
     return validateResults(req, res, next);

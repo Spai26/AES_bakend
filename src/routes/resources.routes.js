@@ -2,7 +2,7 @@ const { Router } = require("express");
 const isAuth = require("../middleware/session");
 const resourcesRoute = Router();
 
-resourcesRoute.get("/", (req, res) => {
+resourcesRoute.get("/ ", (req, res) => {
   res.send({ data: "here" });
 });
 resourcesRoute.post("/upload", (req, res) => {

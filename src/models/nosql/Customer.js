@@ -3,10 +3,25 @@ const { model, Schema } = require("mongoose");
 
 const CustomerSchema = new Schema(
   {
-    name: {
+    firstname: {
+      type: String,
+    },
+    lastname: {
+      type: String,
+    },
+    email: {
       type: String,
       unique: true,
-      required: true,
+    },
+    events: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Event",
+      },
+    ],
+    origin: {
+      type: String,
+      enum: ["event", "especialista", "institucion", "organizacion"],
     },
   },
   {

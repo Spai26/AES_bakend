@@ -2,6 +2,7 @@ const { matchedData } = require("express-validator");
 const { user } = require("../../models/");
 const handlerHttpError = require("../../utils/handlerHttpError");
 const { isExist } = require("../../libs/findUser");
+const uploadImage = require("../../middleware/generateImage");
 
 /**
  * !TODO: obtener la lista de usuarios sin roles, blog y passwords
@@ -37,12 +38,13 @@ const createUser = async (req, res) => {
       lastname: body.lastname,
       email: email,
       password: await user.encryptPassword(body.password),
-      roles: body.roles,
+      roles: roles,
       avatar: `https://ui-avatars.com/api/?name=${body.firstname}${body.lastname}`,
+      status: body.status,
     });
 
     const result = await data.save();
-    res.status(201).json(result);
+    res.status(201).json({ message: "Usuario creado!" });
   } catch (error) {
     console.error(error);
     handlerHttpError(res, "Error al crear o email duplicado", 400);
@@ -66,18 +68,27 @@ const detailUser = async (req, res) => {
 
 /**
  * !TODO: controlador actualizar usuario
- 
  */
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
+    const { firstname, lastname, status, roles } = req.body;
 
-    const data = await user.findOneAndUpdate({ _id: id }, req.body, {
-      new: true,
-    });
-    /* console.log(data) */
+    const data = await user.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          firstname: firstname,
+          lastname: lastname,
+          status: status,
+          roles: roles,
+        },
+      }
+    );
+
     res.status(202).json({ message: "usuario actualizado!" });
   } catch (error) {
+    console.error(error);
     handlerHttpError(res, "No se acepta campos vacios", 400);
   }
 };

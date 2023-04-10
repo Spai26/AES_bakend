@@ -9,13 +9,9 @@ const getAllItems = async (req, res) => {
   try {
     const result = await role.find({});
 
-    if (!data.length) {
-      handlerHttpError(res, "No hay roles creados", 501);
-      return;
-    }
     res.send(result);
   } catch (error) {
-    handlerHttpError(res, "ERROR al asignar permisos", 400);
+    handlerHttpError(res, "No hay usuarios o hubo un error", 400);
   }
 };
 

@@ -10,11 +10,11 @@ const UserSchema = new Schema(
     password: { type: String, require: true },
     lastLogin: { type: Date },
     avatar: { type: String },
-    status: { type: String, enum: ["active", "desactive"], default: "active" },
+    status: { type: Boolean },
     roles: {
       type: Schema.Types.ObjectId,
       ref: "Role",
-    },    
+    },
   },
   {
     timestamps: true,

@@ -71,10 +71,36 @@ const detailUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
+    const { firstname, lastname, email, password, avatar, roles } = req.body;
+    console.log(req.body);
 
-    const data = await user.findOneAndUpdate({ _id: id }, req.body, {
-      new: true,
-    });
+    const isExist = await user.findOne({ _id: id });
+
+    if (isExist) {
+      handlerHttpError(res, "Usuario no existe", 404);
+    }
+
+    const compare = await user.comparePassword(isExist.password, password);
+
+    console.log(compare);
+
+    /* const data = await user.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          firstname: body.firstname,
+          lastname: body.lastname,
+          email: email,
+          roles: body.roles,
+          avatar: `https://ui-avatars.com/api/?name=${body.firstname}${body.lastname}`,
+        },
+      }
+    );
+
+    if (password) {
+      const newpass = user.comparePassword(password);
+    } */
+
     /* console.log(data) */
     res.status(202).json({ message: "usuario actualizado!" });
   } catch (error) {

@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const tagController = require("../controller/tag/Tag.controller");
+const tagController = require("../controller/tag/tag.controller");
 const SearchOrAllTags = require("../controller/tag/tag.index");
 const { validateItem, valideteNameItem } = require("../validators/general");
 const tagRoute = Router();

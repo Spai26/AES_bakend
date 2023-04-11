@@ -28,25 +28,30 @@ const createEvent = async (req, res) => {
       title,
       frontpage,
       description,
-      date,
+      date_in,
+      date_out,
       location,
       status,
       categories,
+      tags,
     } = req.body;
 
     const data = new event({
       title: title,
       frontpage: await uploadImage(frontpage, { public_id: title }),
       description: description,
-      date: date,
+      date_in: date_in,
+      date_out: date_out,
       location: location,
       status: status,
       categories: categories,
+      tags: tags,
     });
 
     await data.save();
     res.status(201).json({ message: "Evento creado con éxito!" });
   } catch (error) {
+    console.error(error);
     handlerHttpError(
       res,
       "Evento no pudo crearse o tiene titulo duplicado",
@@ -69,7 +74,10 @@ const detailEventForid = async (req, res) => {
       return handlerHttpError(res, "Evento no existe!", 404);
     }
 
-    const result = await event.findById(id);
+    const result = await event
+      .findById(id)
+      .populate("categories", "name")
+      .populate("tags", "name");
     res.status(200).json(result);
   } catch (error) {
     handlerHttpError(res, "Este evento no valido");
@@ -98,8 +106,10 @@ const updateEventByid = async (req, res) => {
           frontpage: await uploadImage(body.frontpage),
           description: body.description,
           status: body.status,
-          date: body.date,
+          date_in: body.date_in,
+          date_out: body.date_out,
           categories: body.categories,
+          tags: body.tags,
         },
       }
     );

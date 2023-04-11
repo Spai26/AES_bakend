@@ -11,6 +11,7 @@ customerRoute.put("/:id", validateUpdateCustomer, validatorGetItems, EventClient
 //   res.send({ data: "client" });
 // });
 /* 
+
 customerRoute.get("/:id", EventClient.AddcustomerRouteById);
 customerRoute.post("/", EventClient.CreatecustomerRoute);
 customerRoute.put("/:id", EventClient.UpdatecustomerRoute); */

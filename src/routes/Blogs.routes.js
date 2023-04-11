@@ -18,7 +18,7 @@ blogRoute.put(
   blogController.updateBlogById
 );
 blogRoute.delete("/:id", validateItem, blogController.deleteBlogLogic);
-blogRoute.post("/:id/addCategory", catWithinBlog.addCategoryToBlog);
+blogRoute.post("/:id/addCategory", catWithinBlog.addCategoryToBlog)
 blogRoute.delete(
   "/:id/deleteCategory",
 

@@ -1,9 +1,13 @@
-/**
- * !TODO: todo archivo de modelo se agregara en nosql    agregar la propiedad y asignar su direccion
- */
 const models = {
-  blogModel: require("./nosql/BlogTest"),
-  userModel: require("./nosql/UserTest"),
+  user: require("./nosql/User"),
+  role: require("./nosql/Role"),
+  permission: require("./nosql/Permission"),
+  category: require("./nosql/Category"),
+  blog: require("./nosql/Blog"),
+  resources: require("./nosql/Resources"),
+  event: require("./nosql/Event"),
+  customer: require("./nosql/Customer"),
+  tag: require("./nosql/Tag"),
 };
 
 module.exports = models;

@@ -9,10 +9,11 @@ const DB_URL = process.env.DB_URL;
 
 const url = `${DB_CONN}+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`;
 
+mongoose.set("strictQuery", false);
 mongoose
   .connect(url || DB_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,    
+    useUnifiedTopology: true,
   })
   .then(() =>
     console.log(`connected to the database  successfully is time Work! `)

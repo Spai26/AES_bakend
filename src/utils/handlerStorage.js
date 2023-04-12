@@ -8,9 +8,8 @@ const path = require("path");
  */
 
 //verifico si existe la carpeta para crearlo
-
 let storageCreated = false;
-const storagePath = path.join(__dirname, "src", "storage");
+const storagePath = `${__dirname}/../public`;
 
 if (!storageCreated && !fs.existsSync(storagePath)) {
   try {
@@ -27,12 +26,14 @@ if (!storageCreated && !fs.existsSync(storagePath)) {
 //dirname me da la posicion en la carpeta actual
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const pathStorage = `${process.cwd()}/src/storage`;
-    cb(null, pathStorage);
+    const pathPublic = `${__dirname}/../public`;
+    cb(null, pathPublic);
   },
   filename: function (req, file, cb) {
+    const nameFile = file.originalname.split(".").shift();
+
     const ext = file.originalname.split(".").pop();
-    const filename = `${Date.now()}.${ext}`;
+    const filename = `${nameFile}-${Date.now()}.${ext}`;
     cb(null, filename);
   },
 });

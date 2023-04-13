@@ -9,16 +9,15 @@ const handlerHttpError = require("../../utils/handlerHttpError");
 const getAllItems = async (req, res) => {
   try {
     const data = await user
-      .find({}, { password: 0, blogs: 0 })
+      .find({}, { password: 0 })
       .populate("roles", "name")
       .exec();
 
     if (!data.length) {
-      handlerHttpError(res, "No hay usuarios creados", 204);
-      return;
+      returnhandlerHttpError(res, "No hay usuarios creados", 204);
     }
 
-    res.send(data);
+    res.status(200).json(data);
   } catch (error) {
     handlerHttpError(res, "ERROR al traer data", 400);
   }
@@ -56,7 +55,7 @@ const detailUser = async (req, res) => {
   try {
     req = matchedData(req);
     const { id } = req;
-    const result = await user.findById(id);
+    const result = await user.findById(id)  ;
 
     res.status(200).json(result);
   } catch (error) {

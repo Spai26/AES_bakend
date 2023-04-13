@@ -2,13 +2,11 @@ require("dotenv").config();
 require("./database");
 const express = require("express");
 const morgan = require("morgan");
-const path = require("path");
 
 const routes = require("../routes");
 const server = express();
 
 server.use(express.json());
-server.use(express.static(path.resolve(__dirname, "./public")));
 
 server.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");

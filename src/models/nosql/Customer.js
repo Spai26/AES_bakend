@@ -3,27 +3,6 @@ const { model, Schema } = require("mongoose");
 
 const CustomerSchema = new Schema(
   {
-<<<<<<<<< Temporary merge branch 1
-    firstname: {
-      type: String,
-    },
-    lastname: {
-      type: String,
-    },
-    email: {
-      type: String,
-      unique: true,
-    },
-    events: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Event",
-      },
-    ],
-    origin: {
-      type: String,
-      enum: ["event", "especialista", "institucion", "organizacion"],
-=========
     fullname: { type: String, require: true },
     email: { type: String, unique: true, require: true },
     events: [
@@ -44,7 +23,6 @@ const CustomerSchema = new Schema(
         "Salud Social",
         "Salud Medio Ambiental",
       ],
->>>>>>>>> Temporary merge branch 2
     },
     assistants: { type: Number },
     social: { type: Object },

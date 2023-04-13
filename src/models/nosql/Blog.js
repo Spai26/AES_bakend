@@ -8,10 +8,6 @@ const BlogSchema = new Schema(
   {
     title: { type: String, required: true, unique: true },
     slug: { type: String, slug: "title" },
-    status: {
-      type: Boolean,
-      required: false,
-    },
     description: { type: String, required: true },
     image: { type: String, required: true },
     categories: [
@@ -26,6 +22,11 @@ const BlogSchema = new Schema(
         ref: "Tag",
       },
     ],
+    files: { type: String, default: null },
+    status: {
+      type: Boolean,
+      required: false,
+    },
   },
   {
     timestamps: true,

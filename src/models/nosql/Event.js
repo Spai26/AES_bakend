@@ -9,9 +9,11 @@ const EventSchema = new Schema(
     date_in: { type: Date, require: true },
     date_out: { type: Date, require: true },
     frontpage: { type: String, require: true },
+    files: { type: String, default: null },
     location: { type: String, require: true },
     description: { type: String, require: true },
     slug: { type: String, slug: "title" },
+    status: { type: Boolean, require: false },
     categories: [
       {
         type: Schema.Types.ObjectId,

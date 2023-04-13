@@ -1,7 +1,10 @@
 const { matchedData } = require("express-validator");
 const handlerHttpError = require("../../utils/handlerHttpError");
 const { blog } = require("../../models");
-const uploadImage = require("../../middleware/generateImage");
+const {
+  validExtensionImage,
+  validExtensionFile,
+} = require("../../libs/validExtensionFiles");
 /**
  *!TODO: obtener la lista de blogs
  * ?no lleva trycatch por que hay otro punto de control blog.index
@@ -20,24 +23,34 @@ const getAllBlogs = async () => {
  */
 const setCreateBlog = async (req, res) => {
   try {
-    const { title, image, description, status, categories, tags } = req.body;
+    const { title, description, status, image, files, categories, tags } =
+      req.body;
+
+    if (files !== null) {
+      if (!validExtensionImage(image)) {
+        return handlerHttpError(res, "Formato de imagen no válida!", 404);
+      }
+
+      if (!validExtensionFile(files)) {
+        return handlerHttpError(res, "Solo acepta formato .pdf", 404);
+      }
+    }
 
     const data = new blog({
       title,
-      image: await uploadImage(image, { public_id: title }).then(
-        (result) => result
-      ),
+      image,
       description,
       categories,
       tags,
       status,
+      files,
     });
 
     await data.save();
     res.status(201).json({ message: "Blog creado!" });
   } catch (error) {
     console.error(error);
-    handlerHttpError(res, "Blog no creado, valida los campos");
+    handlerHttpError(res, "Blog no creado, titulo no valido.");
   }
 };
 
@@ -46,13 +59,14 @@ const setCreateBlog = async (req, res) => {
  */
 const getDetailBlog = async (req, res) => {
   try {
-    req = matchedData(req);
-    const { id } = req;
+    /* req = matchedData(req); */
+    const { id } = req.params;
 
     const result = await blog
       .findOne({ _id: id })
       .populate("categories", "name")
       .populate("tags", "name");
+
     res.status(200).json(result);
   } catch (error) {
     handlerHttpError(res, "Blog no encontrado!", 404);
@@ -67,16 +81,27 @@ const updateBlogById = async (req, res) => {
     const { id } = req.params;
     const { body } = req;
 
+    if (body.files !== null) {
+      if (!validExtensionImage(body.image)) {
+        return handlerHttpError(res, "Formato de imagen no válida!", 404);
+      }
+
+      if (!validExtensionFile(body.files)) {
+        return handlerHttpError(res, "Solo acepta formato .pdf", 404);
+      }
+    }
+
     await blog.findByIdAndUpdate(
       { _id: id },
       {
         $set: {
           title: body.title,
-          image: await uploadImage(body.image),
+          image: body.image,
           description: body.description,
           status: body.status,
           categories: body.categories,
           tags: body.tags,
+          files: body.files,
         },
       }
     );

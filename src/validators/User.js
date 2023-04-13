@@ -8,8 +8,8 @@ const validatorCreateUser = [
   check("email").exists().notEmpty().isEmail(),
   check("password").exists().notEmpty(),
   check("roles").exists().notEmpty().isMongoId(),
-  check("status").isBoolean().notEmpty(),
-
+  check("avatar").exists().notEmpty().isString(),
+  check("status").optional().isBoolean().default(true),
   (req, res, next) => {
     return validateResults(req, res, next);
   },
@@ -23,13 +23,12 @@ const validatorGetItems = [
   },
 ];
 
-//actualizar
+//actualizar si no es admin
 const validateUpdate = [
-  check("firstname").exists().notEmpty(),
-  check("lastname").exists().notEmpty(),
-
-  check("status").exists().notEmpty(),
-  check("roles").exists().notEmpty().isMongoId(),
+  check("firstname").exists().notEmpty().isString(),
+  check("lastname").exists().notEmpty().isString(),
+  check("avatar").exists().notEmpty().isString(),
+  check("status").optional().exists().isBoolean().default(true),
   (req, res, next) => {
     return validateResults(req, res, next);
   },
@@ -38,6 +37,7 @@ const validateUpdate = [
 const validatorAuthLogin = [
   check("email").exists().notEmpty().isEmail(),
   check("password").exists().notEmpty(),
+  check("last_login").optional().isDate(Date.now),
   (req, res, next) => {
     return validateResults(req, res, next);
   },
@@ -47,4 +47,5 @@ module.exports = {
   validatorGetItems,
   validatorCreateUser,
   validateUpdate,
+  validatorAuthLogin,
 };

@@ -1,15 +1,17 @@
 const { user } = require("../../models");
 const { createdToken } = require("../../middleware/generateToken");
 const handlerHttpError = require("../../utils/handlerHttpError");
+const { matchedData } = require("express-validator");
 
 const authLogin = async (req, res) => {
+  req = matchedData(req);
+  const { email, password } = req;
+
   try {
-    const { email, password } = req.body;
     const isExits = await user.findOne({ email: email });
 
     if (!isExits) {
-      handlerHttpError(res, "Usuario o email no coincide", 400);
-      return;
+      return handlerHttpError(res, "Usuario o email no coincide", 404);
     }
 
     const validatePassword = await user.comparePassword(
@@ -19,13 +21,15 @@ const authLogin = async (req, res) => {
 
     //401
     if (!validatePassword) {
-      handlerHttpError(res, "La contraseña es erronea", 406);
-      return;
+      return handlerHttpError(res, "La contraseña es erronea", 404);
     }
+
     const token = createdToken(isExits);
 
     res.cookie("login", token);
-    res.status(202).json({ success: true, token, id: isExits._id });
+    res
+      .status(202)
+      .json({ success: true, token, id: isExits._id, role: isExist.roles });
   } catch (error) {
     handlerHttpError(res, "Datos incorrectos", 400);
   }
@@ -35,6 +39,7 @@ const logOut = (req, res) => {
   res.cookie("token", "").json({ success: false });
 };
 
+const changePassword = (req, res) => {};
 /* 
 const registerLogin = async (
   firstname,
@@ -76,5 +81,6 @@ const registerLogin = async (
 module.exports = {
   authLogin,
   logOut,
+  changePassword,
   /*  registerLogin, */
 };

@@ -1,8 +1,6 @@
 const { matchedData } = require("express-validator");
 const { user } = require("../../models/");
 const handlerHttpError = require("../../utils/handlerHttpError");
-const { isExist } = require("../../libs/findUser");
-const uploadImage = require("../../middleware/generateImage");
 
 /**
  * !TODO: obtener la lista de usuarios sin roles, blog y passwords
@@ -39,7 +37,7 @@ const createUser = async (req, res) => {
       email: email,
       password: await user.encryptPassword(body.password),
       roles: roles,
-      avatar: `https://ui-avatars.com/api/?name=${body.firstname}${body.lastname}`,
+      avatar: avatar,
       status: body.status,
     });
 

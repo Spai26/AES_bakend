@@ -7,9 +7,9 @@ const {
 
 // Configuration
 cloudinary.config({
-  cloud_name: CLOUDINARY_NAME || process.env.CLOUDINARY_NAME,
-  api_key: CLOUDINARY_KEY || process.env.CLOUDINARY_KEY,
-  api_secret: CLOUDINARY_PASS || process.env.CLOUDINARY_PASS,
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_PASS,
 });
 
 module.exports = cloudinary;

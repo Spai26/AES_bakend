@@ -1,24 +1,11 @@
-const {Router} = require('express')
-// const authmiddleware = require('../middleware/session')
-const {
-  newCategory,
-  getAllCategory,
-  updateCategory,
-  deleteCategory 
-} = require('../controller/category.controller')
-const {
-   validatorNewCategory,
-   validatorUpdateCategory,
-   validatorDeleteCategory 
-} = require('../validators/categoryTest')
+const { Router } = require("express");
+const categoryCtrl = require("../controller/category.controller");
+const { validateItem, valideteNameItem } = require("../validators/general");
+const categoryRoutes = Router();
 
-const categoryRoutes = Router()
+categoryRoutes.get("/", categoryCtrl.getAllCategory);
+categoryRoutes.post("/", valideteNameItem, categoryCtrl.newCategory)
+categoryRoutes.put("/:id", validateItem, categoryCtrl.updateCategory);
+categoryRoutes.delete("/:id", validateItem, categoryCtrl.deleteCategory);
 
-//, authmiddleware agregar, si es necesario
-categoryRoutes.get('/', getAllCategory)
-categoryRoutes.post('/', validatorNewCategory, newCategory)
-
-categoryRoutes.put('/:id', validatorUpdateCategory, updateCategory)
-categoryRoutes.delete('/:id', validatorDeleteCategory, deleteCategory)
-
-module.exports = categoryRoutes
+module.exports = categoryRoutes;

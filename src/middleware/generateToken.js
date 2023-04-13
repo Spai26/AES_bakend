@@ -15,7 +15,6 @@ const createdToken = (user) => {
       expiresIn: "30d",
     }
   );
-
   return token;
 };
 

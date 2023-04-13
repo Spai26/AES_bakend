@@ -1,6 +1,6 @@
 {
   "name": "projectaes_backup",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "this project is test api-rest with express and mongodb",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,6 @@
   "author": "SergioAi <53959551+Spai26@users.noreply.github.com>",
   "license": "MIT",
   "devDependencies": {
-    "cors": "^2.8.5",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.21"
   },

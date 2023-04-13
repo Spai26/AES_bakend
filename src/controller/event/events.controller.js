@@ -39,8 +39,10 @@ const createEvent = async (req, res) => {
       return handlerHttpError(res, "Formato de imagen no válida!", 404);
     }
 
-    if (!validExtensionFile(files)) {
-      return handlerHttpError(res, "Solo acepta formato .pdf", 404);
+    if (files !== null) {
+      if (!validExtensionFile(files)) {
+        return handlerHttpError(res, "Solo acepta formato .pdf", 404);
+      }
     }
 
     const data = new event({
@@ -104,8 +106,10 @@ const updateEventByid = async (req, res) => {
       return handlerHttpError(res, "Formato de imagen no válida!", 404);
     }
 
-    if (!validExtensionFile(body.files)) {
-      return handlerHttpError(res, "Solo acepta formato .pdf", 404);
+    if (body.files !== null) {
+      if (!validExtensionFile(body.files)) {
+        return handlerHttpError(res, "Solo acepta formato .pdf", 404);
+      }
     }
 
     const data = await event.findOneAndUpdate(

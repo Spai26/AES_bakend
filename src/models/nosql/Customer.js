@@ -3,26 +3,37 @@ const { model, Schema } = require("mongoose");
 
 const CustomerSchema = new Schema(
   {
-    firstname: {
-      type: String,
-    },
-    lastname: {
-      type: String,
-    },
-    email: {
-      type: String,
-      unique: true,
-    },
+    fullname: { type: String, require: true },
+    email: { type: String, unique: true, require: true },
     events: [
       {
         type: Schema.Types.ObjectId,
         ref: "Event",
       },
     ],
-    origin: {
+    organization: { type: String },
+    work: { type: String },
+    cargo: { type: String },
+    phone: { type: String },
+    area: {
       type: String,
-      enum: ["event", "especialista", "institucion", "organizacion"],
+      enum: [
+        "Salud Física",
+        "Salud Mental",
+        "Salud Social",
+        "Salud Medio Ambiental",
+      ],
     },
+    assistants: { type: Number },
+    social: { type: Object },
+    origin: [{
+      type: String,
+      enum: ["event", "especialista", "institución", "organización"],
+    }],
+    country: { type: String },
+    city: { type: String },
+    filepath: { type: String },
+    view: { type: Boolean, default: false}
   },
   {
     versionKey: false,

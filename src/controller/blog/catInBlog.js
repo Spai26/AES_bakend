@@ -1,18 +1,32 @@
 const { blog } = require("../../models");
 const handlerHttpError = require("../../utils/handlerHttpError");
+const {functionMiddlewareNewArray} = require('../../middleware/functionMiddleware')
 
 const addCategoryToBlog = async (req, res) => {
   const { id } = req.params;
   const { category } = req.body;
-  const result = await blog.findById(id);
+  let result = await blog.findById(id);
   try {
     if (result) {
-      //implementar logica para que a su vez se guarde en la db de categorias
+      //implementar logica para que a su vez se guarde en la db de categorias //completado
       //categories = [ id de array]
-      result.category.push(category);
-      await result.save();
+      const newArray = await functionMiddlewareNewArray({category: category})
+      let arrayErrors = []
 
-      res.status(200).json({ result });
+      for(let i=0; i<newArray.length; i++){
+        if(!result.categories.includes(newArray[i]._id)){
+          result.categories.push(newArray[i])
+          await result.save();
+        }else{
+         arrayErrors.push(`(id: ${newArray[i]._id}, name: ${newArray[i].name}), `) 
+        }
+      }
+
+      if(arrayErrors.length === 0){
+        res.status(200).json({ result });
+      }else{
+        res.status(200).json({message: `Estas categorias, no fueron agregadas porque ya existe en el array de categories blogs: ${arrayErrors}`})
+      }
     } else {
       handlerHttpError(res, `ERROR_NO_SE_ENCONTRO_ESE_ID`, 404);
     }

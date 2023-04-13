@@ -1,6 +1,6 @@
 const { Router } = require("express");
-const errohander = require("../middleware/handlerError");
 const fs = require("fs");
+
 const routes = Router();
 
 /**
@@ -17,16 +17,10 @@ fs.readdirSync(PATH_ROUTES).filter((file) => {
   if (fileClean !== "index") {
     routes.use(`/${fileClean}`, require(`./${file}`));
   } else {
-    routes.use(errohander);
+    routes.use("/notfound", (req, res) => {
+      res.status(404).json({ message: "Algo inesperado sucedio :') !" });
+    });
   }
 });
-
-routes.get("/", (req, res) => {
-  res.send(
-    "this root page, If you are here, everything is fine 🧑 ✈ ☯  /para los spanglish si estas aqui es que todo esta bien 🙂🔥🔥🔥🔥   "
-  );
-});
-
-
 
 module.exports = routes;

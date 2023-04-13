@@ -25,14 +25,15 @@ const CustomerSchema = new Schema(
       ],
     },
     assistants: { type: Number },
-    social_networks: { type: [String] },
-    origin: {
+    social: { type: Object },
+    origin: [{
       type: String,
       enum: ["event", "especialista", "institución", "organización"],
-    },
+    }],
     country: { type: String },
     city: { type: String },
     filepath: { type: String },
+    view: { type: Boolean, default: false}
   },
   {
     versionKey: false,

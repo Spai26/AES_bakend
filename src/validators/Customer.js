@@ -1,16 +1,32 @@
 const { check } = require("express-validator");
 const validateResults = require("../utils/handlerValidator");
 
-//create
-const validatorCreateCustomer = [
+//create Customer
+const validatorRegisterCustomer = [
   check("fullname").exists().notEmpty(),
   check("email").exists().notEmpty().isEmail(),
-
+  check("events").exists().notEmpty().isMongoId(),
+  check("origin").exists().notEmpty(),
+  
 
   (req, res, next) => {
     return validateResults(req, res, next);
   },
 ];
+
+// Register especialista
+const validatorRegisterSpecialist = [
+  check("fullname").exists().notEmpty(),
+  check("email").exists().notEmpty(),
+  check("phone").exists().notEmpty(),
+  check("country").exists().notEmpty(),
+  check("area").exists().notEmpty(),
+  check("filepath").exists().notEmpty(),
+
+  (req, res, next) => {
+    return validateResults(req, res, next);
+  },
+]
 
 //traer todos - eliminar
 const validatorGetItems = [
@@ -34,6 +50,7 @@ const validateUpdateCustomer = [
 
 module.exports = {
   validatorGetItems,
-  validatorCreateCustomer,
+  validatorRegisterCustomer,
+  validatorRegisterSpecialist,
   validateUpdateCustomer,
 };

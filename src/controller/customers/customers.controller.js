@@ -7,12 +7,11 @@ const { isExist } = require("../../libs/findUser");
 
 const getAllCustomers = async (req, res) => {
   const allCustomers = await customer.find({});
-  //return allCustomers;
   res.send(allCustomers);
 };
 
 // Agregar un nuevo Customer o formulario
-const createCustomer = async (req, res) => {
+const RegisterCustomer = async (req, res) => {
   try {
     const {
       fullname,
@@ -48,42 +47,48 @@ const createCustomer = async (req, res) => {
       filepath: filepath,
     });
     await info.save();
-    res.status(201).json({ message: "Customer creado con éxito!!" });
+    res.status(201).json({ message: "Customer registrado con éxito!!" });
   } catch (error) {
     console.error(error);
-    handlerHttpError(res, "Customer no pudo crearse", 404);
+    handlerHttpError(res, "Customer no pudo registrarse", 404);
   }
 };
 
-const updateCustomerById = async (req, res) => {
+const validatorEmail = async (email) => {
+  let existingCustomer = await customer.findOne({ email: email });
+  return existingCustomer ? true : false;
+};
+const RegisterCustomerSpecialist = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { body } = req;
-    const isExist = await customer.findOne({ _id: id });
+    const { fullname, email, phone, area, origin, country, filepath } = req.body;
 
-    if (!isExist) return handlerHttpError(res, "Customer no existe!!", 404);
-    const info = await customer.findByIdAndUpdate(
-        {_id:id},
-        {
-            $set: {
-                fullname: body.fullname,
-                email: body.email,
-                events: body.events,
-                organization: body.organization,
-                work: body.work,
-                cargo: body.cargo,
-                phone: body.phone,
-                area: body.area,
-                assistants: body.assistants,
-                social_networks: body.social_networks,
-                origin: body.origin,
-                country: body.country,
-                city: body.city,
-                filepath: body.filepath,
-            }
-        }
-    )
-  } catch (error) {}
+    const emailExists = await validatorEmail(email);
+    if (emailExists) {
+      let existingCustomer = await customer.findOne({ email: email });
+      existingCustomer.origin = [...existingCustomer.origin, origin];
+      await existingCustomer.save();
+      res.status(200).json({ message: "Especialista registrado con éxito!!" });
+    } else {
+      const info = new customer({
+        fullname: fullname,
+        email: email,
+        phone: phone,
+        area: area,
+        origin: [origin],
+        country: country,
+        filepath: filepath,
+      });
+      await info.save();
+      res.status(201).json({ message: "Especialista registrado con éxito!!" });
+    }
+  } catch (error) {
+    handlerHttpError(res, "Especialista no pudo registrarse", 404);
+  }
 };
 
-module.exports = { getAllCustomers, createCustomer };
+
+module.exports = {
+  getAllCustomers,
+  RegisterCustomer,
+  RegisterCustomerSpecialist,
+};

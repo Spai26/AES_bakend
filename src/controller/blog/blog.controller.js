@@ -26,12 +26,14 @@ const setCreateBlog = async (req, res) => {
     const { title, description, status, image, files, categories, tags } =
       req.body;
 
-    if (!validExtensionImage(image)) {
-      return handlerHttpError(res, "Formato de imagen no válida!", 404);
-    }
+    if (files !== null) {
+      if (!validExtensionImage(image)) {
+        return handlerHttpError(res, "Formato de imagen no válida!", 404);
+      }
 
-    if (!validExtensionFile(files)) {
-      return handlerHttpError(res, "Solo acepta formato .pdf", 404);
+      if (!validExtensionFile(files)) {
+        return handlerHttpError(res, "Solo acepta formato .pdf", 404);
+      }
     }
 
     const data = new blog({
@@ -47,6 +49,7 @@ const setCreateBlog = async (req, res) => {
     await data.save();
     res.status(201).json({ message: "Blog creado!" });
   } catch (error) {
+    console.error(error);
     handlerHttpError(res, "Blog no creado, titulo no valido.");
   }
 };
@@ -56,13 +59,14 @@ const setCreateBlog = async (req, res) => {
  */
 const getDetailBlog = async (req, res) => {
   try {
-    req = matchedData(req);
-    const { id } = req;
+    /* req = matchedData(req); */
+    const { id } = req.params;
 
     const result = await blog
       .findOne({ _id: id })
       .populate("categories", "name")
       .populate("tags", "name");
+
     res.status(200).json(result);
   } catch (error) {
     handlerHttpError(res, "Blog no encontrado!", 404);
@@ -77,12 +81,14 @@ const updateBlogById = async (req, res) => {
     const { id } = req.params;
     const { body } = req;
 
-    if (!validExtensionImage(body.image)) {
-      return handlerHttpError(res, "Formato de imagen no válida!", 404);
-    }
+    if (body.files !== null) {
+      if (!validExtensionImage(body.image)) {
+        return handlerHttpError(res, "Formato de imagen no válida!", 404);
+      }
 
-    if (!validExtensionFile(body.files)) {
-      return handlerHttpError(res, "Solo acepta formato .pdf", 404);
+      if (!validExtensionFile(body.files)) {
+        return handlerHttpError(res, "Solo acepta formato .pdf", 404);
+      }
     }
 
     await blog.findByIdAndUpdate(

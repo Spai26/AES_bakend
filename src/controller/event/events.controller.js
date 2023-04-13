@@ -1,9 +1,11 @@
 const { matchedData } = require("express-validator");
 const { event } = require("../../models");
-const { customer } = require("../../models");
 const handlerHttpError = require("../../utils/handlerHttpError");
-const { isExist } = require("../../libs/findUser");
-const uploadImage = require("../../middleware/generateImage");
+const {
+  validExtensionImage,
+  validExtensionFile,
+} = require("../../libs/validExtensionFiles");
+
 /**
  * !TODO: listar todos los eventos
  */
@@ -12,10 +14,6 @@ const getAllEvents = async () => {
     .find({})
     .populate("categories", "name")
     .populate("tags", "name");
-  /* .populate({
-      path: "categories",
-      populate: { path: "categoryId", model: "Category" },
-    }); */
   return allEvents;
 };
 
@@ -27,6 +25,7 @@ const createEvent = async (req, res) => {
     const {
       title,
       frontpage,
+      files,
       description,
       date_in,
       date_out,
@@ -36,22 +35,30 @@ const createEvent = async (req, res) => {
       tags,
     } = req.body;
 
+    if (!validExtensionImage(image)) {
+      return handlerHttpError(res, "Formato de imagen no válida!", 404);
+    }
+
+    if (!validExtensionFile(files)) {
+      return handlerHttpError(res, "Solo acepta formato .pdf", 404);
+    }
+
     const data = new event({
-      title: title,
-      frontpage: await uploadImage(frontpage, { public_id: title }),
-      description: description,
-      date_in: date_in,
-      date_out: date_out,
-      location: location,
-      status: status,
-      categories: categories,
-      tags: tags,
+      title,
+      frontpage,
+      files,
+      description,
+      date_in,
+      date_out,
+      location,
+      status,
+      categories,
+      tags,
     });
 
     await data.save();
     res.status(201).json({ message: "Evento creado con éxito!" });
   } catch (error) {
-    console.error(error);
     handlerHttpError(
       res,
       "Evento no pudo crearse o tiene titulo duplicado",
@@ -78,6 +85,7 @@ const detailEventForid = async (req, res) => {
       .findById(id)
       .populate("categories", "name")
       .populate("tags", "name");
+
     res.status(200).json(result);
   } catch (error) {
     handlerHttpError(res, "Este evento no valido");
@@ -91,10 +99,13 @@ const updateEventByid = async (req, res) => {
   try {
     const { id } = req.params;
     const { body } = req;
-    const isExist = await event.findOne({ _id: id });
 
-    if (!isExist) {
-      return handlerHttpError(res, "Evento no existe!", 404);
+    if (!validExtensionImage(body.image)) {
+      return handlerHttpError(res, "Formato de imagen no válida!", 404);
+    }
+
+    if (!validExtensionFile(body.files)) {
+      return handlerHttpError(res, "Solo acepta formato .pdf", 404);
     }
 
     const data = await event.findOneAndUpdate(
@@ -103,7 +114,8 @@ const updateEventByid = async (req, res) => {
         $set: {
           title: body.title,
           location: body.location,
-          frontpage: await uploadImage(body.frontpage),
+          frontpage: body.frontpage,
+          files: body.files,
           description: body.description,
           status: body.status,
           date_in: body.date_in,

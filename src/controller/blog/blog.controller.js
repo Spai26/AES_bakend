@@ -26,11 +26,11 @@ const setCreateBlog = async (req, res) => {
     const { title, description, status, image, files, categories, tags } =
       req.body;
 
-    if (files !== null) {
-      if (!validExtensionImage(image)) {
-        return handlerHttpError(res, "Formato de imagen no válida!", 404);
-      }
+    if (!validExtensionImage(image)) {
+      return handlerHttpError(res, "Formato de imagen no válida!", 404);
+    }
 
+    if (files !== null) {
       if (!validExtensionFile(files)) {
         return handlerHttpError(res, "Solo acepta formato .pdf", 404);
       }
@@ -81,11 +81,11 @@ const updateBlogById = async (req, res) => {
     const { id } = req.params;
     const { body } = req;
 
-    if (body.files !== null) {
-      if (!validExtensionImage(body.image)) {
-        return handlerHttpError(res, "Formato de imagen no válida!", 404);
-      }
+    if (!validExtensionImage(body.image)) {
+      return handlerHttpError(res, "Formato de imagen no válida!", 404);
+    }
 
+    if (body.files !== null) {
       if (!validExtensionFile(body.files)) {
         return handlerHttpError(res, "Solo acepta formato .pdf", 404);
       }

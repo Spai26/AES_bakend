@@ -6,10 +6,9 @@ const { Schema, model } = require("mongoose");
  */
 const ResourseSchema = new Schema(
   {
-    name: { type: String },
     origin: {
       type: String,
-      enum: ["videos", "gallery"],
+      enum: ["videos", "images"],
     },
     url: { type: String },
     status: { type: Boolean, default: false },

@@ -77,16 +77,25 @@ const updateBlogById = async (req, res) => {
     const { id } = req.params;
     const { body } = req;
 
+    if (!validExtensionImage(body.image)) {
+      return handlerHttpError(res, "Formato de imagen no válida!", 404);
+    }
+
+    if (!validExtensionFile(body.files)) {
+      return handlerHttpError(res, "Solo acepta formato .pdf", 404);
+    }
+
     await blog.findByIdAndUpdate(
       { _id: id },
       {
         $set: {
           title: body.title,
-          image: await uploadImage(body.image),
+          image: body.image,
           description: body.description,
           status: body.status,
           categories: body.categories,
           tags: body.tags,
+          files: body.files,
         },
       }
     );

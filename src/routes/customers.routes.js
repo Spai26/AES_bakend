@@ -2,11 +2,54 @@ const { Router } = require("express");
 const Customer = require("../controller/customers/customers.controller");
 const {validatorRegisterCustomer, validatorRegisterSpecialist } = require("../validators/Customer")
 
-const customerRoute = Router(); 
+<<<<<<<<< Temporary merge branch 1
+const customerRoute = Router();
 customerRoute.get("/", (req, res) => {
   res.send({ data: "client" });
 });
+
+//formularios eventos - especialistas - instituciones  - organizacion
+/**
+ * nombre
+ * apellido
+ * email
+ */
+
+/**
+ {
+  event_id :2222,
+  description: ---
+  title: ----
+  customer :[
+    {customer_id},
+    {customer_id},
+    {customer_id}
+
+  ]
+ }
+ */
+
+//registro evento
+/* customerRoute("/register", (req, res)=>{
+  const {nombre, apellido, email, origin} = req.body
+  
+ }) */
+//especialista
+/* customerRoute("/especialista", (req, res)=>{
+  const {nombre, apellido, email pais, celular} = req.body
+ }) */
 /* customerRoute.get("/", EventClient.AddcustomerRoute);
+=========
+const customerRoute = Router(); 
+
+customerRoute.get("/", Customer.getAllCustomers);
+customerRoute.post("/", validatorCreateCustomer, Customer.createCustomer );
+customerRoute.put("/:id", validateUpdateCustomer, validatorGetItems, EventClient.updateCustomer);
+// customerRoute.get("/", (req, res) => {
+//   res.send({ data: "client" });
+// });
+/* 
+>>>>>>>>> Temporary merge branch 2
 customerRoute.get("/:id", EventClient.AddcustomerRouteById);
 customerRoute.post("/", EventClient.CreatecustomerRoute);
 customerRoute.put("/:id", EventClient.UpdatecustomerRoute); */

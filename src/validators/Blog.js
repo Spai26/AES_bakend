@@ -8,6 +8,7 @@ const validateNewBlog = [
   check("status").exists().notEmpty(),
   check("image").exists().notEmpty(),
   check("files").isString().optional({ checkFalsy: true }),
+  check("short_description").exists().notEmpty().isString(),
   check("categories").exists().notEmpty().isMongoId(),
   check("tags").exists().notEmpty().isMongoId(),
   (req, res, next) => {
@@ -21,6 +22,7 @@ const validateUpdate = [
   check("description").exists().notEmpty(),
   check("image").exists().notEmpty(),
   check("status").exists().notEmpty().isBoolean(),
+  check("short_description").exists().notEmpty().isString(),
   check("files").isString().optional({ checkFalsy: true }),
   check("categories").exists().notEmpty().isMongoId(),
   (req, res, next) => {

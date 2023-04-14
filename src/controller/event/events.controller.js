@@ -32,6 +32,7 @@ const createEvent = async (req, res) => {
       location,
       status,
       categories,
+      short_description,
       tags,
     } = req.body;
 
@@ -52,6 +53,7 @@ const createEvent = async (req, res) => {
       description,
       date_in,
       date_out,
+      short_description,
       location,
       status,
       categories,
@@ -123,6 +125,7 @@ const updateEventByid = async (req, res) => {
           description: body.description,
           status: body.status,
           date_in: body.date_in,
+          short_description: body.short_description,
           date_out: body.date_out,
           categories: body.categories,
           tags: body.tags,

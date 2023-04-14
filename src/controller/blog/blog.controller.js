@@ -23,8 +23,16 @@ const getAllBlogs = async () => {
  */
 const setCreateBlog = async (req, res) => {
   try {
-    const { title, description, status, image, files, categories, tags } =
-      req.body;
+    const {
+      title,
+      description,
+      status,
+      image,
+      files,
+      categories,
+      tags,
+      short_description,
+    } = req.body;
 
     if (!validExtensionImage(image)) {
       return handlerHttpError(res, "Formato de imagen no válida!", 404);
@@ -41,6 +49,7 @@ const setCreateBlog = async (req, res) => {
       image,
       description,
       categories,
+      short_description,
       tags,
       status,
       files,
@@ -100,6 +109,7 @@ const updateBlogById = async (req, res) => {
           description: body.description,
           status: body.status,
           categories: body.categories,
+          short_description: body.short_description,
           tags: body.tags,
           files: body.files,
         },

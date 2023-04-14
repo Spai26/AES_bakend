@@ -8,6 +8,7 @@ const validatorAddEvent = [
   check("date_out").exists().notEmpty().isDate(),
   check("frontpage").exists().notEmpty(),
   check("files").isString().optional({ checkFalsy: true }),
+  check("short_description").exists().notEmpty().isString(),
   check("location").exists().notEmpty().isString(),
   check("description").exists().notEmpty().isString(),
   check("status").exists().notEmpty().isBoolean(),

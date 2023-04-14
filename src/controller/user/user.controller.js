@@ -98,7 +98,6 @@ const updateUser = async (req, res) => {
 
     res.status(202).json({ succes: true });
   } catch (error) {
-    console.error(error);
     handlerHttpError(res, "Algo inesperado sucedio!", 500);
   }
 };
@@ -117,8 +116,8 @@ const deleteUser = async (req, res) => {
       return;
     }
 
-    const data = await user.delete({ _id: id });
-    /* console.log(data); */
+    await user.delete({ _id: id });
+
     res.status(200).json({ message: "Usuario eliminado" });
   } catch (error) {
     handlerHttpError(res, "Haz ingresado un id no valido", 400);

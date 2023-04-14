@@ -3,6 +3,9 @@ const { createdToken } = require("../../middleware/generateToken");
 const handlerHttpError = require("../../utils/handlerHttpError");
 const { matchedData } = require("express-validator");
 
+/**
+ * !TODO: login auth
+ */
 const authLogin = async (req, res) => {
   req = matchedData(req);
   const { email, password } = req;
@@ -29,58 +32,71 @@ const authLogin = async (req, res) => {
     res.cookie("login", token);
     res
       .status(202)
-      .json({ success: true, token, id: isExits._id, role: isExist.roles });
+      .json({ success: true, token, id: isExits._id, role: isExits.roles });
   } catch (error) {
     handlerHttpError(res, "Datos incorrectos", 400);
   }
 };
 
+/**
+ * !TODO: Logout auth
+ */
 const logOut = (req, res) => {
   res.cookie("token", "").json({ success: false });
 };
 
-const changePassword = (req, res) => {};
-/* 
-const registerLogin = async (
-  firstname,
-  lastname,
-  username,
-  email,
-  password
-) => {
-  const userExist = await User.findOne({ email: email });
-  const validateName = await User.findOne({ username: username });
+/**
+ * !TODO: Cambio de contraseña
+ */
+const changePassword = async (req, res) => {
+  const { id } = req.params;
+  const { oldpassword, newpassword } = req.body;
 
-  if (userExist || validateName) {
-    throw new Error("Este usuario ya existe");
+  try {
+    const isExist = await user.findOne({ _id: id });
+
+    if (!isExist || isExist.status === false) {
+      return handlerHttpError(res, "error con el usuario", 404);
+    }
+
+    //valido contraseña
+    const validatePassword = await user.comparePassword(
+      oldpassword,
+      isExist.password
+    );
+
+    if (!validatePassword) {
+      return handlerHttpError(res, "La contraseña es erronea", 404);
+    }
+
+    const validNewPass = await user.comparePassword(
+      isExist.password,
+      newpassword
+    );
+    console.log(validNewPass);
+    if (validNewPass) {
+      return handlerHttpError(
+        res,
+        "estas seguro que estas cambiando la contraseña?",
+        404
+      );
+    }
+
+    //encryto nueva contraseña
+    const encryptNewPass = await user.encryptPassword(newpassword);
+
+    //solo si es distinto lo cambio
+    isExist.password = encryptNewPass;
+
+    const data = await isExist.save();
+    res.send({ succes: true, message: "Contraseña actualizada!" });
+  } catch (error) {
+    handlerHttpError(res, "No se pudo realizar la acción", 500);
   }
-
-  const dataUser = new User({
-    firstname,
-    lastname,
-    username,
-    email,
-    avatar: `https://ui-avatars.com/api/?name=${firstname}${lastname}`,
-    password: await User.encryptPassword(password),
-  });
-
-  //asigno un role por defecto
-  const role = await Role.findOne({ name: "invitado" });
-  dataUser.roles = [role._id];
-
-  dataUser.save();
-
-  const data = {
-    token: createdToken(dataUser),
-    user: dataUser,
-  };
-
-  return data;
-}; */
+};
 
 module.exports = {
   authLogin,
   logOut,
   changePassword,
-  /*  registerLogin, */
 };

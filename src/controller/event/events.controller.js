@@ -35,7 +35,7 @@ const createEvent = async (req, res) => {
       tags,
     } = req.body;
 
-    if (!validExtensionImage(image)) {
+    if (!validExtensionImage(frontpage)) {
       return handlerHttpError(res, "Formato de imagen no válida!", 404);
     }
 

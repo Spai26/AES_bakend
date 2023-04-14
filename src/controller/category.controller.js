@@ -2,9 +2,6 @@ const handlerHttpError = require("../utils/handlerHttpError");
 const { category } = require("../models");
 const { matchedData } = require("express-validator");
 
-/**
- * !TODO: obtener todas las categorias
- */
 const getAllCategory = async (req, res) => {
   try {
     const result = await category.find({});
@@ -18,9 +15,6 @@ const getAllCategory = async (req, res) => {
   }
 };
 
-/**
- * !TODO: crear una nueva categoria
- */
 const newCategory = async (req, res) => {
   const { name } = matchedData(req);
 
@@ -38,16 +32,13 @@ const newCategory = async (req, res) => {
   }
 };
 
-/**
- * !TODO: actualizar categoria
- */
 const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
 
     await category.findByIdAndUpdate({ _id: id }, req.body);
 
-    /* console.log(result) */
+    / console.log(result) */
     res.status(202).json({ message: "categoria actualizada" });
   } catch (error) {
     console.error(error);
@@ -55,9 +46,7 @@ const updateCategory = async (req, res) => {
   }
 };
 
-/**
- * !TODO: Eliminacion de la categoria
- */
+
 const deleteCategory = async (req, res) => {
   try {
     req = matchedData(req);

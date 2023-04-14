@@ -2,8 +2,8 @@ const { Router } = require("express");
 const userController = require("../controller/user/user.controller");
 const isAuth = require("../middleware/session");
 const {
-  validatorCreateUser,
   validatorGetItems,
+  validatorCreateUser,
   validateUpdate,
 } = require("../validators/User");
 const userRoute = Router();
@@ -13,7 +13,6 @@ userRoute.post("/", validatorCreateUser, userController.createUser);
 userRoute.get("/:id", validatorGetItems, userController.detailUser);
 userRoute.put(
   "/:id",
-
   validatorGetItems,
   validateUpdate,
   userController.updateUser

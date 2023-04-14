@@ -10,6 +10,7 @@ const BlogSchema = new Schema(
     slug: { type: String, slug: "title" },
     description: { type: String, required: true },
     image: { type: String, required: true },
+    short_description: { type: String, require: true },
     categories: [
       {
         type: Schema.Types.ObjectId,

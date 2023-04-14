@@ -1,6 +1,7 @@
 const { matchedData } = require("express-validator");
 const { user } = require("../../models/");
 const handlerHttpError = require("../../utils/handlerHttpError");
+const { validExtensionImage } = require("../../libs/validExtensionFiles");
 
 /**
  * !TODO: obtener la lista de usuarios sin roles, blog y passwords
@@ -14,12 +15,12 @@ const getAllItems = async (req, res) => {
       .exec();
 
     if (!data.length) {
-      returnhandlerHttpError(res, "No hay usuarios creados", 204);
+      return handlerHttpError(res, "No hay usuarios creados", 204);
     }
 
     res.status(200).json(data);
   } catch (error) {
-    handlerHttpError(res, "ERROR al traer data", 400);
+    handlerHttpError(res, "error al traer data", 500);
   }
 };
 
@@ -28,8 +29,12 @@ const getAllItems = async (req, res) => {
  */
 const createUser = async (req, res) => {
   try {
-    const { email, roles, ...body } = matchedData(req);
-    /* console.log(roles); */
+    const { email, roles, avatar, ...body } = matchedData(req);
+
+    if (!validExtensionImage(avatar)) {
+      return handlerHttpError(res, "Solo se acepta ext. jpg. png. .gif");
+    }
+
     const data = new user({
       firstname: body.firstname,
       lastname: body.lastname,
@@ -37,10 +42,9 @@ const createUser = async (req, res) => {
       password: await user.encryptPassword(body.password),
       roles: roles,
       avatar: avatar,
-      status: body.status,
     });
 
-    const result = await data.save();
+    await data.save();
     res.status(201).json({ message: "Usuario creado!" });
   } catch (error) {
     console.error(error);
@@ -55,7 +59,11 @@ const detailUser = async (req, res) => {
   try {
     req = matchedData(req);
     const { id } = req;
-    const result = await user.findById(id)  ;
+    const result = await user.findById(id, {
+      roles: 0,
+      password: 0,
+      last_login: 0,
+    });
 
     res.status(200).json(result);
   } catch (error) {
@@ -67,26 +75,30 @@ const detailUser = async (req, res) => {
  * !TODO: controlador actualizar usuario
  */
 const updateUser = async (req, res) => {
+  const { id } = req.params;
+  let up = req.body;
   try {
-    const { id } = req.params;
-    const { firstname, lastname, status, roles } = req.body;
+    const isExist = await user.findOne({ _id: id });
 
-    const data = await user.findOneAndUpdate(
+    if (!isExist) {
+      return handlerHttpError(res, "Exte usuario no existe", 400);
+    }
+
+    await user.updateOne(
       { _id: id },
       {
         $set: {
-          firstname: firstname,
-          lastname: lastname,
-          status: status,
-          roles: roles,
+          firstname: up.firstname,
+          lastname: up.lastname,
+          avatar: up.avatar,
+          status: up.status,
         },
       }
     );
 
-    res.status(202).json({ message: "usuario actualizado!" });
+    res.status(202).json({ succes: true });
   } catch (error) {
-    console.error(error);
-    handlerHttpError(res, "No se acepta campos vacios", 400);
+    handlerHttpError(res, "Algo inesperado sucedio!", 500);
   }
 };
 
@@ -104,8 +116,8 @@ const deleteUser = async (req, res) => {
       return;
     }
 
-    const data = await user.delete({ _id: id });
-    /* console.log(data); */
+    await user.delete({ _id: id });
+
     res.status(200).json({ message: "Usuario eliminado" });
   } catch (error) {
     handlerHttpError(res, "Haz ingresado un id no valido", 400);

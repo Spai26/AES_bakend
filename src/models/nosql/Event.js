@@ -11,6 +11,7 @@ const EventSchema = new Schema(
     frontpage: { type: String, require: true },
     files: { type: String, default: null },
     location: { type: String, require: true },
+    short_description: { type: String, require: true },
     description: { type: String, require: true },
     slug: { type: String, slug: "title" },
     status: { type: Boolean, require: false },

@@ -10,7 +10,8 @@ const models = {
   tag: require("./nosql/Tag"),
   organization: require('./nosql/Organization'),
   area: require('./nosql/Areas'),
-  institution: require('./nosql/Institution')
+  institution: require('./nosql/Institution'),
+  specialist: require("./nosql/Specialist")
 };
 
 module.exports = models;

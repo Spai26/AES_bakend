@@ -21,19 +21,28 @@ const getAllBlogs = async () => {
  * !TODO: crear un blog en nuestro modelo con categoria
  * ?la categoria debe existir y solo recibe id
  */
-const setCreateBlog = async (req, res) => {
+const setCreateBlog = async (req, res, next) => {
   try {
-    const { title, description, status, image, files, categories, tags } =
-      req.body;
+    const {
+      title,
+      description,
+      status,
+      image,
+      categories,
+      tags,
+      short_description,
+    } = req.body;
 
     if (!validExtensionImage(image)) {
       return handlerHttpError(res, "Formato de imagen no válida!", 404);
     }
 
-    if (files !== null) {
-      if (!validExtensionFile(files)) {
+    let files;
+    if (req.body.hasOwnProperty("files") && req.body.files !== null) {
+      if (!validExtensionFile(req.body.files)) {
         return handlerHttpError(res, "Solo acepta formato .pdf", 404);
       }
+      files = req.body.files;
     }
 
     const data = new blog({
@@ -41,6 +50,7 @@ const setCreateBlog = async (req, res) => {
       image,
       description,
       categories,
+      short_description,
       tags,
       status,
       files,
@@ -100,6 +110,7 @@ const updateBlogById = async (req, res) => {
           description: body.description,
           status: body.status,
           categories: body.categories,
+          short_description: body.short_description,
           tags: body.tags,
           files: body.files,
         },

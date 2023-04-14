@@ -25,24 +25,25 @@ const createEvent = async (req, res) => {
     const {
       title,
       frontpage,
-      files,
       description,
       date_in,
       date_out,
       location,
       status,
       categories,
+      short_description,
       tags,
     } = req.body;
 
-    if (!validExtensionImage(image)) {
+    if (!validExtensionImage(frontpage)) {
       return handlerHttpError(res, "Formato de imagen no válida!", 404);
     }
-
-    if (files !== null) {
-      if (!validExtensionFile(files)) {
+    let files;
+    if (req.body.hasOwnProperty("files") && req.body.files !== null) {
+      if (!validExtensionFile(req.body.files)) {
         return handlerHttpError(res, "Solo acepta formato .pdf", 404);
       }
+      files = req.body.files;
     }
 
     const data = new event({
@@ -52,6 +53,7 @@ const createEvent = async (req, res) => {
       description,
       date_in,
       date_out,
+      short_description,
       location,
       status,
       categories,
@@ -61,6 +63,7 @@ const createEvent = async (req, res) => {
     await data.save();
     res.status(201).json({ message: "Evento creado con éxito!" });
   } catch (error) {
+    console.error(error);
     handlerHttpError(
       res,
       "Evento no pudo crearse o tiene titulo duplicado",
@@ -123,6 +126,7 @@ const updateEventByid = async (req, res) => {
           description: body.description,
           status: body.status,
           date_in: body.date_in,
+          short_description: body.short_description,
           date_out: body.date_out,
           categories: body.categories,
           tags: body.tags,

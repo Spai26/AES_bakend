@@ -1,0 +1,69 @@
+const { matchedData } = require("express-validator");
+const { person } = require("../../models");
+const handlerHttpError = require("../../utils/handlerHttpError");
+const { isExist } = require("../../libs/findUser");
+
+//listar todos los customers
+
+const getAllPersons = async (req, res) => {
+  const {email} = req.query;
+
+    if(email){
+      const emailPerson = await person.findOne({email: email})
+      if(emailPerson){
+        res.status(200).json(emailPerson)
+      }else{
+        handlerHttpError(res, `ERROR_ESE_CORREO_NO_SE_ENCUENTRA_REGISTRADO`, 404)
+      }
+    }else{
+      const allPerson = await person.find({});
+      res.send(allPerson);
+    }
+};
+
+// Agregar un nuevo Customer o formulario
+const RegisterPerson = async (req, res) => {
+  const dataPerson = matchedData(req, {location: ['body']})
+  const { email, fullname} = dataPerson;
+  
+  const getPerson = await person.findOne({email: email})
+
+  try {
+    if(!getPerson){
+      const newPerson = new person({
+        email: email,
+        fullname: fullname
+      });
+      await newPerson.save();
+      res.status(201).json({ message: "Persona, registrado con éxito!!" });
+    }else{
+      handlerHttpError(res, `ERROR_LA_PERSONA_CON_ESE_EMAIL_YA_EXISTE`, 400)
+    }
+  } catch (error) {
+    console.error(error);
+    handlerHttpError(res, "Persona, no pudo registrarse", 404);
+  }
+};
+
+const deletePersonById = async (req, res) => {
+  const idPerson = matchedData(req, {location: ['query']})
+  const {id} = idPerson;
+
+  try{
+    const existsPerson = await person.findById(id)
+    if(existsPerson){
+      await person.findByIdAndDelete(id)
+      res.status(200).json({message: `Persona con el id: ${id}, eliminada con éxito`})
+    }else{
+      handlerHttpError(res, `ERROR_ESA_PERSONA_CON_ESE_ID_NO_EXISTE_VERIFICA_DE_NUEVO`, 404)
+    }
+  }catch(err){
+    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400)
+  }
+}
+
+module.exports = {
+  getAllPersons,
+  RegisterPerson,
+  deletePersonById
+};

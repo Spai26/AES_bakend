@@ -2,6 +2,7 @@ const { matchedData } = require("express-validator");
 const { person } = require("../../models");
 const handlerHttpError = require("../../utils/handlerHttpError");
 const { isExist } = require("../../libs/findUser");
+const { eventNames } = require("../../models/nosql/Role");
 
 //listar todos los customers
 
@@ -24,20 +25,23 @@ const getAllPersons = async (req, res) => {
 // Agregar un nuevo Customer o formulario
 const RegisterPerson = async (req, res) => {
   const dataPerson = matchedData(req, {location: ['body']})
-  const { email, fullname} = dataPerson;
+  const { email, fullname, events} = dataPerson;
   
   const getPerson = await person.findOne({email: email})
-
+ 
   try {
     if(!getPerson){
       const newPerson = new person({
         email: email,
-        fullname: fullname
+        fullname: fullname,
+        events: [events]
       });
       await newPerson.save();
       res.status(201).json({ message: "Persona, registrado con éxito!!" });
     }else{
-      handlerHttpError(res, `ERROR_LA_PERSONA_CON_ESE_EMAIL_YA_EXISTE`, 400)
+      getPerson.events.push(events)
+      await getPerson.save();
+      res.status(201).json({ message: "Persona, registrado con éxito!!" });
     }
   } catch (error) {
     console.error(error);

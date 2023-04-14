@@ -12,7 +12,6 @@ blogRoute.post("/", validateNewBlog, blogController.setCreateBlog);
 blogRoute.get("/:id", validateItem, blogController.getDetailBlog);
 blogRoute.put(
   "/:id",
-
   validateItem,
   validateUpdate,
   blogController.updateBlogById

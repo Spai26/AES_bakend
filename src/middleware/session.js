@@ -18,9 +18,9 @@ const isAuth = async (req, res, next) => {
 
     const verified = await verifyToken(token);
 
-    const foundUser = await user.findOne({ _id: verified.id });
+    const foundUser = await user.findOne({ _id: verified.id })
 
-    req.user = foundUser;
+    req.user = foundUser
 
     next();
   } catch (error) {

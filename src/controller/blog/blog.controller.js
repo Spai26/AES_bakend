@@ -38,17 +38,12 @@ const setCreateBlog = async (req, res, next) => {
     }
 
     let files;
-    if (req.body.hasOwnProperty('files') && req.body.files !== null) {
+    if (req.body.hasOwnProperty("files") && req.body.files !== null) {
       if (!validExtensionFile(req.body.files)) {
         return handlerHttpError(res, "Solo acepta formato .pdf", 404);
       }
       files = req.body.files;
     }
-    /* if (files !== null) {
-      if (!validExtensionFile(files)) {
-        return handlerHttpError(res, "Solo acepta formato .pdf", 404);
-      }
-    } */
 
     const data = new blog({
       title,

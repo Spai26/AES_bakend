@@ -9,19 +9,15 @@ const getAllPersons = async (req, res) => {
   const {email} = req.query;
 
     if(email){
-      const emailPerson = await person.findOne({email: email})
-      if(emailPerson){
-        res.status(200).json(emailPerson)
-      }else{
-        handlerHttpError(res, `ERROR_ESE_CORREO_NO_SE_ENCUENTRA_REGISTRADO`, 404)
-      }
+      const emailPerson = await person.find({email: {$regex: new RegExp(`${email}`, 'i')}})
+      res.status(200).json(emailPerson)
     }else{
       const allPerson = await person.find({});
       res.send(allPerson);
     }
 };
 
-// Agregar un nuevo Customer o formulario
+
 const RegisterPerson = async (req, res) => {
   const dataPerson = matchedData(req, {location: ['body']})
   const { email, fullname} = dataPerson;

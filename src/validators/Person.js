@@ -5,7 +5,7 @@ const validateResults = require("../utils/handlerValidator");
 const validatorRegisterPerson = [
   check("email").exists().notEmpty(),
   check("fullname").exists().notEmpty(),
-  check('events').exists().notEmpty(),
+  // check('events').exists().notEmpty(),
   (req, res, next) => {
     return validateResults(req, res, next);
   },

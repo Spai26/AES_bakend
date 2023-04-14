@@ -8,7 +8,7 @@ const ResourseSchema = new Schema(
   {
     origin: {
       type: String,
-      enum: ["videos", "images"],
+      enum: ["videos", "images", "slider"],
     },
     url: { type: String },
     status: { type: Boolean, default: false },

@@ -3,7 +3,7 @@ const { model, Schema } = require('mongoose')
 
 const OrganizationSchema = new Schema(
     {
-        organization: {type: String},
+        organizations: {type: String},
         work: {type: String},
         email: {type: String, required: true, unique: true},
         fullname: {type: String},
@@ -12,8 +12,8 @@ const OrganizationSchema = new Schema(
         assistants: {type: Number},
         city: {type: String},
         social: {type: Object},
+        area: [{type: Schema.Types.ObjectId, ref: 'Area'}],
         view: {type: String},
-        origin: {type: String, required: true}
     },
     {
         versionKey: false,

@@ -5,7 +5,7 @@ const handlerHttpError = require('../../utils/handlerHttpError')
 const getAllAreas = async (req, res) => {
     try{
        const result = await area.find({})
-       res.status(200).json( { result } ) 
+       res.status(200).json(result) 
     }catch(err){
         handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400)
     }
@@ -25,7 +25,7 @@ const createNewArea = async (req, res) => {
         }
       )  
       await newArea.save()
-      res.status(201).json({ newArea })
+      res.status(201).json(newArea)
     }else{
         handlerHttpError(res, `ERROR_ESE_AREA_CON_ESE_NAME_YA_EXISTE_VALIDA_OTRO_NOMBRE`, 400)
     }

@@ -3,7 +3,7 @@ const { model, Schema } = require('mongoose')
 const institutionSchema = new Schema(
     {
         organization: {type: String},
-        email: {type: String, unique: true, required: true},
+        email: {type: String, required: true},
         fullname: { type: String, required: true},
         phone: { type: String},
         post: { type: String},

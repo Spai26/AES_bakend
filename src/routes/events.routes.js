@@ -6,9 +6,14 @@ const { validateItem } = require("../validators/general");
 const eventRouter = Router();
 
 eventRouter.get("/", searchOrAllEvents);
-eventRouter.post("/", eventController.createEvent);
+eventRouter.post("/", validatorAddEvent, eventController.createEvent);
 eventRouter.get("/:id", validateItem, eventController.detailEventForid);
-eventRouter.put("/:id", validateItem, eventController.updateEventByid);
+eventRouter.put(
+  "/:id",
+  validateItem,
+  validatorAddEvent,
+  eventController.updateEventByid
+);
 eventRouter.delete("/:id", validateItem, eventController.deleteEventByid);
 
 module.exports = eventRouter;

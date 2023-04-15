@@ -4,8 +4,8 @@ const validateResults = require("../utils/handlerValidator");
 //create
 const validatorAddEvent = [
   check("title").exists().notEmpty().isString(),
-  check("date_in").exists().notEmpty().isDate(),
-  check("date_out").exists().notEmpty().isDate(),
+  check("date_in").notEmpty().isISO8601().toDate(),
+  check("date_out").notEmpty().isISO8601().toDate(),
   check("frontpage").exists().notEmpty(),
   check("files").isString().optional(),
   check("short_description").exists().notEmpty().isString(),

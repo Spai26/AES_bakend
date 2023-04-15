@@ -20,7 +20,7 @@ const uploadItems = async (req, res) => {
   try {
     const { origin, url } = req.body;
 
-    if (!["videos", "images"].includes(origin)) {
+    if (!["videos", "images", "slider"].includes(origin)) {
       return handlerHttpError(res, "Origen invalido", 404);
     }
 

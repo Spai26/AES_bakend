@@ -13,19 +13,23 @@ const showAllItems = async (req, res) => {
 
 const uploadItems = async (req, res) => {
   try {
-    const { origin, url, status } = req.body;
-    /* console.log(origin, url);
-    console.log(await validResources(url, origin)); */
+    const { title, subtitle, url, origin, status } = req.body;
+
     if (!["videos", "images", "slider"].includes(origin)) {
       return handlerHttpError(res, "Origen invalido", 404);
     }
 
     if (!validResources(url, origin)) {
-      return handlerHttpError(res, `formato de ${origin} no valido`, 404);
+      return handlerHttpError(
+        res,
+        `error con el formato de ${origin}, no valido`,
+        404
+      );
     }
-    //si es una url de video
 
     const data = new resources({
+      title,
+      subtitle,
       url,
       origin,
       status,
@@ -34,6 +38,7 @@ const uploadItems = async (req, res) => {
     await data.save();
     res.send({ succes: true, data: "upload" });
   } catch (error) {
+    console.error(error);
     handlerHttpError(res, "Archivo no subido", 500);
   }
 };

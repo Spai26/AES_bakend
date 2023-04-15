@@ -1,3 +1,5 @@
+const parseUrl = require("url-parse");
+
 const validExtensionImage = (imageurl) => {
   const validExtension = ["jpg", "png", "gif"];
   const extension = imageurl.split(".").pop().toLowerCase();
@@ -13,15 +15,30 @@ const validExtensionFile = (file) => {
 
 const validResources = (url, origin) => {
   const validExtimg = ["jpg", "png", "gif"];
-  const validExtfile = "pdf";
 
   const formOrigin = {
-    videos: (url)=>{},
+    videos: (url) => {
+      const parsedUrl = parseUrl(url, true);
+      const domain = parsedUrl.hostname;
+      // Es un video de YouTube
+      if (domain.includes("youtube.com") || domain.includes("youtu.be")) {
+        return true;
+      } else if (domain.includes("vimeo.com")) {
+        // Es un video de Vimeo
+        return true;
+      } else {
+        // No es una URL válida de un video
+        return false;
+      }
+    },
     images: (url) => {
       const extract = url.split(".").pop().toLowerCase();
       return validExtimg.includes(extract);
     },
-    slider: "slider",
+    slider: (url) => {
+      const extract = url.split(".").pop().toLowerCase();
+      return validExtimg.includes(extract);
+    },
   };
   return formOrigin[origin](url);
 };

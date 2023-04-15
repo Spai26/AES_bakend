@@ -2,12 +2,21 @@ const { check } = require("express-validator");
 const validateResults = require("../utils/handlerValidator");
 
 const validateResourceCreate = [
-  check("origin").isIn(["videos", "images"]),
-  check("url").isString().notEmpty(),
-  check("status")
-    .withMessage("status must be a boolean value")
-    .isBoolean()
-    .default(false),
+  check("origin").isIn(["videos", "images", "slider"]).notEmpty(),
+  check("url").isURL().notEmpty(),
+  check("title")
+    .optional()
+    .isString()
+    .exists()
+    .isLength({ max: 40 })
+    .notEmpty(),
+  check("subtitle")
+    .optional()
+    .isString()
+    .exists()
+    .isLength({ min: 20, max: 120 })
+    .notEmpty(),
+  check("status").isBoolean().default(false),
   (req, res, next) => {
     return validateResults(req, res, next);
   },

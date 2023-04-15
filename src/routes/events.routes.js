@@ -6,7 +6,7 @@ const { validateItem } = require("../validators/general");
 const eventRouter = Router();
 
 eventRouter.get("/", searchOrAllEvents);
-eventRouter.post("/", validatorAddEvent, eventController.createEvent);
+eventRouter.post("/", eventController.createEvent);
 eventRouter.get("/:id", validateItem, eventController.detailEventForid);
 eventRouter.put(
   "/:id",

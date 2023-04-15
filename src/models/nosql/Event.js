@@ -2,6 +2,7 @@ const mongooseDelete = require("mongoose-delete");
 const { model, Schema, default: mongoose } = require("mongoose");
 var slug = require("mongoose-slug-generator");
 mongoose.plugin(slug);
+const mongooseDateFormat = require("mongoose-date-format");
 
 const EventSchema = new Schema(
   {
@@ -34,6 +35,8 @@ const EventSchema = new Schema(
     timestamps: true,
   }
 );
+
+EventSchema.plugin(mongooseDateFormat);
 
 EventSchema.statics.updateSlug = async function (id) {
   const event = await this.findById(id);

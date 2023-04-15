@@ -105,11 +105,11 @@ const updateEventByid = async (req, res) => {
     const { id } = req.params;
     const { body } = req;
 
-    if (!validExtensionImage(body.image)) {
+    if (!validExtensionImage(body.frontpage)) {
       return handlerHttpError(res, "Formato de imagen no válida!", 404);
     }
 
-    if (body.files !== null) {
+    if (body.files) {
       if (!validExtensionFile(body.files)) {
         return handlerHttpError(res, "Solo acepta formato .pdf", 404);
       }

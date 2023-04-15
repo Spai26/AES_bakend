@@ -6,7 +6,7 @@ const validExtensionImage = (imageurl) => {
 };
 
 const validExtensionFile = (file) => {
-  console.log(file);
+  console.log("===validate======", file);
   const extension = file.split(".").pop().toLowerCase();
 
   return extension === "pdf" ? true : false;

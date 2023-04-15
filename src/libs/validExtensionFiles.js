@@ -11,9 +11,23 @@ const validExtensionFile = (file) => {
   return extension === "pdf" ? true : false;
 };
 
+const validResources = (url, origin) => {
+  const validExtimg = ["jpg", "png", "gif"];
+  const validExtfile = "pdf";
 
+  const formOrigin = {
+    videos: (url)=>{},
+    images: (url) => {
+      const extract = url.split(".").pop().toLowerCase();
+      return validExtimg.includes(extract);
+    },
+    slider: "slider",
+  };
+  return formOrigin[origin](url);
+};
 
 module.exports = {
   validExtensionImage,
   validExtensionFile,
+  validResources,
 };

@@ -44,20 +44,50 @@ const uploadItems = async (req, res) => {
 };
 
 const updateResourceStatus = async (req, res) => {
-  const { id } = req.params;
-  const { body } = req;
+  try {
+    const { id } = req.params;
+    req = matchedData(req);
+    const body = req;
 
-  await resources.findByIdAndUpdate(
-    { _id: id },
-    {
-      $set: {
-        status: body.status,
-        origin: body.origin,
-        url: body.url,
-      },
+    const isExist = await resources.findOne({ _id: id });
+
+    if (!isExist) {
+      handlerHttpError(res, "Este recurso no existe");
     }
-  );
+
+    if (!["videos", "images", "slider"].includes(body.origin)) {
+      return handlerHttpError(res, "Origen invalido", 404);
+    }
+
+    if (!validResources(body.url, body.origin)) {
+      return handlerHttpError(
+        res,
+        `error con el formato de ${body.origin}, no valido`,
+        404
+      );
+    }
+    await resources.findByIdAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          title: body.title,
+          subtitle: body.subtitle,
+          status: body.status,
+          origin: body.origin,
+          url: body.url,
+        },
+      }
+    );
+    res.send({ data: "here" });
+  } catch (error) {
+    handlerHttpError(
+      res,
+      `No se pudo actualizar, valida el max. de characters: ${error}`,
+      500
+    );
+  }
 };
+
 module.exports = {
   showAllItems,
   uploadItems,

@@ -10,6 +10,10 @@ const resourcesRoute = Router();
 
 resourcesRoute.get("/gallery/show", showAllItems);
 resourcesRoute.post("/gallery/upload", uploadItems);
-resourcesRoute.get("/gallery/:id", resourcesRoute, updateResourceStatus);
+resourcesRoute.get(
+  "/gallery/:id",
+  validateResourceCreate,
+  updateResourceStatus
+);
 
 module.exports = resourcesRoute;

@@ -9,7 +9,8 @@ const validateResourceCreate = [
     .isString()
     .exists()
     .isLength({ max: 40 })
-    .notEmpty(),
+    .notEmpty()
+    .withMessage("Solo acepta maximo de 40 caracteres"),
   check("subtitle")
     .optional()
     .isString()

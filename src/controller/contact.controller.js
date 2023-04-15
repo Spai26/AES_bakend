@@ -1,6 +1,6 @@
 const handlerHttpError = require("../utils/handlerHttpError");
 const { contact } = require("../models");
-
+const { clearText } = require("../libs/validateTextFiltro");
 const showMessage = async (req, res) => {
   try {
     const data = await contact.find({});
@@ -20,8 +20,8 @@ const registerFrom = async (req, res) => {
       name,
       email,
       phone,
-      title,
-      content,
+      title: clearText(title),
+      content: clearText(content),
     });
 
     await data.save();

@@ -5,7 +5,7 @@ const {
   validExtensionImage,
   validExtensionFile,
 } = require("../../libs/validExtensionFiles");
-
+const { clearText } = require("../../libs/validateTextFiltro");
 /**
  * !TODO: listar todos los eventos
  */
@@ -47,13 +47,13 @@ const createEvent = async (req, res) => {
     }
 
     const data = new event({
-      title,
+      title: clearText(title),
       frontpage,
       files,
-      description,
+      description: clearText(description),
       date_in,
       date_out,
-      short_description,
+      short_description: clearText(short_description),
       location,
       status,
       categories,
@@ -91,6 +91,8 @@ const detailEventForid = async (req, res) => {
       .populate("categories", "name")
       .populate("tags", "name");
 
+    await result.incrementViewCount();
+
     res.status(200).json(result);
   } catch (error) {
     handlerHttpError(res, "Este evento no valido");
@@ -119,14 +121,14 @@ const updateEventByid = async (req, res) => {
       { _id: id },
       {
         $set: {
-          title: body.title,
+          title: clearText(body.title),
           location: body.location,
           frontpage: body.frontpage,
           files: body.files,
-          description: body.description,
+          description: clearText(body.description),
           status: body.status,
           date_in: body.date_in,
-          short_description: body.short_description,
+          short_description: clearText(body.short_description),
           date_out: body.date_out,
           categories: body.categories,
           tags: body.tags,

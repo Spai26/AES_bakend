@@ -11,6 +11,7 @@ const BlogSchema = new Schema(
     description: { type: String, required: true },
     image: { type: String, required: true },
     short_description: { type: String, require: true },
+    count_view: { type: Number, default: 0 },
     categories: [
       {
         type: Schema.Types.ObjectId,
@@ -34,6 +35,11 @@ const BlogSchema = new Schema(
     versionKey: false,
   }
 );
+
+BlogSchema.methods.incrementViewCount = async function () {
+  this.count_view += 1;
+  await this.save();
+};
 
 BlogSchema.statics.updateSlug = async function (id) {
   const blog = await this.findById(id);

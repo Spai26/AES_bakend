@@ -5,6 +5,8 @@ const {
   validExtensionImage,
   validExtensionFile,
 } = require("../../libs/validExtensionFiles");
+
+const { clearText } = require("../../libs/validateTextFiltro");
 /**
  *!TODO: obtener la lista de blogs
  * ?no lleva trycatch por que hay otro punto de control blog.index
@@ -46,11 +48,11 @@ const setCreateBlog = async (req, res, next) => {
     }
 
     const data = new blog({
-      title,
+      title: clearText(title),
       image,
-      description,
+      description: clearText(description),
       categories,
-      short_description,
+      short_description: clearText(short_description),
       tags,
       status,
       files,
@@ -59,7 +61,6 @@ const setCreateBlog = async (req, res, next) => {
     await data.save();
     res.status(201).json({ message: "Blog creado!" });
   } catch (error) {
-    console.error(error);
     handlerHttpError(res, "Blog no creado, titulo no valido.");
   }
 };
@@ -77,6 +78,7 @@ const getDetailBlog = async (req, res) => {
       .populate("categories", "name")
       .populate("tags", "name");
 
+    await result.incrementViewCount();
     res.status(200).json(result);
   } catch (error) {
     handlerHttpError(res, "Blog no encontrado!", 404);
@@ -105,12 +107,12 @@ const updateBlogById = async (req, res) => {
       { _id: id },
       {
         $set: {
-          title: body.title,
+          title: clearText(body.title),
           image: body.image,
-          description: body.description,
+          description: clearText(body.description),
           status: body.status,
           categories: body.categories,
-          short_description: body.short_description,
+          short_description: clearText(body.short_description),
           tags: body.tags,
           files: body.files,
         },

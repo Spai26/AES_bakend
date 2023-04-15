@@ -48,11 +48,11 @@ const setCreateBlog = async (req, res, next) => {
     }
 
     const data = new blog({
-      title: clearText(title),
+      title: title,
       image,
-      description: clearText(description),
+      description: description,
       categories,
-      short_description: clearText(short_description),
+      short_description: short_description,
       tags,
       status,
       files,
@@ -107,12 +107,12 @@ const updateBlogById = async (req, res) => {
       { _id: id },
       {
         $set: {
-          title: clearText(body.title),
+          title: body.title,
           image: body.image,
-          description: clearText(body.description),
+          description: body.description,
           status: body.status,
           categories: body.categories,
-          short_description: clearText(body.short_description),
+          short_description: body.short_description,
           tags: body.tags,
           files: body.files,
         },

@@ -1,7 +1,10 @@
 const { matchedData } = require("express-validator");
 const { resources } = require("../models");
 const handlerHttpError = require("../utils/handlerHttpError");
-
+const {
+  validExtensionImage,
+  validExtensionFile,
+} = require("../libs/validExtensionFiles");
 const showAllItems = (req, res) => {
   try {
     const result = resources.find({});
@@ -18,6 +21,15 @@ const uploadItems = async (req, res) => {
   if (!["videos", "images"].includes(origin)) {
     return handlerHttpError(res, "Origen invalido", 404);
   }
+
+  //si es un imagen
+  if (!validExtensionImage(url) || validExtensionFile(url)) {
+    return handlerHttpError(res, "Formato de imagen no valida", 404);
+  }
+
+  //si es una url de video
+  
+
   try {
     const data = new resources({
       url,

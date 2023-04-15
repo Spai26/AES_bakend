@@ -47,13 +47,13 @@ const createEvent = async (req, res) => {
     }
 
     const data = new event({
-      title: clearText(title),
+      title: title,
       frontpage,
       files,
-      description: clearText(description),
+      description: description,
       date_in,
       date_out,
-      short_description: clearText(short_description),
+      short_description: short_description,
       location,
       status,
       categories,
@@ -121,14 +121,14 @@ const updateEventByid = async (req, res) => {
       { _id: id },
       {
         $set: {
-          title: clearText(body.title),
+          title: body.title,
           location: body.location,
           frontpage: body.frontpage,
           files: body.files,
-          description: clearText(body.description),
+          description: body.description,
           status: body.status,
           date_in: body.date_in,
-          short_description: clearText(body.short_description),
+          short_description: body.short_description,
           date_out: body.date_out,
           categories: body.categories,
           tags: body.tags,

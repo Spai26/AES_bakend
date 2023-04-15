@@ -48,7 +48,7 @@ const createInstitution = async (req, res) => {
         let getArea = await area.findOne({name: areas})
         if(!getArea){
          res.status(404).json({message: `ERROR_EL_AREA_INGRESADO_NO_EXISTE_EN_LA_DB`})
-        }else{
+        }   
             const result = new institution({
                  organization: organization,
                  email: email,
@@ -75,12 +75,10 @@ const createInstitution = async (req, res) => {
                  personGet.institution = [...personGet.institution, institutionGet._id]
                  await personGet.save()
                  res.status(200).json({message: `Intitucion agregada con éxito`})
-             }
-        }
-       
-    }catch(err){
+             }  
+      }catch(err){
         handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400)
-    }
+      }
 }
 
 const putInstitutionById = async (req, res) => {

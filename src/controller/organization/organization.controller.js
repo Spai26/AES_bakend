@@ -41,15 +41,12 @@ const createOrganization = async (req, res) => {
    const {organizations, work, email, fullname, phone, post, assistants, social, areas} = allDate;
    
    try{
-    const getArea = await area.findOne({name: areas})
-    let getEmailPerson = await person.findOne({email: email})
-    const getOrganization = await organization.findOne({email: email})
+    let getArea = await area.findOne({name: areas});
 
     if(!getArea){
       res.status(404).json({message: `ERROR_DEBE_INGRESAR_UN_AREA_EXISTENTE_EN_LA_DB`})
     }
 
-    if(!getEmailPerson && !getOrganization){
       let newOrganization = new organization({
             organizations: organizations,
             work: work,
@@ -63,51 +60,22 @@ const createOrganization = async (req, res) => {
         }) 
       await newOrganization.save()
 
-        try{
-            let getId = await organization.findOne({email: email})
+      let personGet = await person.findOne({email: email})
+      let organizationGet = await organization.findOne({email: email})
 
-            let newPerson = new person({
-                 email: email,
-                 fullname: fullname            
-            })
-            await newPerson.save()
-
-            let result = await person.findOne({email: email}) 
-
-            result.organization = [...result.organization, getId._id]
-            await result.save()
-            res.status(201).json({message: `Todo ha salido con éxito`})
-        }catch(err){
-           handlerHttpError(res, `ERROR_OCURRIDO_AL_CREAR_PERSON`, 400) 
-        }
+      if(!personGet){
+         let newPerson = new person({email: email, fullname: fullname}) 
+         await newPerson.save()
+          
+         let getPerson = await person.findOne({email: email})
+         getPerson.organization = [...getPerson.organization, organizationGet._id]
+         await getPerson.save()
+         res.status(200).json({message: `Organización creada con éxito`})
       }else{
-        if(getEmailPerson && !getOrganization){
-            let newOrganization = new organization({
-                organizations: organizations,
-                work: work,
-                email: email,
-                fullname: fullname,
-                phone: phone,
-                post: post,
-                assistants: assistants,
-                social: social,
-                area: areas,
-            }) 
-          await newOrganization.save()
-
-          try{
-            let getId = await organization.findOne({email: email})
-
-            let result = await person.findOne({email: email})
-            
-            result.organization = [...result.organization, getId._id]
-            await result.save()
-            res.status(201).json({message: `Todo ha salido con éxito`})
-          }catch(err){
-            handlerHttpError(res, `ERROR_OCURRIDO_AL_GUARDAR_CAMBIOS_EN_PERSON`, 400)
-          }
-        }
-      }  
+          personGet.organization = [...personGet.organization, organizationGet._id]
+          await personGet.save()
+          res.status(200).json({message: `Organización agregada con éxito`})
+      }    
    }catch(err){
     handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400)
    }

@@ -5,32 +5,27 @@ const {
   validExtensionImage,
   validExtensionFile,
 } = require("../libs/validExtensionFiles");
-const showAllItems = (req, res) => {
+const showAllItems = async (req, res) => {
   try {
-    const result = resources.find({});
-
+    const result = await resources.find({});
+    console.log(result);
     res.status(200).json(result);
   } catch (error) {
+    console.error(error);
     handlerHttpError(res, "No se encontraron recursos!", 404);
   }
 };
 
 const uploadItems = async (req, res) => {
-  const { origin, url } = req.body;
-
-  if (!["videos", "images"].includes(origin)) {
-    return handlerHttpError(res, "Origen invalido", 404);
-  }
-
-  //si es un imagen
-  if (!validExtensionImage(url) || validExtensionFile(url)) {
-    return handlerHttpError(res, "Formato de imagen no valida", 404);
-  }
-
-  //si es una url de video
-  
-
   try {
+    const { origin, url } = req.body;
+
+    if (!["videos", "images"].includes(origin)) {
+      return handlerHttpError(res, "Origen invalido", 404);
+    }
+
+    //si es una url de video
+
     const data = new resources({
       url,
       origin,

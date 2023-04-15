@@ -11,6 +11,8 @@ const validExtensionFile = (file) => {
   return extension === "pdf" ? true : false;
 };
 
+
+
 module.exports = {
   validExtensionImage,
   validExtensionFile,

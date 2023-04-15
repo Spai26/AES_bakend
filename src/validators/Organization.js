@@ -9,15 +9,30 @@ const validatorCreateOrganization = [
    check('phone').exists().notEmpty(),
    check('post').exists().notEmpty(),
    check('assistants').exists().notEmpty(),
-   check('city').exists().notEmpty(),
    check('social').exists().notEmpty(),
-   check('view').exists().notEmpty(),
    check('areas').exists().notEmpty(),
    (req, res, next) => {
      return validateResults(req, res, next)
    } 
 ]
 
+const validatorGetOrganizationById = [
+  check('id').exists().notEmpty().isMongoId(),
+  (req, res, next) => {
+    return validateResults(req, res, next)
+  }
+]
+
+const validatorPutOrganization = [
+  check('id').exists().notEmpty().isMongoId(),
+  check('view').exists().notEmpty(),
+  (req, res, next) => {
+    return validateResults(req, res, next)  
+  }
+]
+
 module.exports = {
-    validatorCreateOrganization
+    validatorCreateOrganization,
+    validatorPutOrganization,
+    validatorGetOrganizationById
 }

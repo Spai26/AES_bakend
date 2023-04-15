@@ -24,9 +24,25 @@ const getAllInstitution = async(req, res) => {
    } 
 }
 
+const getInstitutionById = async (req, res) => {
+    const idDate = matchedData(req, {location: ['params']})
+    const {id} = idDate;
+
+    try{
+      const getId = await institution.findById(id)
+      if(getId){
+        res.status(200).json(getId)
+      }else{
+        handlerHttpError(res, `ERROR_ESE_ID_NO_EXISTE_VERIFICALO`, 404)
+      }
+    }catch(err){
+      handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400)  
+    }
+}
+
 const createInstitution = async (req, res) => {
     const allDate = matchedData(req, {location: ['body']})
-    const {organization, email, fullname, phone, post, city, view, areas} = allDate;
+    const {organization, email, fullname, phone, post, city, areas} = allDate;
     
     try{
         let getArea = await area.findOne({name: areas})
@@ -40,7 +56,6 @@ const createInstitution = async (req, res) => {
                  phone: phone,
                  post: post,
                  city: city,
-                 view: view,
                  area: areas
              })
              await result.save()
@@ -68,7 +83,31 @@ const createInstitution = async (req, res) => {
     }
 }
 
+const putInstitutionById = async (req, res) => {
+  const dateId = matchedData(req, {location: ['params']})
+  const dateView = matchedData(req, {location: ['body']})
+  const {id} = dateId;
+  const {view} = dateView;
+  
+  try{
+    await institution.findByIdAndUpdate(
+        {_id: id},
+        {
+            $set: {
+                view: view
+            }
+        }
+    )
+   
+    res.status(200).json({message: `Institucion actualizada`})    
+  }catch(err){
+    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400)
+  }
+}
+
 module.exports = {
     getAllInstitution,
-    createInstitution
+    getInstitutionById,
+    createInstitution,
+    putInstitutionById
 }

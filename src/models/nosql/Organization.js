@@ -13,7 +13,7 @@ const OrganizationSchema = new Schema(
         city: {type: String},
         social: {type: Object},
         area: [{type: Schema.Types.ObjectId, ref: 'Area'}],
-        view: {type: String},
+        view: {type: Boolean, default: false},
     },
     {
         versionKey: false,

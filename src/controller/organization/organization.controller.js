@@ -20,9 +20,25 @@ const getAllOrganizationsForms = async (req, res) => {
   }
 }
 
+const getOrganizationById = async (req, res) => {
+  const idDate = matchedData(req, {location: ['params']})
+  const {id} = idDate;
+
+  try{
+    const getId = await organization.findById(id)
+    if(getId){
+      res.status(200).json(getId)
+    }else{
+      handlerHttpError(res, `ERROR_ESE_ID_NO_EXISTE_VERIFICALO`, 404)
+    }
+  }catch(err){
+    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400)  
+  }
+}
+
 const createOrganization = async (req, res) => {
    const allDate = matchedData(req, {location: ['body']})
-   const {organizations, work, email, fullname, phone, post, assistants, city, social, view, areas} = allDate;
+   const {organizations, work, email, fullname, phone, post, assistants, social, areas} = allDate;
    
    try{
     const getArea = await area.findOne({name: areas})
@@ -42,9 +58,7 @@ const createOrganization = async (req, res) => {
             phone: phone,
             post: post,
             assistants: assistants,
-            city: city,
             social: social,
-            view: view,
             area: areas,
         }) 
       await newOrganization.save()
@@ -76,9 +90,7 @@ const createOrganization = async (req, res) => {
                 phone: phone,
                 post: post,
                 assistants: assistants,
-                city: city,
                 social: social,
-                view: view,
                 area: areas,
             }) 
           await newOrganization.save()
@@ -101,7 +113,31 @@ const createOrganization = async (req, res) => {
    }
 }
 
+const putOrganizationById = async (req, res) => {
+  const dateId = matchedData(req, {location: ['params']})
+  const dateView = matchedData(req, {location: ['body']})
+  const {id} = dateId;
+  const {view} = dateView;
+  
+  try{
+    await organization.findByIdAndUpdate(
+        {_id: id},
+        {
+            $set: {
+                view: view
+            }
+        }
+    )
+   
+    res.status(200).json({message: `Institucion actualizada`})    
+  }catch(err){
+    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400)
+  }
+}
+
 module.exports = {
     getAllOrganizationsForms,
-    createOrganization
+    createOrganization,
+    getOrganizationById,
+    putOrganizationById
 }

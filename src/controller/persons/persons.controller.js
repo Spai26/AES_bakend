@@ -1,8 +1,7 @@
 const { matchedData } = require("express-validator");
 const { person } = require("../../models");
 const handlerHttpError = require("../../utils/handlerHttpError");
-const { isExist } = require("../../libs/findUser");
-const { eventNames } = require("../../models/nosql/Role");
+
 
 //listar todos los customers
 

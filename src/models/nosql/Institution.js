@@ -8,7 +8,7 @@ const institutionSchema = new Schema(
         phone: { type: String},
         post: { type: String},
         city: { type: String},
-        view: { type: String},
+        view: { type: Boolean, default: false},
         area: [{ type: Schema.Types.ObjectId, ref: 'Area'}],
     },
     {

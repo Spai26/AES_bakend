@@ -1,5 +1,6 @@
 const { matchedData } = require("express-validator");
 const { event } = require("../../models");
+const { sendPostNewInfo } = require("../suscription/sendEmail")
 const handlerHttpError = require("../../utils/handlerHttpError");
 const {
   validExtensionImage,
@@ -34,7 +35,7 @@ const createEvent = async (req, res) => {
       categories,
       tags,
     } = req.body;
-
+    const image = frontpage
     if (!validExtensionImage(image)) {
       return handlerHttpError(res, "Formato de imagen no válida!", 404);
     }
@@ -59,8 +60,10 @@ const createEvent = async (req, res) => {
     });
 
     await data.save();
+    await sendPostNewInfo("event", data);
     res.status(201).json({ message: "Evento creado con éxito!" });
   } catch (error) {
+    console.error(error)
     handlerHttpError(
       res,
       "Evento no pudo crearse o tiene titulo duplicado",

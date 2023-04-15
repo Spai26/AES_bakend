@@ -1,5 +1,7 @@
 const { matchedData } = require("express-validator");
+const { sendPostNewInfo } = require("../suscription/sendEmail")
 const handlerHttpError = require("../../utils/handlerHttpError");
+
 const { blog } = require("../../models");
 const {
   validExtensionImage,
@@ -47,6 +49,7 @@ const setCreateBlog = async (req, res) => {
     });
 
     await data.save();
+    await sendPostNewInfo("blog", data)
     res.status(201).json({ message: "Blog creado!" });
   } catch (error) {
     console.error(error);

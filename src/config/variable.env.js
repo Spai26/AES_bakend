@@ -10,6 +10,7 @@ const KEY_JSON = process.env.KEY_JSON;
 const CLOUDINARY_NAME = process.env.CLOUDINARY_NAME;
 const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY;
 const CLOUDINARY_PASS = process.env.CLOUDINARY_PASS;
+const SENDINBLUE_KEY = process.env.SENDINBLUE_KEY
 
 module.exports = {
   DB_CONN,
@@ -23,5 +24,6 @@ module.exports = {
   CLOUDINARY_NAME,
   CLOUDINARY_KEY,
   CLOUDINARY_PASS,
+  SENDINBLUE_KEY,
   PORT
 };

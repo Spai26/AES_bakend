@@ -8,6 +8,7 @@ const models = {
   event: require("./nosql/Event"),
   person: require("./nosql/Person"),
   tag: require("./nosql/Tag"),
+  suscription: require("./nosql/Suscribers"),
   organization: require('./nosql/Organization'),
   area: require('./nosql/Areas')
 };

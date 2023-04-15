@@ -5,9 +5,11 @@ const DB_HOST = process.env.DB_HOST;
 const DB_NAME = process.env.DB_DATABASE;
 const DB_USER = process.env.DB_USERNAME;
 const DB_PASS = process.env.DB_PASSWORD;
-const DB_URL = process.env.DB_URL;
+//const DB_URL = process.env.DB_URL;
 
-const url = `${DB_CONN}+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`;
+//const url = `${DB_CONN}+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`;
+const url = 'mongodb://127.0.0.1:27017/bdPrueba'
+const DB_URL = 'mongodb://127.0.0.1:27017/bdPrueba'
 
 mongoose.set("strictQuery", false);
 mongoose

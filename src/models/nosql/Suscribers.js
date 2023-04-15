@@ -1,8 +1,11 @@
 const { Schema, model } = require("mongoose");
+const mongooseDelete = require("mongoose-delete");
 
 const SubcriberSchema = new Schema(
   {
-    name: { type: String, unique: true },
+    first_name: { type: String, require: true },
+    last_name: { type: String, require: true },
+    email: { type: String, require: true, unique: true },
   },
   {
     timestamps: false,
@@ -10,4 +13,5 @@ const SubcriberSchema = new Schema(
   }
 );
 
+SubcriberSchema.plugin(mongooseDelete, { overrideMethods: "all" });
 module.exports = model("Subcriber", SubcriberSchema);

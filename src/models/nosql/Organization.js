@@ -5,7 +5,7 @@ const OrganizationSchema = new Schema(
     {
         organizations: {type: String},
         work: {type: String},
-        email: {type: String, required: true, unique: true},
+        email: {type: String, required: true},
         fullname: {type: String},
         phone: {type: String},
         post: {type: String},

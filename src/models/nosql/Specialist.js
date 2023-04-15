@@ -3,8 +3,8 @@ const { model, Schema } = require("mongoose");
 
 const SpecialistSchema = new Schema(
   {
-    fullname: { type: String, unique: true, required: true },
-    email: { type: String, unique: true, require: true },
+    fullname: { type: String, required: true },
+    email: { type: String, require: true },
     phone: { type: String, require: true },
     area: [
       {

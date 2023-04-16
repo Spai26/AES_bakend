@@ -1,6 +1,5 @@
 const handlerHttpError = require("../../utils/handlerHttpError");
 const { addSuscriptiontoList } = require("./sendEmail")
-const { matchedData } = require("express-validator");
 const { suscription } = require("../../models")
 const { person } = require("../../models");
 
@@ -21,11 +20,10 @@ const deleteSuscriptionById = async(req, res) => {
 
 const addSuscription = async (req, res) => {
     const {fullname, email } = req.body;
+    let existentSuscription = await suscription.findOne({ email: email })
+    
     try {
-        const existentSuscription = await suscription.findOne({ email: email })
-        if (existentSuscription) {
-         handlerHttpError(res, "El correo ingresado ya esta suscrito", 400)
-        }
+        if (!existentSuscription) {
             let newSuscription = new suscription({
                 email
             })
@@ -47,10 +45,12 @@ const addSuscription = async (req, res) => {
                 await existentPerson.save()
             };
             return res.status(200).json({ message: "succesful" });
+        }else{
+         handlerHttpError(res, "El correo ingresado ya esta suscrito", 400)
+        }
         
     } catch (error) {
-        console.error(error)
-        handlerHttpError(res, "No pudo agregarse la suscripcion o el email ingresado ya existe")
+        handlerHttpError(res, "No pudo agregarse la suscripcion o el email ingresado ya existe", 400)
     }
 
 }

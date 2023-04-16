@@ -4,7 +4,7 @@ const {ContactsApi, CreateContact, EmailCampaignsApi, TransactionalEmailsApi }= 
 const listId = 3
 
 
-const addSuscriptiontoList = async ({ email }) => {
+const addSuscriptiontoList = async ({  email }) => {
 
     try {
         let apiInstance = await ContactsApi;

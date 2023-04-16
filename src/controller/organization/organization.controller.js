@@ -1,7 +1,6 @@
 const { matchedData } = require("express-validator");
 const { person } = require("../../models");
 const { organization } = require("../../models");
-const { area } = require("../../models");
 const handlerHttpError = require("../../utils/handlerHttpError");
 
 const getAllOrganizationsForms = async (req, res) => {
@@ -47,9 +46,17 @@ const createOrganization = async (req, res) => {
     area,
   } = matchedData(req);
 
-  //busco
+  //busco si existe
   let findPerson = await person.findOne({ email: email });
-  console.log("find => ", findPerson);
+
+  //si no encuentra crea
+  if (!findPerson) {
+    new person({
+      fullname: fullname,
+      email: email,
+    });
+  }
+
   try {
     let newOrganization = new organization({
       organizations: organizations,
@@ -63,22 +70,15 @@ const createOrganization = async (req, res) => {
       area: area,
     });
 
+    //guardo la org para usar el id
     const resultOrg = await newOrganization.save();
 
-    /* 
-    if (!findPerson) {
-      let newPerson = new person({ email: email, fullname: fullname });
-      await newPerson.save();
+    //asigno org al registro person
+    findPerson.organization = [...findPerson.organization, resultOrg._id];
 
-      let getPerson = await person.findOne({ email: email });
-      getPerson.organization = [...getPerson.organization, organizationGet._id];
-      await getPerson.save();
-      res.status(200).json({ message: `Organización creada con éxito` });
-    } else {
-      personGet.organization = [...personGet.organization, organizationGet._id];
-      await personGet.save();
-      res.status(200).json({ message: `Organización agregada con éxito` });
-    } */
+    //salvo cambios en person
+    let personResult = await findPerson.save();
+
     res.status(201).json({ message: "Registro exitoso!" });
   } catch (err) {
     console.error(err);
@@ -87,11 +87,9 @@ const createOrganization = async (req, res) => {
 };
 
 const putOrganizationById = async (req, res) => {
-  const dateId = matchedData(req, { location: ["params"] });
-  const dateView = matchedData(req, { location: ["body"] });
-  const { id } = dateId;
-  const { view } = dateView;
-
+  const { id } = req.params;
+  const { view } = matchedData(req);
+  console.log(id, view);
   try {
     await organization.findByIdAndUpdate(
       { _id: id },

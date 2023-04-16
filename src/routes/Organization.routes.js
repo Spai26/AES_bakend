@@ -1,8 +1,8 @@
 const { Router } = require("express");
 const {
   validatorCreateOrganization,
-  validatorGetOrganizationById,
-  validatorPutOrganization,
+  validatorOrgById,
+  validatorUpdateOrg,
 } = require("../validators/Organization");
 const {
   getAllOrganizationsForms,
@@ -14,11 +14,12 @@ const organizationRoutes = Router();
 
 organizationRoutes.get("/", getAllOrganizationsForms);
 organizationRoutes.post("/", validatorCreateOrganization, createOrganization);
-organizationRoutes.get(
+organizationRoutes.get("/:id", validatorOrgById, getOrganizationById);
+organizationRoutes.put(
   "/:id",
-  validatorGetOrganizationById,
-  getOrganizationById
+  validatorOrgById,
+  validatorUpdateOrg,
+  putOrganizationById
 );
-organizationRoutes.put("/:id", validatorPutOrganization, putOrganizationById);
 
 module.exports = organizationRoutes;

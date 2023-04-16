@@ -10,7 +10,7 @@ const resourcesRoute = Router();
 
 resourcesRoute.get("/gallery/show", showAllItems);
 resourcesRoute.post("/gallery/upload", uploadItems);
-resourcesRoute.get(
+resourcesRoute.put(
   "/gallery/:id",
   validateResourceCreate,
   updateResourceStatus

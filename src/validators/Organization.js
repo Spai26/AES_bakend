@@ -16,15 +16,15 @@ const validatorCreateOrganization = [
   },
 ];
 
-const validatorGetOrganizationById = [
+const validatorOrgById = [
   check("id").exists().notEmpty().isMongoId(),
   (req, res, next) => {
     return validateResults(req, res, next);
   },
 ];
 
-const validatorPutOrganization = [
-  check("view").exists().notEmpty(),
+const validatorUpdateOrg = [
+  check("view").exists().notEmpty().isBoolean(),
   (req, res, next) => {
     return validateResults(req, res, next);
   },
@@ -32,6 +32,6 @@ const validatorPutOrganization = [
 
 module.exports = {
   validatorCreateOrganization,
-  validatorPutOrganization,
-  validatorGetOrganizationById,
+  validatorUpdateOrg,
+  validatorOrgById,
 };

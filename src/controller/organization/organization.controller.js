@@ -8,9 +8,11 @@ const getAllOrganizationsForms = async (req, res) => {
     const { email } = req.query;
 
     if (email) {
-      const result = await organization.find({
-        email: { $regex: email, $options: "i" },
-      });
+      const result = await organization
+        .find({
+          email: { $regex: email, $options: "i" },
+        })
+        .populate("area", "name");
       res.status(200).json(result);
     }
     const result = await organization.find({}).populate("area", "name");
@@ -89,7 +91,7 @@ const createOrganization = async (req, res) => {
 const putOrganizationById = async (req, res) => {
   const { id } = req.params;
   const { view } = matchedData(req);
-  console.log(id, view);
+
   try {
     await organization.findByIdAndUpdate(
       { _id: id },

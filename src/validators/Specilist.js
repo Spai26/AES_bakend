@@ -4,12 +4,11 @@ const validateResults = require("../utils/handlerValidator");
 //create formulario especialista
 const validatorRegisterSpecialist = [
   check("fullname").exists().notEmpty().isString(),
-  check("email").exists().notEmpty().isEmail(),
-  check("phone").exists().notEmpty(),
-  check("area").exists().notEmpty(),
-  check("country").exists().notEmpty(),
-  check("filepath").exists().notEmpty(),
-  
+  check("email").exists().notEmpty().isEmail().isEmail(),
+  check("phone").exists().notEmpty().isString(),
+  check("area").exists().notEmpty().isMongoId(),
+  check("country").exists().notEmpty().isString(),
+  check("filepath").exists().notEmpty().isString(),
   (req, res, next) => {
     return validateResults(req, res, next);
   },
@@ -37,7 +36,7 @@ const validateUpdate = [
 ];
 
 module.exports = {
-    validatorRegisterSpecialist,
-    validatorGetItems,
-    validateUpdate
+  validatorRegisterSpecialist,
+  validatorGetItems,
+  validateUpdate,
 };

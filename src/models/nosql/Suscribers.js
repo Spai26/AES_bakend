@@ -12,4 +12,4 @@ const SubscriberSchema = new Schema(
 );
 
 SubscriberSchema.plugin(mongooseDelete, { overrideMethods: "all" });
-module.exports = model("Subscriber", SubscriberSchema);
+module.exports = model("suscription", SubscriberSchema);

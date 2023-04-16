@@ -1,111 +1,116 @@
 const { matchedData } = require("express-validator");
 const { person } = require("../../models");
-const { organization } = require('../../models')
-const {area} = require('../../models')
+const { organization } = require("../../models");
+const { area } = require("../../models");
 const handlerHttpError = require("../../utils/handlerHttpError");
 
 const getAllOrganizationsForms = async (req, res) => {
-  const {email} = req.query;
-  
-  try{
-    if(email){
-      const result = await organization.find({email: {$regex: new RegExp(`${email}`, 'i')}})
-      res.status(200).json(result)
-    }else{
-      const result = await organization.find({})
-      res.status(200).json(result)
-    }  
-  }catch(err){
-    handlerHttpError(res, `ERROR_OCURRIDO_AL_TRAER_LA_INFORMACION`, 400)
+  try {
+    const { email } = req.query;
+
+    if (email) {
+      const result = await organization.find({
+        email: { $regex: email, $options: "i" },
+      });
+      res.status(200).json(result);
+    }
+    const result = await organization.find({}).populate("area", "name");
+    res.status(200).json(result);
+  } catch (err) {
+    handlerHttpError(res, `ERROR_OCURRIDO_AL_TRAER_LA_INFORMACION`, 400);
   }
-}
+};
 
 const getOrganizationById = async (req, res) => {
-  const idDate = matchedData(req, {location: ['params']})
-  const {id} = idDate;
+  const { id } = req.params;
+  req = matchedData(req);
 
-  try{
-    const getId = await organization.findById(id)
-    if(getId){
-      res.status(200).json(getId)
-    }else{
-      handlerHttpError(res, `ERROR_ESE_ID_NO_EXISTE_VERIFICALO`, 404)
-    }
-  }catch(err){
-    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400)  
+  try {
+    const result = await organization.findById(id).populate("area", "name");
+
+    res.status(200).json(result);
+  } catch (err) {
+    handlerHttpError(res, `El formulario no existe o no es valido!`, 400);
   }
-}
+};
 
 const createOrganization = async (req, res) => {
-   const allDate = matchedData(req, {location: ['body']})
-   const {organizations, work, email, fullname, phone, post, assistants, social, areas} = allDate;
-   
-   try{
-    let getArea = await area.findOne({name: areas});
+  const {
+    organizations,
+    work,
+    email,
+    fullname,
+    phone,
+    post,
+    assistants,
+    social,
+    area,
+  } = matchedData(req);
 
-    if(!getArea){
-      res.status(404).json({message: `ERROR_DEBE_INGRESAR_UN_AREA_EXISTENTE_EN_LA_DB`})
-    }
+  //busco
+  let findPerson = await person.findOne({ email: email });
+  console.log("find => ", findPerson);
+  try {
+    let newOrganization = new organization({
+      organizations: organizations,
+      work: work,
+      email: email,
+      fullname: fullname,
+      phone: phone,
+      post: post,
+      assistants: assistants,
+      social: social,
+      area: area,
+    });
 
-      let newOrganization = new organization({
-            organizations: organizations,
-            work: work,
-            email: email,
-            fullname: fullname,
-            phone: phone,
-            post: post,
-            assistants: assistants,
-            social: social,
-            area: areas,
-        }) 
-      await newOrganization.save()
+    const resultOrg = await newOrganization.save();
 
-      let personGet = await person.findOne({email: email})
-      let organizationGet = await organization.findOne({email: email})
+    /* 
+    if (!findPerson) {
+      let newPerson = new person({ email: email, fullname: fullname });
+      await newPerson.save();
 
-      if(!personGet){
-         let newPerson = new person({email: email, fullname: fullname}) 
-         await newPerson.save()
-          
-         let getPerson = await person.findOne({email: email})
-         getPerson.organization = [...getPerson.organization, organizationGet._id]
-         await getPerson.save()
-         res.status(200).json({message: `Organización creada con éxito`})
-      }else{
-          personGet.organization = [...personGet.organization, organizationGet._id]
-          await personGet.save()
-          res.status(200).json({message: `Organización agregada con éxito`})
-      }    
-   }catch(err){
-    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400)
-   }
-}
+      let getPerson = await person.findOne({ email: email });
+      getPerson.organization = [...getPerson.organization, organizationGet._id];
+      await getPerson.save();
+      res.status(200).json({ message: `Organización creada con éxito` });
+    } else {
+      personGet.organization = [...personGet.organization, organizationGet._id];
+      await personGet.save();
+      res.status(200).json({ message: `Organización agregada con éxito` });
+    } */
+    res.status(201).json({ message: "Registro exitoso!" });
+  } catch (err) {
+    console.error(err);
+    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400);
+  }
+};
 
 const putOrganizationById = async (req, res) => {
-  const dateId = matchedData(req, {location: ['params']})
-  const dateView = matchedData(req, {location: ['body']})
-  const {id} = dateId;
-  const {view} = dateView;
-  
-  try{
+  const dateId = matchedData(req, { location: ["params"] });
+  const dateView = matchedData(req, { location: ["body"] });
+  const { id } = dateId;
+  const { view } = dateView;
+
+  try {
     await organization.findByIdAndUpdate(
-        {_id: id},
-        {
-            $set: {
-                view: view
-            }
-        }
-    )
-   
-    res.status(200).json({message: `Institucion actualizada`})    
-  }catch(err){
-    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400)
+      { _id: id },
+      {
+        $set: {
+          view: view,
+        },
+      }
+    );
+
+    res.status(200).json({ message: `Institucion actualizada` });
+  } catch (err) {
+    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400);
   }
-}
+};
 
 module.exports = {
-    getAllOrganizationsForms,
-    createOrganization,
-    getOrganizationById,
-    putOrganizationById
-}
+  getAllOrganizationsForms,
+  createOrganization,
+  getOrganizationById,
+  putOrganizationById,
+};

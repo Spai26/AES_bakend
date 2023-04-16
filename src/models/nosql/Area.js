@@ -9,4 +9,4 @@ const areaSchema = new Schema(
   }
 );
 
-module.exports = model("area", areaSchema);
+module.exports = model("Area", areaSchema);

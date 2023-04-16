@@ -1,22 +1,26 @@
-const { Router } = require('express')
+const { Router } = require("express");
 const {
   validatorCreateInstitution,
   validatorGetInstitutionById,
-  validatorPutInstitution  
-} = require('../validators/Institucion')
+  validatorPutInstitution,
+} = require("../validators/Institucion");
 const {
-    getAllInstitution,
-    getInstitutionById,
-    createInstitution,
-    putInstitutionById
-}= require('../controller/institution/institution.controller')
+  getAllInstitution,
+  getInstitutionById,
+  createInstitution,
+  putInstitutionById,
+} = require("../controller/institution/institution.controller");
 
-const institutionRoutes = Router()
+const institutionRoutes = Router();
 
-institutionRoutes.get('/', getAllInstitution)
-institutionRoutes.get('/:id', validatorGetInstitutionById, getInstitutionById)
+institutionRoutes.get("/", getAllInstitution);
+institutionRoutes.get("/:id", validatorGetInstitutionById, getInstitutionById);
+institutionRoutes.post("/", validatorCreateInstitution, createInstitution);
+institutionRoutes.put(
+  "/:id",
+  validatorGetInstitutionById,
+  validatorPutInstitution,
+  putInstitutionById
+);
 
-institutionRoutes.post('/', validatorCreateInstitution, createInstitution)
-institutionRoutes.put('/:id', validatorPutInstitution, putInstitutionById)
-
-module.exports = institutionRoutes
+module.exports = institutionRoutes;

@@ -78,7 +78,7 @@ const updateResourceStatus = async (req, res) => {
         },
       }
     );
-    res.send({ data: "here" });
+    res.send({ succes: true });
   } catch (error) {
     handlerHttpError(
       res,

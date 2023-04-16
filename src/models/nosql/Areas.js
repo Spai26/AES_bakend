@@ -1,13 +1,12 @@
-const { model, Schema } = require('mongoose')
+const { model, Schema } = require("mongoose");
 
 const areaSchema = new Schema(
-    {
-        name: {type: String, required: true, unique: true}
-    },
-    {
-        versionKey: false,
-        timestamps: true
-    }
-)
+  {
+    name: { type: String, required: true, unique: true },
+  },
+  {
+    versionKey: false,
+  }
+);
 
-module.exports = model('area', areaSchema)
+module.exports = model("area", areaSchema);

@@ -20,7 +20,7 @@ const deleteSuscriptionById = async(req, res) => {
 }
 
 const addSuscription = async (req, res) => {
-    const { email } = matchedData(req)
+    const {fullname, email } = matchedData(req)
     try {
         const existentSuscription = await suscription.findOne({ email: email })
         if (existentSuscription !== null) {
@@ -37,6 +37,7 @@ const addSuscription = async (req, res) => {
     
             if (!existentPerson) {
                 let newPerson = new person({
+                    fullname: fullname,
                     email: email,
                     suscriber: true
                 });

@@ -19,43 +19,45 @@ const deleteSuscriptionById = async(req, res) => {
 }
 
 const addSuscription = async (req, res) => {
-    const {fullname, email } = req.body
+    const {email} = req.body
     
     try {
         let existentSuscription = await suscription.findOne({ email: email })
         if (!existentSuscription) {
             let newSuscription = new suscription({
-                email
+                email: email
             })
             
             await newSuscription.save()
-            await addSuscriptiontoList({email: newSuscription.email})
+
+            let newSuscrip = await suscription.findOne({email: email})
+            let newEmail = newSuscrip.email
+
+            await addSuscriptiontoList({email: newEmail})
     
             let existentPerson = await person.findOne({ email: email })
     
             if (!existentPerson) {
                 let newPerson = new person({
-                    fullname,
-                    email,
+                    email: email,
                     suscriber: true
                 });
                 await newPerson.save();
               res.status(200).json({ message: "succesful_create" })
-            } else {
-                existentPerson.suscriber = true;
-                await existentPerson.save()
+            }else{
+                let getPerson = await person.findOne({email: email})
+                getPerson.suscriber = true;
+                await getPerson.save()
                 res.status(200).json({ message: "succesful_aggregate" })
             };
         }else{
          handlerHttpError(res, "El correo ingresado ya esta suscrito", 400)
-        }
-        
+        }       
     } catch (error) {
         handlerHttpError(res, "No pudo agregarse la suscripcion o el email ingresado ya existe", 400)
     }
 
 }
-
 
 module.exports = {
     addSuscription,

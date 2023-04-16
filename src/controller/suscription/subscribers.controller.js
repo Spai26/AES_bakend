@@ -1,5 +1,6 @@
 const handlerHttpError = require("../../utils/handlerHttpError");
 const { addSuscriptiontoList } = require("./sendEmail")
+const { ContactsApi } = require('../../config/sendinblue');
 const { suscription } = require("../../models")
 const { person } = require("../../models");
 
@@ -59,8 +60,40 @@ const addSuscription = async (req, res) => {
 
 }
 
+const unsuscribeUser = async (req, res) => {
+    const {email} = req.body;
+    const listIds = 3; 
+
+    try {
+        if (!email) throw new Error("Debes ingresar un email a desuscribir"); 
+
+        let personUnsuscribe = await person.findOne({email: email});
+        if (!personUnsuscribe) throw new Error("No se encontró una persona con ese correo electrónico"); 
+
+        personUnsuscribe.suscriber = false;
+        await personUnsuscribe.save();
+
+        let deleteSuscriber = await suscription.findOne({email: email})
+
+        if(deleteSuscriber){ 
+            await deleteSuscriber.remove() 
+
+            let apiInstance = ContactsApi;
+            await apiInstance.deleteContact(email);
+            res.status(200).json({message: "El usuario ha sido dado de baja de la suscripción con éxito"});
+        }else{
+           handlerHttpError(res, `ERROR_EL_USUARIO_NO_ESTABA_SUSCRIPTO`, 404) 
+        }
+
+    } catch (error) {
+        handlerHttpError(res, error.message, 400); 
+    }
+};
+
+
 module.exports = {
     addSuscription,
     getAllSusribers,
-    deleteSuscriptionById
+    deleteSuscriptionById,
+    unsuscribeUser
 }

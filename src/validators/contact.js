@@ -5,7 +5,7 @@ const validateResults = require("../utils/handlerValidator");
 const validatorContact = [
   check("name").exists().notEmpty().isString(),
   check("email").exists().notEmpty().isEmail(),
-  check("phone").exists().notEmpty().isMobilePhone(),
+  check("phone").exists().notEmpty().isString(),
   check("title").exists().notEmpty().isString(),
   check("content").exists().notEmpty().isString(),
   (req, res, next) => {

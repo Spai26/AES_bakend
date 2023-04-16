@@ -31,7 +31,7 @@ const getInstitutionById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const getId = await institution.findById(id);
+    const getId = await institution.findById(id).populate("area", "name");
     if (getId) {
       res.status(200).json(getId);
     } else {

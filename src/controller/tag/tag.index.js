@@ -8,8 +8,6 @@ const handlerHttpError = require("../../utils/handlerHttpError");
 const SearchOrAllTags = async (req, res) => {
   const { search } = req.query;
   if (search) {
-    console.log("search =>");
-
     try {
       const result = await searchTagForName(search);
       return res.status(200).send(result);
@@ -18,7 +16,6 @@ const SearchOrAllTags = async (req, res) => {
     }
   }
 
-  console.log("all =>");
   try {
     const result = await tagController.getAllTags();
 

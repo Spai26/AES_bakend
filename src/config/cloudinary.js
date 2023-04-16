@@ -1,9 +1,4 @@
 const cloudinary = require("cloudinary").v2;
-const {
-  CLOUDINARY_NAME,
-  CLOUDINARY_KEY,
-  CLOUDINARY_PASS,
-} = require("./variable.env");
 
 // Configuration
 cloudinary.config({

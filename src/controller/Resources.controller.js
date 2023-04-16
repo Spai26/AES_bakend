@@ -38,7 +38,6 @@ const uploadItems = async (req, res) => {
     await data.save();
     res.send({ succes: true, data: "upload" });
   } catch (error) {
-    console.error(error);
     handlerHttpError(res, "Archivo no subido", 500);
   }
 };
@@ -52,7 +51,7 @@ const updateResourceStatus = async (req, res) => {
     const isExist = await resources.findOne({ _id: id });
 
     if (!isExist) {
-      handlerHttpError(res, "Este recurso no existe");
+      return handlerHttpError(res, "Este recurso no existe");
     }
 
     if (!["videos", "images", "slider"].includes(body.origin)) {

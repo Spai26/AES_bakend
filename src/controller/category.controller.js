@@ -6,7 +6,7 @@ const getAllCategory = async (req, res) => {
   try {
     const result = await category.find({});
     if (!result.length) {
-      handlerHttpError(res, "No hay categorias creadas", 404);
+      return handlerHttpError(res, "No hay categorias creadas", 404);
     }
 
     res.status(200).json(result);
@@ -38,14 +38,11 @@ const updateCategory = async (req, res) => {
 
     await category.findByIdAndUpdate({ _id: id }, req.body);
 
-    / console.log(result) */
     res.status(202).json({ message: "categoria actualizada" });
   } catch (error) {
-    console.error(error);
     handlerHttpError(res, "Error al actualizar o ya existe", 400);
   }
 };
-
 
 const deleteCategory = async (req, res) => {
   try {
@@ -55,8 +52,7 @@ const deleteCategory = async (req, res) => {
     const isExist = await category.findOne({ _id: id });
 
     if (!isExist) {
-      handlerHttpError(res, "Categoria no encontrada", 404);
-      return;
+      return handlerHttpError(res, "Categoria no encontrada", 404);
     }
 
     await category.deleteOne({ _id: id });
@@ -65,7 +61,6 @@ const deleteCategory = async (req, res) => {
       message: "categoria eliminada",
     });
   } catch (error) {
-    console.error(error);
     handlerHttpError(res, "Algo inesperado sucedio!", 400);
   }
 };

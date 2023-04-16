@@ -1,6 +1,6 @@
 const { matchedData } = require("express-validator");
 const { event } = require("../../models");
-const {sendPostNewInfo} = require('../suscription/sendEmail')
+const { sendPostNewInfo } = require("../suscription/sendEmail");
 const handlerHttpError = require("../../utils/handlerHttpError");
 const {
   validExtensionImage,
@@ -62,10 +62,9 @@ const createEvent = async (req, res) => {
     });
 
     await data.save();
-    await sendPostNewInfo({type: "event", info: data});
+    await sendPostNewInfo({ type: "event", info: data });
     res.status(201).json({ message: "Evento creado con éxito!" });
   } catch (error) {
-    console.error(error);
     handlerHttpError(
       res,
       "Evento no pudo crearse o tiene titulo duplicado",
@@ -139,7 +138,6 @@ const updateEventByid = async (req, res) => {
     );
     res.status(200).json({ message: "Evento actualizado" });
   } catch (error) {
-    console.error(error);
     handlerHttpError(res, "Verifica los campos requeridos", 404);
   }
 };

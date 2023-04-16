@@ -22,14 +22,7 @@ const validatorGetItems = [
 ];
 
 const validateUpdate = [
-  check("id").exists().notEmpty().isMongoId(),
-  check("fullname").exists().notEmpty().isString(),
-  check("email").exists().notEmpty().isEmail(),
-  check("phone").exists().notEmpty(),
-  check("area").exists().notEmpty(),
-  check("country").exists().notEmpty(),
-  check("filepath").exists().notEmpty(),
-  check("view").exists().notEmpty(),
+  check("view").exists().notEmpty().isBoolean(),
   (req, res, next) => {
     return validateResults(req, res, next);
   },

@@ -5,7 +5,7 @@ const showMessage = async (req, res) => {
   try {
     const data = await contact.find({});
     if (!data.length) {
-      handlerHttpError(res, "No tiene mensajes aún!", 404);
+      return handlerHttpError(res, "No tiene mensajes aún!", 404);
     }
     res.status(200).json(data);
   } catch (error) {

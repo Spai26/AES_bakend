@@ -23,6 +23,10 @@ const registerSpecialist = async (req, res) => {
     const { fullname, email, area, country, phone, filepath } =
       matchedData(req);
 
+    if (!validExtensionFile(filepath)) {
+      return handlerHttpError(res, "formato de archivo incorrecto", 404);
+    }
+
     const newSpecialist = new specialist({
       fullname: fullname,
       email: email,
@@ -48,25 +52,18 @@ const registerSpecialist = async (req, res) => {
     }
     res.status(201).json({ message: "Specialist registrado con éxito!" });
   } catch (error) {
-    console.error(error);
     handlerHttpError(res, "Specialist no pudo registrarse ", 404);
   }
 };
 
 const specialistUpdate = async (req, res) => {
   const { id } = req.params;
-  const { fullname, email, area, country, phone, filepath, view } = req.body;
+  const { view } = matchedData(req);
   try {
     const Specialist = await specialist.findOneAndUpdate(
       { _id: id },
       {
         $set: {
-          fullname: fullname,
-          email: email,
-          area: area,
-          country: country,
-          phone: phone,
-          filepath: filepath,
           view: view,
         },
       }

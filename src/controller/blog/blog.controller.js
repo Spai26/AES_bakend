@@ -1,6 +1,6 @@
 const { matchedData } = require("express-validator");
 const handlerHttpError = require("../../utils/handlerHttpError");
-const {sendPostNewInfo} = require('../suscription/sendEmail')
+const { sendPostNewInfo } = require("../suscription/sendEmail");
 const { blog } = require("../../models");
 const {
   validExtensionImage,
@@ -60,7 +60,7 @@ const setCreateBlog = async (req, res, next) => {
     });
 
     await data.save();
-    await sendPostNewInfo({type: "blog", info: data})
+    await sendPostNewInfo({ type: "blog", info: data });
     res.status(201).json({ message: "Blog creado!" });
   } catch (error) {
     handlerHttpError(res, "Blog no creado, titulo no valido.");
@@ -125,7 +125,6 @@ const updateBlogById = async (req, res) => {
     /*console.log(result) */
     res.status(200).json({ message: "blog actualizado!" });
   } catch (error) {
-    console.error(error);
     handlerHttpError(res, `No se pudo actualizar verifica los campos`, 400);
   }
 };

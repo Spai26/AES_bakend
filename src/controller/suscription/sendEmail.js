@@ -13,7 +13,7 @@ const addSuscriptiontoList = async ({email}) => {
         createContact.email = email
         createContact.listIds = [listId]
         await apiInstance.createContact(createContact)
-        console.log('API called successfully. Returned data: ' + JSON.stringify(createContact));
+       /*  console.log('API called successfully. Returned data: ' + JSON.stringify(createContact)); */
 
     } catch (error) {
         handlerHttpError(res, `ERROR_EN_CREAR_NUEVO_CONTACTO`, 400)
@@ -59,7 +59,8 @@ const createCampaign = async ({type, info}) => {
         const campaign = await EmailCampaignsApi.createEmailCampaign(emailCampaigns)
         return campaign.id
     } catch (error) {
-        console.error(error)
+        
+        handlerHttpError(res, `Origen: Campaign ${error}`)
     }
 }
 

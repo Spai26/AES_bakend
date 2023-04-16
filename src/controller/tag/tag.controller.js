@@ -41,7 +41,6 @@ const updateTag = async (req, res) => {
     /* console.log(result) */
     res.status(202).json({ message: "categoria actualizada" });
   } catch (error) {
-    console.error(error);
     handlerHttpError(res, "Error al actualizar o ya existe", 400);
   }
 };
@@ -57,8 +56,7 @@ const deleteTag = async (req, res) => {
     const isExist = await tag.findOne({ _id: id });
 
     if (!isExist) {
-      handlerHttpError(res, "Categoria no encontrada", 404);
-      return;
+      return handlerHttpError(res, "Categoria no encontrada", 404);
     }
 
     await tag.deleteOne({ _id: id });
@@ -67,7 +65,6 @@ const deleteTag = async (req, res) => {
       message: "categoria eliminada",
     });
   } catch (error) {
-    console.error(error);
     handlerHttpError(res, "Algo inesperado sucedio!", 400);
   }
 };

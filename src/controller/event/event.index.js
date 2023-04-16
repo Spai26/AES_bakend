@@ -10,7 +10,6 @@ const SearchOrAllBlogs = async (req, res) => {
   const { slug } = req.query;
   //busqueda por titulo
   if (search) {
-    console.log("search event =>");
     try {
       const result = await searchEvent(search);
       return res.status(200).send(result);
@@ -20,7 +19,6 @@ const SearchOrAllBlogs = async (req, res) => {
   }
   //busqueda por slug
   if (slug) {
-    console.log("slug event =>");
     try {
       const result = await searchBySlug(slug);
       return res.status(200).send(result);
@@ -29,7 +27,6 @@ const SearchOrAllBlogs = async (req, res) => {
     }
   }
 
-  console.log("all =>");
   try {
     const result = await eventController.getAllEvents();
 
@@ -39,7 +36,6 @@ const SearchOrAllBlogs = async (req, res) => {
 
     res.status(200).json(result);
   } catch (error) {
-    console.error(error);
     handlerHttpError(res, "ERROR_DIS_EVENT", 500);
   }
 };

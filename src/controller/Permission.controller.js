@@ -10,8 +10,7 @@ const getAllItems = async (req, res) => {
     const data = await permission.find({});
 
     if (!data.length) {
-      handlerHttpError(res, "No hay permisos creados", 501);
-      return;
+      return handlerHttpError(res, "No hay permisos creados", 501);
     }
 
     res.status(200).json(data);

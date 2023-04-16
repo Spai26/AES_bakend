@@ -13,7 +13,8 @@ const models = {
   institution: require("./nosql/Institution"),
   specialist: require("./nosql/Specialist"),
   contact: require("./nosql/Contact"),
-  countries: require('./nosql/Country')
+  countries: require('./nosql/Country'),
+  suscription: require('./nosql/Suscribers')
 };
 
 module.exports = models;

@@ -20,11 +20,11 @@ const deleteSuscriptionById = async(req, res) => {
 }
 
 const addSuscription = async (req, res) => {
-    const {fullname, email } = matchedData(req)
+    const {fullname, email } = req.body;
     try {
         const existentSuscription = await suscription.findOne({ email: email })
-        if (existentSuscription !== null) {
-            return handlerHttpError(res, "El correo ingresado ya esta suscrito")
+        if (existentSuscription) {
+         handlerHttpError(res, "El correo ingresado ya esta suscrito", 400)
         }else{
             let newSuscription = new suscription({
                 email
@@ -37,8 +37,8 @@ const addSuscription = async (req, res) => {
     
             if (!existentPerson) {
                 let newPerson = new person({
-                    fullname: fullname,
-                    email: email,
+                    fullname,
+                    email,
                     suscriber: true
                 });
                 await newPerson.save();

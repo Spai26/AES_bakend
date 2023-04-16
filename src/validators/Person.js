@@ -4,7 +4,7 @@ const validateResults = require("../utils/handlerValidator");
 //create Person
 const validatorRegisterPerson = [
   check("email").exists().notEmpty().isEmail(),
-  check("fullname").exists().notEmpty(),
+  check("fullname").optional().exists().notEmpty(),
   check('events').optional().exists().notEmpty().isMongoId(),
   (req, res, next) => {
     return validateResults(req, res, next);

@@ -4,7 +4,7 @@ const {ContactsApi, CreateContact, EmailCampaignsApi, TransactionalEmailsApi }= 
 const listId = 3
 
 
-const addSuscriptiontoList = async ({  email }) => {
+const addSuscriptiontoList = async ({email}) => {
 
     try {
         let apiInstance = await ContactsApi;
@@ -16,8 +16,7 @@ const addSuscriptiontoList = async ({  email }) => {
         console.log('API called successfully. Returned data: ' + JSON.stringify(createContact));
 
     } catch (error) {
-        console.error(error)
-        throw error;
+        handlerHttpError(res, `ERROR_EN_CREAR_NUEVO_CONTACTO`, 400)
     }
 
 }
@@ -26,7 +25,6 @@ const addSuscriptiontoList = async ({  email }) => {
 const sendPostNewInfo = async ({type, info}) => {
     try {
         let campaignId = await createCampaign({type: type, info: info})
-        console.log(campaignId)
         if (campaignId) {
             await EmailCampaignsApi.sendEmailCampaignNow(campaignId)
             console.log('API called successfully.');

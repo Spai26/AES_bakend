@@ -25,7 +25,7 @@ const addSuscription = async (req, res) => {
         const existentSuscription = await suscription.findOne({ email: email })
         if (existentSuscription) {
          handlerHttpError(res, "El correo ingresado ya esta suscrito", 400)
-        }else{
+        }
             let newSuscription = new suscription({
                 email
             })
@@ -47,7 +47,6 @@ const addSuscription = async (req, res) => {
                 await existentPerson.save()
             };
             return res.status(200).json({ message: "succesful" });
-        }
         
     } catch (error) {
         console.error(error)

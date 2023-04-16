@@ -1,5 +1,6 @@
 const { matchedData } = require("express-validator");
 const handlerHttpError = require("../../utils/handlerHttpError");
+const {sendPostNewInfo} = require('../suscription/sendEmail')
 const { blog } = require("../../models");
 const {
   validExtensionImage,
@@ -59,6 +60,7 @@ const setCreateBlog = async (req, res, next) => {
     });
 
     await data.save();
+    await sendPostNewInfo({type: "blog", info: data})
     res.status(201).json({ message: "Blog creado!" });
   } catch (error) {
     handlerHttpError(res, "Blog no creado, titulo no valido.");

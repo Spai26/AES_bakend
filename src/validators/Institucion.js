@@ -5,7 +5,7 @@ const validatorCreateInstitution = [
   check("organization").exists().notEmpty().isString(),
   check("email").exists().notEmpty().isEmail(),
   check("fullname").exists().notEmpty().isString(),
-  check("phone").exists().notEmpty().isMobilePhone(),
+  check("phone").exists().notEmpty().isString(),
   check("post").exists().notEmpty(),
   check("city").exists().notEmpty(),
   check("area").exists().notEmpty().isMongoId(),

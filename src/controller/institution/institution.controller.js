@@ -1,7 +1,6 @@
 const { matchedData } = require("express-validator");
 const { person } = require("../../models");
 const { institution } = require("../../models");
-const { area } = require("../../models");
 const handlerHttpError = require("../../utils/handlerHttpError");
 
 const getAllInstitution = async (req, res) => {
@@ -9,9 +8,11 @@ const getAllInstitution = async (req, res) => {
 
   if (email) {
     try {
-      const result = await institution.find({
-        email: { $regex: new RegExp(`${email}`, "i") },
-      });
+      const result = await institution
+        .find({
+          email: { $regex: new RegExp(`${email}`, "i") },
+        })
+        .populate("area", "name");
       res.status(200).json(result);
     } catch (err) {
       handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400);

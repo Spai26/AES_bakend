@@ -101,9 +101,22 @@ const resourceById = async (req, res) => {
     handlerHttpError(res, "id no valido", 404);
   }
 };
+
+const deteleFormResource = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await resources.findByIdAndDelete({ _id: id });
+
+    res.status(200).json({ message: "resource deleted!" });
+  } catch (error) {
+    handlerHttpError(res, "id no valido", 404);
+  }
+};
 module.exports = {
   showAllItems,
   uploadItems,
   updateResourceStatus,
   resourceById,
+  deteleFormResource,
 };

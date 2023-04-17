@@ -4,6 +4,7 @@ const {
   uploadItems,
   updateResourceStatus,
   resourceById,
+  deteleFormResource,
 } = require("../controller/Resources.controller");
 const {
   validateResourceCreate,
@@ -22,5 +23,7 @@ resourcesRoute.put(
   validateResourceUp,
   updateResourceStatus
 );
+
+resourcesRoute.delete("/gallery/:id", validateItem, deteleFormResource);
 
 module.exports = resourcesRoute;

@@ -5,18 +5,21 @@ const {
   updateResourceStatus,
   resourceById,
 } = require("../controller/Resources.controller");
-const validateResourceCreate = require("../validators/Resources");
+const {
+  validateResourceCreate,
+  validateResourceUp,
+} = require("../validators/Resources");
 const { validateItem } = require("../validators/general");
 const isAuth = require("../middleware/session");
 const resourcesRoute = Router();
 
 resourcesRoute.get("/gallery/show", showAllItems);
 resourcesRoute.get("/gallery/:id", resourceById);
-resourcesRoute.post("/gallery/upload", uploadItems);
+resourcesRoute.post("/gallery/upload", validateResourceCreate, uploadItems);
 resourcesRoute.put(
   "/gallery/:id",
   validateItem,
-  validateResourceCreate,
+  validateResourceUp,
   updateResourceStatus
 );
 

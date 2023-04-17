@@ -1,7 +1,10 @@
 const { matchedData } = require("express-validator");
 const { resources } = require("../models");
 const handlerHttpError = require("../utils/handlerHttpError");
-const { validResources } = require("../libs/validExtensionFiles");
+const {
+  validExtensionFile,
+  validExtensionImage,
+} = require("../libs/validExtensionFiles");
 
 const showAllItems = async (req, res) => {
   try {
@@ -47,7 +50,7 @@ const updateResourceStatus = async (req, res) => {
   try {
     const { id } = req.params;
     req = matchedData(req);
-    const { url, origin, title, subtitle, status } = req;
+    const { url, title, subtitle, status } = req;
 
     const isExist = await resources.findOne({ _id: id });
 
@@ -55,14 +58,10 @@ const updateResourceStatus = async (req, res) => {
       return handlerHttpError(res, "Este recurso no existe");
     }
 
-    if (!["videos", "images", "slider"].includes(origin)) {
-      return handlerHttpError(res, "Origen invalido", 404);
-    }
-
-    if (!validResources(url, origin)) {
+    if (!validExtensionImage(url)) {
       return handlerHttpError(
         res,
-        `error con el formato de ${origin}, no valido`,
+        `error con el formato de archivo, no valido`,
         404
       );
     }
@@ -74,7 +73,6 @@ const updateResourceStatus = async (req, res) => {
           title: title,
           subtitle: subtitle,
           status: status,
-          origin: origin,
           url: url,
         },
       },

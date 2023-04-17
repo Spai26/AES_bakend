@@ -2,7 +2,7 @@ const { check } = require("express-validator");
 const validateResults = require("../utils/handlerValidator");
 
 const validateResourceCreate = [
-  check("origin").isIn(["videos", "images", "slider"]).notEmpty(),
+  check("origin").isIn(["videos", "images", "slider"]).notEmpty().optional(),
   check("url").notEmpty().isString(),
   check("title")
     .optional()

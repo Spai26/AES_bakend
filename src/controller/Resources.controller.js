@@ -47,7 +47,7 @@ const updateResourceStatus = async (req, res) => {
   try {
     const { id } = req.params;
     req = matchedData(req);
-    const body = req;
+    const { url, origin, title, subtitle, status } = req;
 
     const isExist = await resources.findOne({ _id: id });
 
@@ -55,30 +55,33 @@ const updateResourceStatus = async (req, res) => {
       return handlerHttpError(res, "Este recurso no existe");
     }
 
-    if (!["videos", "images", "slider"].includes(body.origin)) {
+    if (!["videos", "images", "slider"].includes(origin)) {
       return handlerHttpError(res, "Origen invalido", 404);
     }
 
-    if (!validResources(body.url, body.origin)) {
+    if (!validResources(url, origin)) {
       return handlerHttpError(
         res,
-        `error con el formato de ${body.origin}, no valido`,
+        `error con el formato de ${origin}, no valido`,
         404
       );
     }
-    await resources.findByIdAndUpdate(
-      { _id: id },
+
+    const result = await resources.findByIdAndUpdate(
+      id,
       {
         $set: {
-          title: body.title,
-          subtitle: body.subtitle,
-          status: body.status,
-          origin: body.origin,
-          url: body.url,
+          title: title,
+          subtitle: subtitle,
+          status: status,
+          origin: origin,
+          url: url,
         },
-      }
+      },
+      { new: true }
     );
-    res.send({ succes: true });
+
+    res.send({ data: result });
   } catch (error) {
     handlerHttpError(
       res,

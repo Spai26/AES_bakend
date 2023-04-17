@@ -3,14 +3,13 @@ const validateResults = require("../utils/handlerValidator");
 
 const validateResourceCreate = [
   check("origin").isIn(["videos", "images", "slider"]).notEmpty(),
-  check("url").isURL().notEmpty(),
+  check("url").notEmpty().isString(),
   check("title")
     .optional()
     .isString()
     .exists()
     .isLength({ max: 40 })
-    .notEmpty()
-    .withMessage("Solo acepta maximo de 40 caracteres"),
+    .notEmpty(),
   check("subtitle")
     .optional()
     .isString()

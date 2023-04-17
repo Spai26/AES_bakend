@@ -61,6 +61,14 @@ const updateResourceStatus = async (req, res) => {
     if (!validExtensionImage(url)) {
       return handlerHttpError(
         res,
+        `error con el formato de archivo image, no valido`,
+        404
+      );
+    }
+
+    if (!validExtensionFile(url)) {
+      return handlerHttpError(
+        res,
         `error con el formato de archivo, no valido`,
         404
       );

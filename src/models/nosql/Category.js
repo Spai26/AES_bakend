@@ -7,10 +7,6 @@ const CategorySchema = new Schema(
       unique: true,
       required: true,
     },
-    origin: {
-      type: String,
-      enum: ["blog", "event"],
-    },
   },
   {
     versionKey: false,

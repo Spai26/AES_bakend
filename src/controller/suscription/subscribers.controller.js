@@ -64,7 +64,7 @@ const addSuscription = async (req, res) => {
 };
 
 const unsuscribeUser = async (req, res) => {
-  const { email } = req.body;
+  const { email } = req.query;
   const listIds = 3;
 
   try {

@@ -6,7 +6,7 @@ const {
   resourceById,
 } = require("../controller/Resources.controller");
 const validateResourceCreate = require("../validators/Resources");
-const validateItem = require("../validators/general");
+const { validateItem } = require("../validators/general");
 const isAuth = require("../middleware/session");
 const resourcesRoute = Router();
 

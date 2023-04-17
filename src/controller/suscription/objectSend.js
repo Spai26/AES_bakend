@@ -5,11 +5,11 @@ module.exports = {
         let emailCampaigns = await CreateEmailCampaign;
         emailCampaigns = {
             //tag: 'myTag',
-            sender: { name: 'AES', email: 'lautaro12heredia@gmail.com' },
+            sender: { name: 'AES', email: 'aescompany2023@gmail.com' },
             name: title,
             templateId: templateId,
             subject: title,
-            replyTo: 'lautaro12heredia@gmail.com',
+            replyTo: 'aescompany2023@gmail.com',
             // toField: '{{contact.FIRSTNAME}} {{contact.LASTNAME}}',
             recipients: { listIds: [listId] },
             mirrorActive: false,

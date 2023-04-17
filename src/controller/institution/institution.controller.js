@@ -59,7 +59,7 @@ const createInstitution = async (req, res) => {
                  area: areas
              })
              await result.save()
-             
+
              let personGet = await person.findOne({email: email})
              let institutionGet = await institution.findOne({email: email})
      

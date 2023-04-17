@@ -3,6 +3,8 @@ const { addSuscriptiontoList } = require("./sendEmail")
 const { ContactsApi } = require('../../config/sendinblue');
 const { suscription } = require("../../models")
 const { person } = require("../../models");
+const url = require('url');
+const axios = require('axios')
 
 const getAllSusribers = async (req, res) => {
     const suscribers = await suscription.find({})
@@ -62,7 +64,6 @@ const addSuscription = async (req, res) => {
 
 const unsuscribeUser = async (req, res) => {
     const {email} = req.body;
-    const listIds = 3; 
 
     try {
         if (!email) throw new Error("Debes ingresar un email a desuscribir"); 
@@ -88,8 +89,7 @@ const unsuscribeUser = async (req, res) => {
     } catch (error) {
         handlerHttpError(res, error.message, 400); 
     }
-};
-
+}
 
 module.exports = {
     addSuscription,

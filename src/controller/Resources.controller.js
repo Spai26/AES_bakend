@@ -66,14 +66,6 @@ const updateResourceStatus = async (req, res) => {
       );
     }
 
-    if (!validExtensionFile(url)) {
-      return handlerHttpError(
-        res,
-        `error con el formato de archivo, no valido`,
-        404
-      );
-    }
-
     const result = await resources.findByIdAndUpdate(
       id,
       {

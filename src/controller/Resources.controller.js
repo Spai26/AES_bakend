@@ -83,6 +83,7 @@ const updateResourceStatus = async (req, res) => {
 
     res.send({ data: result });
   } catch (error) {
+    console.error(error);
     handlerHttpError(
       res,
       `No se pudo actualizar, valida el max. de characters: ${error}`,

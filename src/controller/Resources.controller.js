@@ -4,6 +4,7 @@ const handlerHttpError = require("../utils/handlerHttpError");
 const {
   validExtensionFile,
   validExtensionImage,
+  validResources,
 } = require("../libs/validExtensionFiles");
 
 const showAllItems = async (req, res) => {
@@ -42,6 +43,7 @@ const uploadItems = async (req, res) => {
     await data.save();
     res.send({ succes: true, data: "upload" });
   } catch (error) {
+    console.error(error);
     handlerHttpError(res, "Archivo no subido", 500);
   }
 };

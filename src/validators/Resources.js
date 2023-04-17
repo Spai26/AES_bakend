@@ -16,7 +16,7 @@ const validateResourceCreate = [
     .exists()
     .isLength({ min: 20, max: 120 })
     .notEmpty(),
-  check("status").isBoolean().default(false),
+  check("status").isBoolean().default(false).optional(),
   (req, res, next) => {
     return validateResults(req, res, next);
   },

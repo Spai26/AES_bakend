@@ -2,6 +2,7 @@ const { matchedData } = require("express-validator");
 const { resources } = require("../models");
 const handlerHttpError = require("../utils/handlerHttpError");
 const { validResources } = require("../libs/validExtensionFiles");
+
 const showAllItems = async (req, res) => {
   try {
     const result = await resources.find({});
@@ -87,8 +88,20 @@ const updateResourceStatus = async (req, res) => {
   }
 };
 
+const resourceById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await resources.findOne({ _id: id });
+
+    res.status(200).json(result);
+  } catch (error) {
+    handlerHttpError(res, "id no valido", 404);
+  }
+};
 module.exports = {
   showAllItems,
   uploadItems,
   updateResourceStatus,
+  resourceById,
 };

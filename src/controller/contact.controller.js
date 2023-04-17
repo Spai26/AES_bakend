@@ -12,6 +12,17 @@ const showMessage = async (req, res) => {
     handlerHttpError(res, "Algo inesperado ha pasado", 404);
   }
 };
+
+const getContactbyId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await contact.findOne({ _id: id });
+
+    res.status(200).json(result);
+  } catch (error) {
+    handlerHttpError(res, "Error, id no valido o no existe.", 500);
+  }
+};
 const registerFrom = async (req, res) => {
   try {
     const { name, email, phone, title, content } = req.body;
@@ -34,4 +45,5 @@ const registerFrom = async (req, res) => {
 module.exports = {
   showMessage,
   registerFrom,
+  getContactbyId,
 };

@@ -106,7 +106,7 @@ const deteleFormResource = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const result = await resources.findByIdAndDelete({ _id: id });
+    const result = await resources.findOneAndDelete({ _id: id });
 
     res.status(200).json({ message: "resource deleted!" });
   } catch (error) {

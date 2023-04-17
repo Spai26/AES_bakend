@@ -32,15 +32,15 @@ const uploadItems = async (req, res) => {
       );
     }
 
-    const data = new resources({
+    const data = {
       title,
       subtitle,
       url,
       origin,
       status,
-    });
+    };
+    const result = await resources.create(data);
 
-    await data.save();
     res.send({ succes: true, data: "upload" });
   } catch (error) {
     console.error(error);

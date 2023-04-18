@@ -19,13 +19,7 @@ organizationRoutes.get(
   getAllOrganizationsForms
 );
 organizationRoutes.post("/", validatorCreateOrganization, createOrganization);
-organizationRoutes.get(
-  "/:id",
-  isAuth,
-  checkrol(["admin"]),
-  validatorOrgById,
-  getOrganizationById
-);
+organizationRoutes.get("/:id", validatorOrgById, getOrganizationById);
 organizationRoutes.put(
   "/:id",
   isAuth,

@@ -13,7 +13,7 @@ const {
 
 const institutionRoutes = Router();
 
-institutionRoutes.get("/", isAuth, checkrol(["admin"]), getAllInstitution);
+institutionRoutes.get("/", getAllInstitution);
 institutionRoutes.get("/:id", validatorGetInstitutionById, getInstitutionById);
 institutionRoutes.post("/", validatorCreateInstitution, createInstitution);
 institutionRoutes.put(

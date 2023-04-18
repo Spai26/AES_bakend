@@ -5,15 +5,9 @@ const { validatorAddEvent } = require("../validators/Event");
 const { validateItem } = require("../validators/general");
 const eventRouter = Router();
 
-eventRouter.get("/", isAuth, checkrol(["admin"]), searchOrAllEvents);
+eventRouter.get("/", searchOrAllEvents);
 eventRouter.post("/", validatorAddEvent, eventController.createEvent);
-eventRouter.get(
-  "/:id",
-  isAuth,
-  checkrol(["admin"]),
-  validateItem,
-  eventController.detailEventForid
-);
+eventRouter.get("/:id", validateItem, eventController.detailEventForid);
 eventRouter.put(
   "/:id",
   validateItem,

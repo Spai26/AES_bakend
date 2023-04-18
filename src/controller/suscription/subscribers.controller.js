@@ -23,6 +23,7 @@ const addSuscription = async (req, res) => {
   const { email } = req.body;
 
   try {
+    let existentPersonInDb = await person.findOne({email: email})
     let existentSuscription = await suscription.findOne({ email: email });
     if (!existentSuscription ) {
       let newSuscription = new suscription({
@@ -49,25 +50,32 @@ const addSuscription = async (req, res) => {
         let getPerson = await person.findOne({ email: email });
         getPerson.suscriber = true;
         await getPerson.save();
-        res.status(200).json({ message: "succesful_aggregate" });
+       return res.status(200).json({ message: "succesful_aggregate" });
       }
-    } else {
-      if(existentSuscription && existentSuscription.deleted === true){
+    }
+     if(existentSuscription && existentSuscription.deleted === true){
         existentSuscription.deleted = false
         await existentSuscription.save()
+
         let existentPerson = await person.findOne({ email: email });
         existentPerson.suscriber = true
         await existentPerson.save()
+
         let newSuscrip = await suscription.findOne({ email: email });
         let newEmail = newSuscrip.email;
+
         await addSuscriptiontoList({ email: newEmail });
-        res.status(200).json({message: `Succes_User_activate`})
-      }
+
+        return res.status(200).json({message: `Succes_User_activate`})
+      
     }
+      if(existentSuscription && existentSuscription.deleted === false && existentPersonInDb.suscriber === true){
+        return handlerHttpError(res, `USUARIO_YA_ESTA_SUSCRIPTO`, 400)
+      }
   } catch (error) {
     handlerHttpError(
       res,
-      "No pudo agregarse la suscripcion ",
+      "No pudo agregarse la suscripcion o el usuario esta registrado",
       400
     );
   }

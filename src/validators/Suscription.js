@@ -9,12 +9,4 @@ const validatorAddSuscription = [
     },
 ];
 
-const validatorUnsuscribe = [
-    check("email").exists().notEmpty(),
-
-    (req, res, next) => {
-        return validateResults(req, res, next);
-    },
-];
-
-module.exports = { validatorAddSuscription, validatorUnsuscribe }
+module.exports = { validatorAddSuscription}

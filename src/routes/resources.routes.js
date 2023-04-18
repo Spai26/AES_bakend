@@ -7,7 +7,7 @@ const {
   deteleFormResource,
 } = require("../controller/Resources.controller");
 const {
-  validateResourceCreate,
+  //validateResourceCreate,
   validateResourceUp,
 } = require("../validators/Resources");
 const { validateItem } = require("../validators/general");
@@ -16,7 +16,7 @@ const resourcesRoute = Router();
 
 resourcesRoute.get("/gallery/show", showAllItems);
 resourcesRoute.get("/gallery/:id", resourceById);
-resourcesRoute.post("/gallery/upload", validateResourceCreate, uploadItems);
+resourcesRoute.post("/gallery/upload", uploadItems);
 resourcesRoute.put(
   "/gallery/:id",
   validateItem,

@@ -8,7 +8,8 @@ suscriptionRoute.get("/", suscriptionController.getAllSusribers)
 
 suscriptionRoute.post("/", validatorAddSuscription, suscriptionController.addSuscription)
 
-suscriptionRoute.delete('/', validatorUnsuscribe, suscriptionController.unsuscribeUser)
-suscriptionRoute.delete('/:id', suscriptionController.deleteSuscriptionById)
+suscriptionRoute.delete('/delete',  suscriptionController.unsuscribeUser)
+
+// suscriptionRoute.delete('/:id', suscriptionController.deleteSuscriptionById)
 
 module.exports = suscriptionRoute

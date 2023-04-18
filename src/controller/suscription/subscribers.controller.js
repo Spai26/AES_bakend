@@ -9,22 +9,23 @@ const getAllSusribers = async (req, res) => {
   res.status(200).json(suscribers);
 };
 
-const deleteSuscriptionById = async (req, res) => {
-  const { id } = req.params;
-  try {
-    await suscription.findByIdAndDelete(id);
-    res.status(200).json({ message: `Eliminado success` });
-  } catch (err) {
-    handlerHttpError(res, `origen: delete_suscription ${err}`);
-  }
-};
+// const deleteSuscriptionById = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     await suscription.findByIdAndDelete(id);
+//     res.status(200).json({ message: `Eliminado success` });
+//   } catch (err) {
+//     handlerHttpError(res, `origen: delete_suscription ${err}`);
+//   }
+// };
 
 const addSuscription = async (req, res) => {
   const { email } = req.body;
 
   try {
+    let existentPersonInDb = await person.findOne({email: email})
     let existentSuscription = await suscription.findOne({ email: email });
-    if (!existentSuscription) {
+    if (!existentSuscription ) {
       let newSuscription = new suscription({
         email: email,
       });
@@ -49,23 +50,39 @@ const addSuscription = async (req, res) => {
         let getPerson = await person.findOne({ email: email });
         getPerson.suscriber = true;
         await getPerson.save();
-        res.status(200).json({ message: "succesful_aggregate" });
+       return res.status(200).json({ message: "succesful_aggregate" });
       }
-    } else {
-      handlerHttpError(res, "El correo ingresado ya esta suscrito", 400);
-    }
+    };
+     if(existentSuscription && existentSuscription.deleted === true){
+        existentSuscription.deleted = false
+        await existentSuscription.save()
+
+        let existentPerson = await person.findOne({ email: email });
+        existentPerson.suscriber = true
+        await existentPerson.save()
+
+        let newSuscrip = await suscription.findOne({ email: email });
+        let newEmail = newSuscrip.email;
+
+        await addSuscriptiontoList({ email: newEmail });
+
+        return res.status(200).json({message: `Succes_User_activate`})
+      
+    };
+      if(existentSuscription && existentSuscription.deleted === false && existentPersonInDb.suscriber === true){
+        return handlerHttpError(res, `USUARIO_YA_ESTA_SUSCRIPTO`, 400)
+      };
   } catch (error) {
     handlerHttpError(
       res,
-      "No pudo agregarse la suscripcion o el email ingresado ya existe",
+      "No pudo agregarse la suscripcion o el usuario esta registrado",
       400
     );
   }
 };
 
 const unsuscribeUser = async (req, res) => {
-  const { email } = req.body;
-  const listIds = 3;
+  const { email } = req.query;
 
   try {
     if (!email) {
@@ -79,7 +96,7 @@ const unsuscribeUser = async (req, res) => {
     let personUnsuscribe = await person.findOne({ email: email });
 
     if (!personUnsuscribe) {
-      handlerHttpError(
+     return handlerHttpError(
         res,
         "No se encontró una persona con ese correo electrónico",
         404
@@ -91,8 +108,15 @@ const unsuscribeUser = async (req, res) => {
 
     let deleteSuscriber = await suscription.findOne({ email: email });
 
-    if (deleteSuscriber) {
-      await deleteSuscriber.remove();
+    if (deleteSuscriber && deleteSuscriber.deleted === false) {
+      await suscription.findOneAndUpdate(
+        {email: email},
+        {
+          $set: {
+            deleted: true
+          }
+        }
+      );
 
       let apiInstance = ContactsApi;
       await apiInstance.deleteContact(email);
@@ -110,6 +134,6 @@ const unsuscribeUser = async (req, res) => {
 module.exports = {
   addSuscription,
   getAllSusribers,
-  deleteSuscriptionById,
+  // deleteSuscriptionById,
   unsuscribeUser,
 };

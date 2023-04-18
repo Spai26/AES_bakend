@@ -6,6 +6,9 @@ const {
   validatorCreateUser,
   validateUpdate,
 } = require("../validators/User");
+const isAuth = require("../middleware/sessionAuth");
+const checkrol = require("../middleware/roleAuth");
+
 const userRoute = Router();
 
 userRoute.get("/", isAuth, checkrol(["admin"]), userController.getAllItems);

@@ -11,6 +11,8 @@ const {
   validateResourceUp,
 } = require("../validators/Resources");
 const { validateItem } = require("../validators/general");
+const isAuth = require("../middleware/sessionAuth");
+const checkrol = require("../middleware/roleAuth");
 
 const resourcesRoute = Router();
 

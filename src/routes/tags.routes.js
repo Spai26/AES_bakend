@@ -2,6 +2,8 @@ const { Router } = require("express");
 const tagController = require("../controller/tag/tag.controller");
 const SearchOrAllTags = require("../controller/tag/tag.index");
 const { validateItem, valideteNameItem } = require("../validators/general");
+const isAuth = require("../middleware/sessionAuth");
+const checkrol = require("../middleware/roleAuth");
 const tagRoute = Router();
 
 tagRoute.get("/", SearchOrAllTags);

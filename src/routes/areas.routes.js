@@ -9,6 +9,9 @@ const {
   deleteAreaById,
 } = require("../controller/areas/areas.controller");
 
+const isAuth = require("../middleware/sessionAuth");
+const checkrol = require("../middleware/roleAuth");
+
 const areasRouter = Router();
 
 areasRouter.get("/", getAllAreas);

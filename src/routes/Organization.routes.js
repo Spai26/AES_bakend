@@ -10,6 +10,10 @@ const {
   getOrganizationById,
   putOrganizationById,
 } = require("../controller/organization/organization.controller");
+
+const isAuth = require("../middleware/sessionAuth");
+const checkrol = require("../middleware/roleAuth");
+
 const organizationRoutes = Router();
 
 organizationRoutes.get(

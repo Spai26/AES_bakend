@@ -1,6 +1,9 @@
 const { Router } = require("express");
 const categoryCtrl = require("../controller/category.controller");
 const { validateItem, valideteNameItem } = require("../validators/general");
+const isAuth = require("../middleware/sessionAuth");
+const checkrol = require("../middleware/roleAuth");
+
 const categoryRoutes = Router();
 
 categoryRoutes.get("/", categoryCtrl.getAllCategory);

@@ -11,6 +11,9 @@ const {
   putInstitutionById,
 } = require("../controller/institution/institution.controller");
 
+const isAuth = require("../middleware/sessionAuth");
+const checkrol = require("../middleware/roleAuth");
+
 const institutionRoutes = Router();
 
 institutionRoutes.get("/", getAllInstitution);

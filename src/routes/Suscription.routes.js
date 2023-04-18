@@ -3,6 +3,8 @@ const {
   validatorAddSuscription,
   validatorUnsuscribe,
 } = require("../validators/Suscription");
+const isAuth = require("../middleware/sessionAuth");
+const checkrol = require("../middleware/roleAuth");
 
 const suscriptionRoute = Router();
 const suscriptionController = require("../controller/suscription/subscribers.controller");

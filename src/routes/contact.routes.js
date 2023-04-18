@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const contactController = require("../controller/contact.controller");
 const { validatorContact } = require("../validators/contact");
+const isAuth = require("../middleware/sessionAuth");
+const checkrol = require("../middleware/roleAuth");
 const contactRoute = Router();
 
 contactRoute.get(

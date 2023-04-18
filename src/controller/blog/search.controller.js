@@ -16,6 +16,12 @@ const searchBySlug = async (slug) => {
   const result = await blog
     .findOne({ slug: slug })
     .populate("categories", "name");
+
+  if (result) {
+    result.count_view += 1;
+    await result.save();
+  }
+
   return result;
 };
 

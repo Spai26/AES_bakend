@@ -92,8 +92,7 @@ const detailEventForid = async (req, res) => {
       .populate("categories", "name")
       .populate("tags", "name");
 
-    await result.incrementViewCount();
-
+   
     res.status(200).json(result);
   } catch (error) {
     handlerHttpError(res, "Este evento no valido");

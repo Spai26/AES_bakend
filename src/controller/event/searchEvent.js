@@ -15,6 +15,9 @@ const searchBySlug = async (slug) => {
   const result = await event
     .findOne({ slug: slug })
     .populate("categories", "name");
+
+  await result.incrementViewCount();
+
   return result;
 };
 

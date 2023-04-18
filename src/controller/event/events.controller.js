@@ -155,7 +155,6 @@ const deleteEventByid = async (req, res) => {
 
     const result = await event.delete({ _id: id });
     res.status(200).json({ message: "Evento eliminado!" });
-    res.send({ data, id });
   } catch (error) {
     handlerHttpError(res, "Error al eliminar, intenta despues");
   }

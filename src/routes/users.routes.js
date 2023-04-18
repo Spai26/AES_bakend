@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const userController = require("../controller/user/user.controller");
-const isAuth = require("../middleware/session");
+
 const {
   validatorGetItems,
   validatorCreateUser,

@@ -2,11 +2,23 @@ require("dotenv").config();
 require("./database");
 const express = require("express");
 const morgan = require("morgan");
+const {
+  createRoles,
+  createCategories,
+  createTags,
+  createAreas,
+} = require("../libs/initialDocuments");
 
 const routes = require("../routes");
 const server = express();
 
 server.use(express.json());
+
+/* carga de data */
+createRoles();
+createCategories();
+createTags();
+createAreas();
 
 server.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");

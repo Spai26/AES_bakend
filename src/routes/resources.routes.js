@@ -11,7 +11,7 @@ const {
   validateResourceUp,
 } = require("../validators/Resources");
 const { validateItem } = require("../validators/general");
-const isAuth = require("../middleware/session");
+
 const resourcesRoute = Router();
 
 resourcesRoute.get("/gallery/show", showAllItems);

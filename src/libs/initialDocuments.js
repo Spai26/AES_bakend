@@ -1,0 +1,89 @@
+const { role } = require("../models");
+const { category } = require("../models");
+const { tag } = require("../models");
+const { area } = require("../models");
+const { user } = require("../models");
+/**
+ *!TODO: creacion de roles base
+ */
+const createRoles = async () => {
+  try {
+    const count = await role.estimatedDocumentCount();
+
+    if (count > 0) return;
+
+    const values = await Promise.all([
+      new role({ name: "superadmin" }).save(),
+      new role({ name: "admin" }).save(),
+      new role({ name: "editor" }).save(),
+    ]);
+    console.log(values);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/**
+ *!TODO: creacion de categorias base
+ */
+const createCategories = async () => {
+  try {
+    const count = await category.estimatedDocumentCount();
+    if (count > 0) return;
+    const values = await Promise.all([
+      new category({ name: "videos" }).save(),
+      new category({ name: "testimonios" }).save(),
+      new category({ name: "salud" }).save(),
+      new category({ name: "educación" }).save(),
+      new category({ name: "eventos" }).save(),
+    ]);
+    console.log(values);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/**
+ *!TODO: creacion de categorias base
+ */
+const createTags = async () => {
+  try {
+    const count = await tag.estimatedDocumentCount();
+    if (count > 0) return;
+    const values = await Promise.all([
+      new tag({ name: "causas" }).save(),
+      new tag({ name: "salud" }).save(),
+      new tag({ name: "niños" }).save(),
+      new tag({ name: "educación" }).save(),
+      new tag({ name: "noticias" }).save(),
+      new tag({ name: "eventos" }).save(),
+      new tag({ name: "instituciones" }).save(),
+      new tag({ name: "patrocinadores" }).save(),
+    ]);
+    console.log(values);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/**
+ *!TODO: creacion de categorias base
+ */
+
+const createAreas = async () => {
+  try {
+    const count = await area.estimatedDocumentCount();
+    if (count > 0) return;
+    const values = await Promise.all([
+      new area({ name: "Salud Mental" }).save(),
+      new area({ name: "Salud Física" }).save(),
+      new area({ name: "Salud Social" }).save(),
+      new area({ name: "Salud Ambiental" }).save(),
+    ]);
+    console.log(values);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+module.exports = { createRoles, createCategories, createTags, createAreas };

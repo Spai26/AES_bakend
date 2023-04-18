@@ -36,10 +36,6 @@ const BlogSchema = new Schema(
   }
 );
 
-BlogSchema.methods.incrementViewCount = async function () {
-  this.count_view += 1;
-  await this.save();
-};
 
 BlogSchema.statics.updateSlug = async function (id) {
   const blog = await this.findById(id);

@@ -80,7 +80,10 @@ const getDetailBlog = async (req, res) => {
       .populate("categories", "name")
       .populate("tags", "name");
 
-    await result.incrementViewCount();
+    result.count_view += 1;
+
+    await result.save();
+
     res.status(200).json(result);
   } catch (error) {
     handlerHttpError(res, "Blog no encontrado!", 404);

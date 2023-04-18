@@ -52,7 +52,7 @@ const addSuscription = async (req, res) => {
         await getPerson.save();
        return res.status(200).json({ message: "succesful_aggregate" });
       }
-    }
+    };
      if(existentSuscription && existentSuscription.deleted === true){
         existentSuscription.deleted = false
         await existentSuscription.save()
@@ -68,10 +68,10 @@ const addSuscription = async (req, res) => {
 
         return res.status(200).json({message: `Succes_User_activate`})
       
-    }
+    };
       if(existentSuscription && existentSuscription.deleted === false && existentPersonInDb.suscriber === true){
         return handlerHttpError(res, `USUARIO_YA_ESTA_SUSCRIPTO`, 400)
-      }
+      };
   } catch (error) {
     handlerHttpError(
       res,

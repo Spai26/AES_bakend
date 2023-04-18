@@ -13,11 +13,13 @@ const {
 
 const institutionRoutes = Router();
 
-institutionRoutes.get("/", getAllInstitution);
+institutionRoutes.get("/", isAuth, checkrol(["admin"]), getAllInstitution);
 institutionRoutes.get("/:id", validatorGetInstitutionById, getInstitutionById);
 institutionRoutes.post("/", validatorCreateInstitution, createInstitution);
 institutionRoutes.put(
   "/:id",
+  isAuth,
+  checkrol(["admin"]),
   validatorGetInstitutionById,
   validatorPutInstitution,
   putInstitutionById

@@ -24,6 +24,7 @@ blogRoute.post(
   validateNewBlog,
   blogController.setCreateBlog
 );
+
 blogRoute.put(
   "/:id",
   isAuth,
@@ -32,6 +33,7 @@ blogRoute.put(
   validateUpdate,
   blogController.updateBlogById
 );
+
 blogRoute.delete(
   "/:id",
   isAuth,

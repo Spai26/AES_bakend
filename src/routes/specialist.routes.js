@@ -8,9 +8,16 @@ const {
 
 const specialistRouter = Router();
 
-specialistRouter.get("/", Controller.addSpecialist);
+specialistRouter.get(
+  "/",
+  isAuth,
+  checkrol(["admin"]),
+  Controller.addSpecialist
+);
 specialistRouter.get(
   "/:id",
+  isAuth,
+  checkrol(["admin"]),
   validatorGetItems,
   Controller.detailSpecialistForid
 );
@@ -21,6 +28,8 @@ specialistRouter.post(
 );
 specialistRouter.put(
   "/:id",
+  isAuth,
+  checkrol(["admin"]),
   validatorGetItems,
   validateUpdate,
   Controller.specialistUpdate

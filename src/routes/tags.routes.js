@@ -5,8 +5,26 @@ const { validateItem, valideteNameItem } = require("../validators/general");
 const tagRoute = Router();
 
 tagRoute.get("/", SearchOrAllTags);
-tagRoute.post("/", valideteNameItem, tagController.newTag);
-tagRoute.put("/:id", validateItem, tagController.updateTag);
-tagRoute.delete("/:id", validateItem, tagController.deleteTag);
+tagRoute.post(
+  "/",
+  isAuth,
+  checkrol(["admin"]),
+  valideteNameItem,
+  tagController.newTag
+);
+tagRoute.put(
+  "/:id",
+  isAuth,
+  checkrol(["admin"]),
+  validateItem,
+  tagController.updateTag
+);
+tagRoute.delete(
+  "/:id",
+  isAuth,
+  checkrol(["admin"]),
+  validateItem,
+  tagController.deleteTag
+);
 
 module.exports = tagRoute;

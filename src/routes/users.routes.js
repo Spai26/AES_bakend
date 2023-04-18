@@ -8,15 +8,35 @@ const {
 } = require("../validators/User");
 const userRoute = Router();
 
-userRoute.get("/", userController.getAllItems);
-userRoute.post("/", validatorCreateUser, userController.createUser);
-userRoute.get("/:id", validatorGetItems, userController.detailUser);
+userRoute.get("/", isAuth, checkrol(["admin"]), userController.getAllItems);
+userRoute.post(
+  "/",
+  isAuth,
+  checkrol(["admin"]),
+  validatorCreateUser,
+  userController.createUser
+);
+userRoute.get(
+  "/:id",
+  isAuth,
+  checkrol(["admin"]),
+  validatorGetItems,
+  userController.detailUser
+);
 userRoute.put(
   "/:id",
+  isAuth,
+  checkrol(["admin"]),
   validatorGetItems,
   validateUpdate,
   userController.updateUser
 );
-userRoute.delete("/:id", validatorGetItems, userController.deleteUser);
+userRoute.delete(
+  "/:id",
+  isAuth,
+  checkrol(["admin"]),
+  validatorGetItems,
+  userController.deleteUser
+);
 
 module.exports = userRoute;

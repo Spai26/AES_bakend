@@ -1,15 +1,32 @@
-const { Router } = require('express')
-const { validatorAddSuscription, validatorUnsuscribe } = require("../validators/Suscription")
+const { Router } = require("express");
+const {
+  validatorAddSuscription,
+  validatorUnsuscribe,
+} = require("../validators/Suscription");
 
-const suscriptionRoute = Router()
-const suscriptionController = require("../controller/suscription/subscribers.controller")
+const suscriptionRoute = Router();
+const suscriptionController = require("../controller/suscription/subscribers.controller");
 
-suscriptionRoute.get("/", suscriptionController.getAllSusribers)
+suscriptionRoute.get(
+  "/",
+  isAuth,
+  checkrol(["admin"]),
+  suscriptionController.getAllSusribers
+);
 
-suscriptionRoute.post("/", validatorAddSuscription, suscriptionController.addSuscription)
+suscriptionRoute.post(
+  "/",
+  validatorAddSuscription,
+  suscriptionController.addSuscription
+);
 
-suscriptionRoute.delete('/delete',  suscriptionController.unsuscribeUser)
+suscriptionRoute.delete(
+  "/delete",
+  isAuth,
+  checkrol(["admin"]),
+  suscriptionController.unsuscribeUser
+);
 
 // suscriptionRoute.delete('/:id', suscriptionController.deleteSuscriptionById)
 
-module.exports = suscriptionRoute
+module.exports = suscriptionRoute;

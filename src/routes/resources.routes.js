@@ -19,11 +19,19 @@ resourcesRoute.get("/gallery/:id", resourceById);
 resourcesRoute.post("/gallery/upload", uploadItems);
 resourcesRoute.put(
   "/gallery/:id",
+  isAuth,
+  checkrol(["admin"]),
   validateItem,
   validateResourceUp,
   updateResourceStatus
 );
 
-resourcesRoute.delete("/gallery/:id", validateItem, deteleFormResource);
+resourcesRoute.delete(
+  "/gallery/:id",
+  isAuth,
+  checkrol(["admin"]),
+  validateItem,
+  deteleFormResource
+);
 
 module.exports = resourcesRoute;

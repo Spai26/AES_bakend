@@ -12,7 +12,19 @@ const {
 const areasRouter = Router();
 
 areasRouter.get("/", getAllAreas);
-areasRouter.post("/", validatorCreateArea, createNewArea);
-areasRouter.delete("/:id", validatorDeleteAreaById, deleteAreaById);
+areasRouter.post(
+  "/",
+  isAuth,
+  checkrol(["admin"]),
+  validatorCreateArea,
+  createNewArea
+);
+areasRouter.delete(
+  "/:id",
+  isAuth,
+  checkrol(["admin"]),
+  validatorDeleteAreaById,
+  deleteAreaById
+);
 
 module.exports = areasRouter;

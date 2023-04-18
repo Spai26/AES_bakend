@@ -12,11 +12,24 @@ const {
 } = require("../controller/organization/organization.controller");
 const organizationRoutes = Router();
 
-organizationRoutes.get("/", getAllOrganizationsForms);
+organizationRoutes.get(
+  "/",
+  isAuth,
+  checkrol(["admin"]),
+  getAllOrganizationsForms
+);
 organizationRoutes.post("/", validatorCreateOrganization, createOrganization);
-organizationRoutes.get("/:id", validatorOrgById, getOrganizationById);
+organizationRoutes.get(
+  "/:id",
+  isAuth,
+  checkrol(["admin"]),
+  validatorOrgById,
+  getOrganizationById
+);
 organizationRoutes.put(
   "/:id",
+  isAuth,
+  checkrol(["admin"]),
   validatorOrgById,
   validatorUpdateOrg,
   putOrganizationById

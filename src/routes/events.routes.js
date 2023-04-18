@@ -5,15 +5,27 @@ const { validatorAddEvent } = require("../validators/Event");
 const { validateItem } = require("../validators/general");
 const eventRouter = Router();
 
-eventRouter.get("/", searchOrAllEvents);
+eventRouter.get("/", isAuth, checkrol(["admin"]), searchOrAllEvents);
 eventRouter.post("/", validatorAddEvent, eventController.createEvent);
-eventRouter.get("/:id", validateItem, eventController.detailEventForid);
+eventRouter.get(
+  "/:id",
+  isAuth,
+  checkrol(["admin"]),
+  validateItem,
+  eventController.detailEventForid
+);
 eventRouter.put(
   "/:id",
   validateItem,
   validatorAddEvent,
   eventController.updateEventByid
 );
-eventRouter.delete("/:id", validateItem, eventController.deleteEventByid);
+eventRouter.delete(
+  "/:id",
+  isAuth,
+  checkrol(["admin"]),
+  validateItem,
+  eventController.deleteEventByid
+);
 
 module.exports = eventRouter;

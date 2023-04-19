@@ -12,8 +12,7 @@ const personRoute = Router();
 
 personRoute.get(
   "/",
-  isAuth,
-  checkrol(["admin"]),
+
   personsController.getAllPersons
 );
 personRoute.post(

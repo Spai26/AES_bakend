@@ -1,6 +1,6 @@
 const { matchedData } = require("express-validator");
 const { person } = require("../../models");
-
+const { event } = require("../../models");
 const handlerHttpError = require("../../utils/handlerHttpError");
 
 //listar todos los customers
@@ -22,12 +22,12 @@ const getAllPersons = async (req, res) => {
 const RegisterPerson = async (req, res) => {
   const dataPerson = matchedData(req, { location: ["body"] });
   const { email, fullname, events } = dataPerson;
-
+  let newPerson;
   const getPerson = await person.findOne({ email: email });
 
   try {
     if (!getPerson) {
-      const newPerson = new person({
+      newPerson = new person({
         email: email,
         fullname: fullname,
         events: [events],

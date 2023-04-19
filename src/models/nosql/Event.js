@@ -29,7 +29,7 @@ const EventSchema = new Schema(
         ref: "Tag",
       },
     ],
-    participants: [{ type: Schema.Types.ObjectId, ref: "Person" }],
+
     subscribers: [],
   },
   {

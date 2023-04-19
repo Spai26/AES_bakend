@@ -74,6 +74,7 @@ const createInstitution = async (req, res) => {
 
     res.status(201).json({ message: "Registro exitoso!" });
   } catch (err) {
+    console.error(err);
     handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400);
   }
 };

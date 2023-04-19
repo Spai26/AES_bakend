@@ -1,6 +1,5 @@
 const { matchedData } = require("express-validator");
 const { person } = require("../../models");
-const { event } = require("../../models");
 const handlerHttpError = require("../../utils/handlerHttpError");
 
 //listar todos los customers
@@ -20,8 +19,7 @@ const getAllPersons = async (req, res) => {
 };
 
 const RegisterPerson = async (req, res) => {
-  const dataPerson = matchedData(req, { location: ["body"] });
-  const { email, fullname, events } = dataPerson;
+  const { email, fullname, events } = matchedData(req);
   let newPerson;
   const getPerson = await person.findOne({ email: email });
 
@@ -35,11 +33,15 @@ const RegisterPerson = async (req, res) => {
 
       await newPerson.save();
       res.status(201).json({ message: "Persona, registrado con éxito!!" });
-    } else {
-      getPerson.events.push(events);
-      await getPerson.save();
-      res.status(201).json({ message: "Persona, registrado con éxito!!" });
     }
+
+    if (getPerson.events.includes(events)) {
+      return handlerHttpError(res, "Ya estas registrado para este evento", 404);
+    }
+
+    getPerson.events.push(events);
+    await getPerson.save();
+    res.status(201).json({ message: "Registro éxitoso!" });
   } catch (error) {
     handlerHttpError(res, "Persona, no pudo registrarse", 404);
   }

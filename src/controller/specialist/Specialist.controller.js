@@ -1,7 +1,7 @@
 const handlerHttpError = require("../../utils/handlerHttpError");
 const { specialist, person } = require("../../models");
 const { matchedData } = require("express-validator");
-
+const { validExtensionFile } = require("../../libs/validExtensionFiles");
 const addSpecialist = async (req, res) => {
   const info = await specialist.find({}).populate("area", "name");
   res.status(200).send(info);
@@ -20,11 +20,15 @@ const detailSpecialistForid = async (req, res) => {
 
 const registerSpecialist = async (req, res) => {
   try {
-    const { fullname, email, area, country, phone, filepath } =
-      matchedData(req);
+    const { fullname, email, area, country, phone } = req.body;
 
-    if (!validExtensionFile(filepath)) {
-      return handlerHttpError(res, "formato de archivo incorrecto", 404);
+    let filepath;
+
+    if (req.body.hasOwnProperty("files") && req.body.files !== null) {
+      if (!validExtensionFile(req.body.filepath)) {
+        return handlerHttpError(res, "formato de archivo incorrecto", 404);
+      }
+      files = req.body.filepath;
     }
 
     const newSpecialist = new specialist({
@@ -52,6 +56,7 @@ const registerSpecialist = async (req, res) => {
     }
     res.status(201).json({ message: "Specialist registrado con éxito!" });
   } catch (error) {
+    console.error(error);
     handlerHttpError(res, "Specialist no pudo registrarse ", 404);
   }
 };

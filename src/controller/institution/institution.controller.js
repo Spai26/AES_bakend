@@ -46,6 +46,7 @@ const createInstitution = async (req, res) => {
   const { organization, email, fullname, phone, post, city, area } =
     matchedData(req);
 
+  console.log(organization, email, fullname, phone, post, city, area);
   try {
     let findPerson = await person.findOne({ email: email });
 

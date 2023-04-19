@@ -17,8 +17,11 @@ const checkrol = require("../middleware/roleAuth");
 const institutionRoutes = Router();
 
 institutionRoutes.get("/", getAllInstitution);
+
 institutionRoutes.get("/:id", validatorGetInstitutionById, getInstitutionById);
+
 institutionRoutes.post("/", validatorCreateInstitution, createInstitution);
+
 institutionRoutes.put(
   "/:id",
   isAuth,

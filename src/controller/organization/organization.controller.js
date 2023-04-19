@@ -47,19 +47,19 @@ const createOrganization = async (req, res) => {
     social,
     area,
   } = matchedData(req);
-
+  let newPerson;
   //busco si existe
   let findPerson = await person.findOne({ email: email });
 
-  //si no encuentra crea
-  if (!findPerson) {
-    new person({
-      fullname: fullname,
-      email: email,
-    });
-  }
-
   try {
+    //si no encuentra crea
+    if (!findPerson) {
+      newPerson = new person({
+        fullname: fullname,
+        email: email,
+      });
+    }
+
     let newOrganization = new organization({
       organizations: organizations,
       work: work,
@@ -79,11 +79,10 @@ const createOrganization = async (req, res) => {
     findPerson.organization = [...findPerson.organization, resultOrg._id];
 
     //salvo cambios en person
-    let personResult = await findPerson.save();
+    await findPerson.save();
 
     res.status(201).json({ message: "Registro exitoso!" });
   } catch (err) {
-    console.error(err);
     handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400);
   }
 };

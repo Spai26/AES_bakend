@@ -32,7 +32,9 @@ const RegisterPerson = async (req, res) => {
       });
 
       await newPerson.save();
-      res.status(201).json({ message: "Persona, registrado con éxito!!" });
+      return res
+        .status(201)
+        .json({ message: "Persona, registrado con éxito!!" });
     }
 
     if (getPerson.events.includes(events)) {

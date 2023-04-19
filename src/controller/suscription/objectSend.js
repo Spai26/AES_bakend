@@ -4,13 +4,11 @@ module.exports = {
   newCampaign: async ({ templateId, title, params, listId }) => {
     let emailCampaigns = await CreateEmailCampaign;
     emailCampaigns = {
-      //tag: 'myTag',
       sender: { name: "AES", email: process.env.SMS_EMAIL },
       name: title,
       templateId: templateId,
       subject: title,
       replyTo: process.env.SMS_EMAIL,
-      // toField: '{{contact.FIRSTNAME}} {{contact.LASTNAME}}',
       recipients: { listIds: [listId] },
       mirrorActive: false,
       recurring: false,

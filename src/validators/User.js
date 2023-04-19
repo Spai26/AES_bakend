@@ -25,9 +25,10 @@ const validatorGetItems = [
 
 //actualizar si no es admin
 const validateUpdate = [
-  check("firstname").exists().notEmpty().isString(),
-  check("lastname").exists().notEmpty().isString(),
-  check("avatar").exists().notEmpty().isString(),
+  check("firstname").exists().notEmpty().isString().optional(),
+  check("lastname").exists().notEmpty().isString().optional(),
+  check("email").exists().isEmail().optional(),
+  check("avatar").exists().notEmpty().isString().optional(),
   check("status").optional().exists().isBoolean().default(true),
   (req, res, next) => {
     return validateResults(req, res, next);

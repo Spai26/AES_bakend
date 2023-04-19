@@ -19,8 +19,13 @@ const validResources = (url, origin) => {
     videos: (url) => {
       const parsedUrl = parseUrl(url, true);
       const domain = parsedUrl.hostname;
+      console.log(domain);
       // Es un video de YouTube
-      if (domain.includes("youtube.com") || domain.includes("youtu.be")) {
+      if (
+        domain.includes("youtube.com") ||
+        domain.includes("youtu.be") ||
+        domain.includes("youtube-nocookie.com")
+      ) {
         return true;
       } else if (domain.includes("vimeo.com")) {
         // Es un video de Vimeo

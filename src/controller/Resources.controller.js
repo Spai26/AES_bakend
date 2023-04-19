@@ -60,14 +60,6 @@ const updateResourceStatus = async (req, res) => {
       return handlerHttpError(res, "Este recurso no existe");
     }
 
-    if (!validExtensionImage(url)) {
-      return handlerHttpError(
-        res,
-        `error con el formato de archivo image, no valido`,
-        404
-      );
-    }
-
     const result = await resources.findByIdAndUpdate(
       id,
       {

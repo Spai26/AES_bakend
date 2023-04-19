@@ -24,8 +24,7 @@ suscriptionRoute.post(
 
 suscriptionRoute.delete(
   "/delete",
-  isAuth,
-  checkrol(["admin"]),
+
   suscriptionController.unsuscribeUser
 );
 

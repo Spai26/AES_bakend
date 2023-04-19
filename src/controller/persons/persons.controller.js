@@ -1,5 +1,6 @@
 const { matchedData } = require("express-validator");
 const { person } = require("../../models");
+
 const handlerHttpError = require("../../utils/handlerHttpError");
 
 //listar todos los customers
@@ -31,6 +32,7 @@ const RegisterPerson = async (req, res) => {
         fullname: fullname,
         events: [events],
       });
+
       await newPerson.save();
       res.status(201).json({ message: "Persona, registrado con éxito!!" });
     } else {

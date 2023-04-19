@@ -2,6 +2,7 @@ const { matchedData } = require("express-validator");
 const { event } = require("../../models");
 const { sendPostNewInfo } = require("../suscription/sendEmail");
 const handlerHttpError = require("../../utils/handlerHttpError");
+
 const {
   validExtensionImage,
   validExtensionFile,
@@ -92,7 +93,6 @@ const detailEventForid = async (req, res) => {
       .populate("categories", "name")
       .populate("tags", "name");
 
-   
     res.status(200).json(result);
   } catch (error) {
     handlerHttpError(res, "Este evento no valido");

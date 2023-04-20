@@ -1,9 +1,6 @@
 const { Router } = require("express");
 const RrsController = require("../controller/Resources.controller");
-const {
-  //validateResourceCreate,
-  validateResourceUp,
-} = require("../validators/Resources");
+const { validateResourceUp } = require("../validators/Resources");
 const { validateItem } = require("../validators/general");
 const isAuth = require("../middleware/sessionAuth");
 const checkrol = require("../middleware/roleAuth");

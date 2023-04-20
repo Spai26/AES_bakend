@@ -43,6 +43,10 @@ const validResources = (url, origin) => {
       const extract = url.split(".").pop().toLowerCase();
       return validExtimg.includes(extract);
     },
+    logos: (url) => {
+      const extract = url.split(".").pop().toLowerCase();
+      return validExtimg.includes(extract);
+    },
   };
   return formOrigin[origin](url);
 };

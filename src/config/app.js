@@ -7,6 +7,7 @@ const {
   createCategories,
   createTags,
   createAreas,
+  createSuperAdmin,
 } = require("../libs/initialDocuments");
 
 const routes = require("../routes");
@@ -19,6 +20,7 @@ createRoles();
 createCategories();
 createTags();
 createAreas();
+createSuperAdmin();
 
 server.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");

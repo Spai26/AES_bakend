@@ -4,5 +4,5 @@ const isAuth = require("../middleware/sessionAuth");
 const checkrol = require("../middleware/roleAuth");
 const roleRoute = Router();
 
-roleRoute.get("/", isAuth, checkrol(["admin"]), getAllItems);
+roleRoute.get("/", isAuth, checkrol(["superadmin", "admin"]), getAllItems);
 module.exports = roleRoute;

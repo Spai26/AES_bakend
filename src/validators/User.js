@@ -29,6 +29,7 @@ const validateUpdate = [
   check("lastname").exists().notEmpty().isString().optional(),
   check("email").exists().isEmail().optional(),
   check("avatar").exists().notEmpty().isString().optional(),
+  check("roles").exists().notEmpty().isMongoId().optional(),
   check("status").optional().exists().isBoolean().default(true),
   (req, res, next) => {
     return validateResults(req, res, next);

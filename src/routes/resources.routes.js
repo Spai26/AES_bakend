@@ -1,11 +1,5 @@
 const { Router } = require("express");
-const {
-  showAllItems,
-  uploadItems,
-  updateResourceStatus,
-  resourceById,
-  deteleFormResource,
-} = require("../controller/Resources.controller");
+const RrsController = require("../controller/Resources.controller");
 const {
   //validateResourceCreate,
   validateResourceUp,
@@ -16,24 +10,29 @@ const checkrol = require("../middleware/roleAuth");
 
 const resourcesRoute = Router();
 
-resourcesRoute.get("/gallery/show", showAllItems);
-resourcesRoute.get("/gallery/:id", resourceById);
-resourcesRoute.post("/gallery/upload", uploadItems);
+resourcesRoute.get("/gallery/show", RrsController.showAllItems);
+resourcesRoute.get("/gallery/:id", RrsController.resourceById);
+resourcesRoute.post(
+  "/gallery/upload",
+  isAuth,
+  checkrol(["superadmin", "admin", "editor"]),
+  RrsController.uploadItems
+);
 resourcesRoute.put(
   "/gallery/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin", "editor"]),
   validateItem,
   validateResourceUp,
-  updateResourceStatus
+  RrsController.updateResourceStatus
 );
 
 resourcesRoute.delete(
   "/gallery/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin"]),
   validateItem,
-  deteleFormResource
+  RrsController.deteleFormResource
 );
 
 module.exports = resourcesRoute;

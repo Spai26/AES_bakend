@@ -20,7 +20,7 @@ blogRoute.get("/:id", validateItem, blogController.getDetailBlog);
 blogRoute.post(
   "/",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin", "editor"]),
   validateNewBlog,
   blogController.setCreateBlog
 );
@@ -28,7 +28,7 @@ blogRoute.post(
 blogRoute.put(
   "/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin", "editor"]),
   validateItem,
   validateUpdate,
   blogController.updateBlogById
@@ -37,16 +37,12 @@ blogRoute.put(
 blogRoute.delete(
   "/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin"]),
   validateItem,
   blogController.deleteBlogLogic
 );
 
 blogRoute.post("/:id/addCategory", catWithinBlog.addCategoryToBlog);
-blogRoute.delete(
-  "/:id/deleteCategory",
-
-  catWithinBlog.deleteCategoryToBlog
-);
+blogRoute.delete("/:id/deleteCategory", catWithinBlog.deleteCategoryToBlog);
 
 module.exports = blogRoute;

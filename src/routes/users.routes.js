@@ -11,25 +11,30 @@ const checkrol = require("../middleware/roleAuth");
 
 const userRoute = Router();
 
-userRoute.get("/", isAuth, checkrol(["admin"]), userController.getAllItems);
+userRoute.get(
+  "/",
+  isAuth,
+  checkrol(["superadmin", "admin"]),
+  userController.getAllItems
+);
 userRoute.post(
   "/",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin"]),
   validatorCreateUser,
   userController.createUser
 );
 userRoute.get(
   "/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin", "editor"]),
   validatorGetItems,
   userController.detailUser
 );
 userRoute.put(
   "/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin", "editor"]),
   validatorGetItems,
   validateUpdate,
   userController.updateUser
@@ -37,7 +42,7 @@ userRoute.put(
 userRoute.delete(
   "/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin"]),
   validatorGetItems,
   userController.deleteUser
 );

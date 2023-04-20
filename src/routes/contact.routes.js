@@ -8,13 +8,13 @@ const contactRoute = Router();
 contactRoute.get(
   "/",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin", "editor"]),
   contactController.showMessage
 );
 contactRoute.get(
   "/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin", "editor"]),
   contactController.getContactbyId
 );
 contactRoute.post("/", validatorContact, contactController.registerFrom);

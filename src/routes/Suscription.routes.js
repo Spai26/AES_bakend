@@ -12,7 +12,7 @@ const suscriptionController = require("../controller/suscription/subscribers.con
 suscriptionRoute.get(
   "/",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin", "editor"]),
   suscriptionController.getAllSusribers
 );
 
@@ -22,12 +22,6 @@ suscriptionRoute.post(
   suscriptionController.addSuscription
 );
 
-suscriptionRoute.delete(
-  "/delete",
-
-  suscriptionController.unsuscribeUser
-);
-
-// suscriptionRoute.delete('/:id', suscriptionController.deleteSuscriptionById)
+suscriptionRoute.delete("/delete", suscriptionController.unsuscribeUser);
 
 module.exports = suscriptionRoute;

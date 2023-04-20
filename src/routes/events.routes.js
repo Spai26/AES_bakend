@@ -12,6 +12,8 @@ eventRouter.post("/", validatorAddEvent, eventController.createEvent);
 eventRouter.get("/:id", validateItem, eventController.detailEventForid);
 eventRouter.put(
   "/:id",
+  isAuth,
+  checkrol(["superadmin", "admin", "editor"]),
   validateItem,
   validatorAddEvent,
   eventController.updateEventByid
@@ -19,7 +21,7 @@ eventRouter.put(
 eventRouter.delete(
   "/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin"]),
   validateItem,
   eventController.deleteEventByid
 );

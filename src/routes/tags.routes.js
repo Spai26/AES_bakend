@@ -10,21 +10,21 @@ tagRoute.get("/", SearchOrAllTags);
 tagRoute.post(
   "/",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin", "editor"]),
   valideteNameItem,
   tagController.newTag
 );
 tagRoute.put(
   "/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin", "editor"]),
   validateItem,
   tagController.updateTag
 );
 tagRoute.delete(
   "/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin"]),
   validateItem,
   tagController.deleteTag
 );

@@ -18,14 +18,14 @@ areasRouter.get("/", getAllAreas);
 areasRouter.post(
   "/",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin", "editor"]),
   validatorCreateArea,
   createNewArea
 );
 areasRouter.delete(
   "/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin"]),
   validatorDeleteAreaById,
   deleteAreaById
 );

@@ -76,7 +76,8 @@ const detailUser = async (req, res) => {
  */
 const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { firstname, lastname, email, avatar, status } = matchedData(req);
+  const { firstname, lastname, email, avatar, status, roles } =
+    matchedData(req);
 
   try {
     const isExist = await user.findOne({
@@ -95,6 +96,7 @@ const updateUser = async (req, res) => {
           lastname: lastname,
           email: email,
           avatar: avatar,
+          roles: roles,
           status: status,
         },
       }
@@ -115,12 +117,14 @@ const deleteUser = async (req, res) => {
     const { id } = req;
     const isExist = await user.findOne({ _id: id });
 
+    console.log(isExist);
+
     if (!isExist) {
       handlerHttpError(res, "No se encontro el usuario", 400);
       return;
     }
 
-    await user.delete({ _id: id });
+    /* await user.delete({ _id: id }); */
 
     res.status(200).json({ message: "Usuario eliminado" });
   } catch (error) {

@@ -1,7 +1,7 @@
 const { check } = require("express-validator");
 const validateResults = require("../utils/handlerValidator");
 
-const validatorCreateOrganization = [
+const CreateOrganization = [
   check("organizations").exists().notEmpty().isString(),
   check("work").exists().notEmpty().isString(),
   check("email").exists().notEmpty().isEmail(),
@@ -16,14 +16,14 @@ const validatorCreateOrganization = [
   },
 ];
 
-const validatorOrgById = [
+const OrgById = [
   check("id").exists().notEmpty().isMongoId(),
   (req, res, next) => {
     return validateResults(req, res, next);
   },
 ];
 
-const validatorUpdateOrg = [
+const UpdateOrg = [
   check("view").exists().notEmpty().isBoolean(),
   (req, res, next) => {
     return validateResults(req, res, next);
@@ -31,7 +31,7 @@ const validatorUpdateOrg = [
 ];
 
 module.exports = {
-  validatorCreateOrganization,
-  validatorUpdateOrg,
-  validatorOrgById,
+  CreateOrganization,
+  UpdateOrg,
+  OrgById,
 };

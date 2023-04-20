@@ -20,15 +20,13 @@ const detailSpecialistForid = async (req, res) => {
 
 const registerSpecialist = async (req, res) => {
   try {
-    const { fullname, email, area, country, phone } = req.body;
+    req = matchedData(req);
+    const { fullname, email, area, country, phone, filepath } = req;
 
-    let filepath;
+    let files;
 
-    if (req.body.hasOwnProperty("files") && req.body.files !== null) {
-      if (!validExtensionFile(req.body.filepath)) {
-        return handlerHttpError(res, "formato de archivo incorrecto", 404);
-      }
-      files = req.body.filepath;
+    if (!validExtensionFile(filepath)) {
+      return handlerHttpError(res, "formato de archivo incorrecto", 404);
     }
 
     const newSpecialist = new specialist({

@@ -10,21 +10,21 @@ categoryRoutes.get("/", categoryCtrl.getAllCategory);
 categoryRoutes.post(
   "/",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin", "editor"]),
   valideteNameItem,
   categoryCtrl.newCategory
 );
 categoryRoutes.put(
   "/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin", "editor"]),
   validateItem,
   categoryCtrl.updateCategory
 );
 categoryRoutes.delete(
   "/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin"]),
   validateItem,
   categoryCtrl.deleteCategory
 );

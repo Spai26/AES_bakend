@@ -10,7 +10,7 @@ const ResourseSchema = new Schema(
     subtitle: { type: String },
     origin: {
       type: String,
-      enum: ["videos", "images", "slider"],
+      enum: ["videos", "images", "slider", "logos"],
     },
     url: { type: String },
     status: { type: Boolean, default: false },

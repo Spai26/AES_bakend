@@ -12,19 +12,18 @@ const specialistRouter = Router();
 specialistRouter.get("/", Controller.addSpecialist);
 specialistRouter.get(
   "/:id",
-
   validatorGetItems,
   Controller.detailSpecialistForid
 );
 specialistRouter.post(
   "/",
-
+  validatorRegisterSpecialist,
   Controller.registerSpecialist
 );
 specialistRouter.put(
   "/:id",
   isAuth,
-  checkrol(["admin"]),
+  checkrol(["superadmin", "admin", "editor"]),
   validatorGetItems,
   validateUpdate,
   Controller.specialistUpdate

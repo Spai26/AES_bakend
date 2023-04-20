@@ -6,7 +6,6 @@ const handlerHttpError = require("../utils/handlerHttpError");
 
 const authRoute = Router();
 
-/* authRoute.post("/register", RegisterUser); */
 authRoute.post("/login", validatorAuthLogin, AuthController.authLogin);
 authRoute.post("/logout", AuthController.logOut);
 authRoute.get("/dashboard", isAuth, (req, res) => {

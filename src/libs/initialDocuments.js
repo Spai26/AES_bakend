@@ -96,9 +96,10 @@ const createSuperAdmin = async () => {
       lastname: "usuario",
       email: process.env.SUPER_ADMIN_EMAIL,
       password: await user.encryptPassword(process.env.SUPER_ADMIN_PASS),
+      avatar: `https://res.cloudinary.com/dpisdt9i3/image/upload/v1681955070/icon-128x128_wphlbq.png`,
       roles: findRol._id,
     });
-    values.avatar = `https://ui-avatars.com/api/?name=${values.firstname}${values.lastname}`;
+
     await values.save();
     console.log(values);
   } catch (error) {

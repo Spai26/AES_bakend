@@ -86,4 +86,30 @@ const createAreas = async () => {
   }
 };
 
-module.exports = { createRoles, createCategories, createTags, createAreas };
+const createSuperAdmin = async () => {
+  try {
+    const count = await user.estimatedDocumentCount();
+    const findRol = await role.findOne({ name: "superadmin" });
+    if (count > 0) return;
+    const values = new user({
+      firstname: "Super",
+      lastname: "usuario",
+      email: process.env.SUPER_ADMIN_EMAIL,
+      password: await user.encryptPassword(process.env.SUPER_ADMIN_PASS),
+      roles: findRol._id,
+    });
+    values.avatar = `https://ui-avatars.com/api/?name=${values.firstname}${values.lastname}`;
+    await values.save();
+    console.log(values);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+module.exports = {
+  createRoles,
+  createCategories,
+  createTags,
+  createAreas,
+  createSuperAdmin,
+};

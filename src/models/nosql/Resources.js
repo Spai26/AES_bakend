@@ -6,9 +6,11 @@ const { Schema, model } = require("mongoose");
  */
 const ResourseSchema = new Schema(
   {
+    title: { type: String },
+    subtitle: { type: String },
     origin: {
       type: String,
-      enum: ["videos", "images", "slider"],
+      enum: ["videos", "images", "slider", "logos"],
     },
     url: { type: String },
     status: { type: Boolean, default: false },

@@ -2,6 +2,7 @@ const mongooseDelete = require("mongoose-delete");
 const { model, Schema, default: mongoose } = require("mongoose");
 var slug = require("mongoose-slug-generator");
 mongoose.plugin(slug);
+const mongooseDateFormat = require("mongoose-date-format");
 
 const EventSchema = new Schema(
   {
@@ -13,6 +14,7 @@ const EventSchema = new Schema(
     location: { type: String, require: true },
     short_description: { type: String, require: true },
     description: { type: String, require: true },
+    count_view: { type: Number, default: 0 },
     slug: { type: String, slug: "title" },
     status: { type: Boolean, require: false },
     categories: [
@@ -27,6 +29,7 @@ const EventSchema = new Schema(
         ref: "Tag",
       },
     ],
+
     subscribers: [],
   },
   {
@@ -34,6 +37,13 @@ const EventSchema = new Schema(
     timestamps: true,
   }
 );
+
+EventSchema.plugin(mongooseDateFormat);
+
+EventSchema.methods.incrementViewCount = async function () {
+  this.count_view += 1;
+  await this.save();
+};
 
 EventSchema.statics.updateSlug = async function (id) {
   const event = await this.findById(id);

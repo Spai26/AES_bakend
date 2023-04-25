@@ -1,10 +1,13 @@
 const { matchedData } = require("express-validator");
 const handlerHttpError = require("../../utils/handlerHttpError");
+const { sendPostNewInfo } = require("../suscription/sendEmail");
 const { blog } = require("../../models");
 const {
   validExtensionImage,
   validExtensionFile,
 } = require("../../libs/validExtensionFiles");
+
+const { clearText } = require("../../libs/validateTextFiltro");
 /**
  *!TODO: obtener la lista de blogs
  * ?no lleva trycatch por que hay otro punto de control blog.index
@@ -46,20 +49,20 @@ const setCreateBlog = async (req, res, next) => {
     }
 
     const data = new blog({
-      title,
+      title: title,
       image,
-      description,
+      description: description,
       categories,
-      short_description,
+      short_description: short_description,
       tags,
       status,
       files,
     });
 
     await data.save();
+    await sendPostNewInfo({ type: "blog", info: data });
     res.status(201).json({ message: "Blog creado!" });
   } catch (error) {
-    console.error(error);
     handlerHttpError(res, "Blog no creado, titulo no valido.");
   }
 };
@@ -76,6 +79,10 @@ const getDetailBlog = async (req, res) => {
       .findOne({ _id: id })
       .populate("categories", "name")
       .populate("tags", "name");
+
+    result.count_view += 1;
+
+    await result.save();
 
     res.status(200).json(result);
   } catch (error) {
@@ -121,7 +128,6 @@ const updateBlogById = async (req, res) => {
     /*console.log(result) */
     res.status(200).json({ message: "blog actualizado!" });
   } catch (error) {
-    console.error(error);
     handlerHttpError(res, `No se pudo actualizar verifica los campos`, 400);
   }
 };

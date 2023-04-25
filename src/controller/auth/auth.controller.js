@@ -11,8 +11,10 @@ const authLogin = async (req, res) => {
   const { email, password } = req;
 
   try {
-    const isExits = await user.findOne({ email: email });
-
+    const isExits = await user
+      .findOne({ email: email })
+      .populate("roles", "name");
+    console.log(isExits);
     if (!isExits) {
       return handlerHttpError(res, "Usuario o email no coincide", 404);
     }
@@ -32,7 +34,12 @@ const authLogin = async (req, res) => {
     res.cookie("login", token);
     res
       .status(202)
-      .json({ success: true, token, id: isExits._id, role: isExits.roles });
+      .json({
+        success: true,
+        token,
+        id: isExits._id,
+        role: isExits.roles.name,
+      });
   } catch (error) {
     handlerHttpError(res, "Datos incorrectos", 400);
   }

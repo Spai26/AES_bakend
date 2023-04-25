@@ -12,7 +12,7 @@ const createdToken = (user) => {
     { id: user._id, role: user.roles },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: "30d",
+      expiresIn: "2d",
     }
   );
   return token;

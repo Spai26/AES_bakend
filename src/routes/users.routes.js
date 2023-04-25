@@ -1,22 +1,50 @@
 const { Router } = require("express");
 const userController = require("../controller/user/user.controller");
-const isAuth = require("../middleware/session");
+
 const {
   validatorGetItems,
   validatorCreateUser,
   validateUpdate,
 } = require("../validators/User");
+const isAuth = require("../middleware/sessionAuth");
+const checkrol = require("../middleware/roleAuth");
+
 const userRoute = Router();
 
-userRoute.get("/", userController.getAllItems);
-userRoute.post("/", validatorCreateUser, userController.createUser);
-userRoute.get("/:id", validatorGetItems, userController.detailUser);
+userRoute.get(
+  "/",
+  isAuth,
+  checkrol(["superadmin", "admin"]),
+  userController.getAllItems
+);
+userRoute.post(
+  "/",
+  isAuth,
+  checkrol(["superadmin", "admin"]),
+  validatorCreateUser,
+  userController.createUser
+);
+userRoute.get(
+  "/:id",
+  isAuth,
+  checkrol(["superadmin", "admin", "editor"]),
+  validatorGetItems,
+  userController.detailUser
+);
 userRoute.put(
   "/:id",
+  isAuth,
+  checkrol(["superadmin", "admin", "editor"]),
   validatorGetItems,
   validateUpdate,
   userController.updateUser
 );
-userRoute.delete("/:id", validatorGetItems, userController.deleteUser);
+userRoute.delete(
+  "/:id",
+  isAuth,
+  checkrol(["superadmin", "admin"]),
+  validatorGetItems,
+  userController.deleteUser
+);
 
 module.exports = userRoute;

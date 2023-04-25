@@ -1,107 +1,115 @@
 const { matchedData } = require("express-validator");
 const { person } = require("../../models");
-const { organization } = require('../../models')
-const {area} = require('../../models')
+const { organization } = require("../../models");
 const handlerHttpError = require("../../utils/handlerHttpError");
 
 const getAllOrganizationsForms = async (req, res) => {
-  const {email} = req.query;
-  
-  try{
-    if(email){
-      const result = await organization.find({email: {$regex: new RegExp(`${email}`, 'i')}})
-      res.status(200).json(result)
-    }else{
-      const result = await organization.find({})
-      res.status(200).json(result)
-    }  
-  }catch(err){
-    handlerHttpError(res, `ERROR_OCURRIDO_AL_TRAER_LA_INFORMACION`, 400)
+  try {
+    const { email } = req.query;
+
+    if (email) {
+      const result = await organization
+        .find({
+          email: { $regex: email, $options: "i" },
+        })
+        .populate("area", "name");
+      res.status(200).json(result);
+    }
+    const result = await organization.find({}).populate("area", "name");
+    res.status(200).json(result);
+  } catch (err) {
+    handlerHttpError(res, `ERROR_OCURRIDO_AL_TRAER_LA_INFORMACION`, 400);
   }
-}
+};
+
+const getOrganizationById = async (req, res) => {
+  const { id } = req.params;
+  req = matchedData(req);
+
+  try {
+    const result = await organization.findById(id).populate("area", "name");
+
+    res.status(200).json(result);
+  } catch (err) {
+    handlerHttpError(res, `El formulario no existe o no es valido!`, 400);
+  }
+};
 
 const createOrganization = async (req, res) => {
-   const allDate = matchedData(req, {location: ['body']})
-   const {organizations, work, email, fullname, phone, post, assistants, city, social, view, areas} = allDate;
-   
-   try{
-    const getArea = await area.findOne({name: areas})
-    let getEmailPerson = await person.findOne({email: email})
-    const getOrganization = await organization.findOne({email: email})
+  const {
+    organizations,
+    work,
+    email,
+    fullname,
+    phone,
+    post,
+    assistants,
+    social,
+    area,
+  } = matchedData(req);
+  let newPerson;
+  //busco si existe
+  let findPerson = await person.findOne({ email: email });
 
-    if(!getArea){
-      res.status(404).json({message: `ERROR_DEBE_INGRESAR_UN_AREA_EXISTENTE_EN_LA_DB`})
+  try {
+    //si no encuentra crea
+    if (!findPerson) {
+      newPerson = new person({
+        fullname: fullname,
+        email: email,
+      });
     }
 
-    if(!getEmailPerson && !getOrganization){
-      let newOrganization = new organization({
-            organizations: organizations,
-            work: work,
-            email: email,
-            fullname: fullname,
-            phone: phone,
-            post: post,
-            assistants: assistants,
-            city: city,
-            social: social,
-            view: view,
-            area: areas,
-        }) 
-      await newOrganization.save()
+    let newOrganization = new organization({
+      organizations: organizations,
+      work: work,
+      email: email,
+      fullname: fullname,
+      phone: phone,
+      post: post,
+      assistants: assistants,
+      social: social,
+      area: area,
+    });
 
-        try{
-            let getId = await organization.findOne({email: email})
+    //guardo la org para usar el id
+    const resultOrg = await newOrganization.save();
 
-            let newPerson = new person({
-                 email: email,
-                 fullname: fullname            
-            })
-            await newPerson.save()
+    //asigno org al registro person
+    findPerson.organization = [...findPerson.organization, resultOrg._id];
 
-            let result = await person.findOne({email: email}) 
+    //salvo cambios en person
+    await findPerson.save();
 
-            result.organization = [...result.organization, getId._id]
-            await result.save()
-            res.status(201).json({message: `Todo ha salido con éxito`})
-        }catch(err){
-           handlerHttpError(res, `ERROR_OCURRIDO_AL_CREAR_PERSON`, 400) 
-        }
-      }else{
-        if(getEmailPerson && !getOrganization){
-            let newOrganization = new organization({
-                organizations: organizations,
-                work: work,
-                email: email,
-                fullname: fullname,
-                phone: phone,
-                post: post,
-                assistants: assistants,
-                city: city,
-                social: social,
-                view: view,
-                area: areas,
-            }) 
-          await newOrganization.save()
+    res.status(201).json({ message: "Registro exitoso!" });
+  } catch (err) {
+    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400);
+  }
+};
 
-          try{
-            let getId = await organization.findOne({email: email})
+const putOrganizationById = async (req, res) => {
+  const { id } = req.params;
+  const { view } = matchedData(req);
 
-            let result = await person.findOne({email: email})
-            
-            result.organization = [...result.organization, getId._id]
-            await result.save()
-            res.status(201).json({message: `Todo ha salido con éxito`})
-          }catch(err){
-            handlerHttpError(res, `ERROR_OCURRIDO_AL_GUARDAR_CAMBIOS_EN_PERSON`, 400)
-          }
-        }
-      }  
-   }catch(err){
-    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400)
-   }
-}
+  try {
+    await organization.findByIdAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          view: view,
+        },
+      }
+    );
+
+    res.status(200).json({ message: `Institucion actualizada` });
+  } catch (err) {
+    handlerHttpError(res, `ERROR_OCURRIDO_EN_PETICION`, 400);
+  }
+};
 
 module.exports = {
-    getAllOrganizationsForms,
-    createOrganization
-}
+  getAllOrganizationsForms,
+  createOrganization,
+  getOrganizationById,
+  putOrganizationById,
+};

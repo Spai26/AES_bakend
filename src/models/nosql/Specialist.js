@@ -3,18 +3,17 @@ const { model, Schema } = require("mongoose");
 
 const SpecialistSchema = new Schema(
   {
-    fullname: { type: String, unique: true, required: true },
-    email: { type: String, unique: true, require: true },
+    fullname: { type: String, required: true },
+    email: { type: String, require: true },
     phone: { type: String, require: true },
-    area: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Area",
-      },
-    ],
+    area: {
+      type: Schema.Types.ObjectId,
+      ref: "Area",
+    },
+
     country: { type: String },
     filepath: { type: String },
-    view: { type: Boolean, default: false }
+    view: { type: Boolean, default: false },
   },
   {
     versionKey: false,

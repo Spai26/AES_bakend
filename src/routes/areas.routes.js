@@ -1,18 +1,33 @@
-const { Router } = require('express')
+const { Router } = require("express");
 const {
-    validatorCreateArea,
-    validatorDeleteAreaById
-} = require('../validators/Areas')
+  validatorCreateArea,
+  validatorDeleteAreaById,
+} = require("../validators/Areas");
 const {
-    createNewArea,
-    getAllAreas,
-    deleteAreaById
-} = require('../controller/areas/areas.controller')
+  createNewArea,
+  getAllAreas,
+  deleteAreaById,
+} = require("../controller/areas/areas.controller");
 
-const areasRouter = Router()
+const isAuth = require("../middleware/sessionAuth");
+const checkrol = require("../middleware/roleAuth");
 
-areasRouter.get('/', getAllAreas)
-areasRouter.post('/', validatorCreateArea, createNewArea)
-areasRouter.delete('/', validatorDeleteAreaById, deleteAreaById)
+const areasRouter = Router();
 
-module.exports = areasRouter
+areasRouter.get("/", getAllAreas);
+areasRouter.post(
+  "/",
+  isAuth,
+  checkrol(["superadmin", "admin", "editor"]),
+  validatorCreateArea,
+  createNewArea
+);
+areasRouter.delete(
+  "/:id",
+  isAuth,
+  checkrol(["superadmin", "admin"]),
+  validatorDeleteAreaById,
+  deleteAreaById
+);
+
+module.exports = areasRouter;

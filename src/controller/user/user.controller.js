@@ -76,26 +76,32 @@ const detailUser = async (req, res) => {
  */
 const updateUser = async (req, res) => {
   const { id } = req.params;
-  let up = req.body;
+  const { firstname, lastname, email, avatar, status, roles } =
+    matchedData(req);
+
   try {
-    const isExist = await user.findOne({ _id: id });
+    const isExist = await user.findOne({
+      $or: [{ _id: id }, { email: email }],
+    });
 
     if (!isExist) {
       return handlerHttpError(res, "Exte usuario no existe", 400);
     }
 
-    await user.updateOne(
+    const result = await user.updateOne(
       { _id: id },
       {
         $set: {
-          firstname: up.firstname,
-          lastname: up.lastname,
-          avatar: up.avatar,
-          status: up.status,
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          avatar: avatar,
+          roles: roles,
+          status: status,
         },
       }
     );
-
+    console.log(result);
     res.status(202).json({ succes: true });
   } catch (error) {
     handlerHttpError(res, "Algo inesperado sucedio!", 500);
@@ -107,8 +113,9 @@ const updateUser = async (req, res) => {
  */
 const deleteUser = async (req, res) => {
   try {
+    const { id } = req.params;
     req = matchedData(req);
-    const { id } = req;
+
     const isExist = await user.findOne({ _id: id });
 
     if (!isExist) {

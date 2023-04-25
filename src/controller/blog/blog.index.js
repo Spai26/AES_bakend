@@ -11,7 +11,6 @@ const SearchOrAllBlogs = async (req, res) => {
 
   //busqueda por titulo
   if (search) {
-    console.log("search =>");
     try {
       const result = await searchBlog(search);
       return res.status(200).send(result);
@@ -22,7 +21,6 @@ const SearchOrAllBlogs = async (req, res) => {
 
   //Busqueda por slug
   if (slug) {
-    console.log("slug =>");
     try {
       const result = await searchBySlug(slug);
       return res.status(200).send(result);
@@ -31,7 +29,6 @@ const SearchOrAllBlogs = async (req, res) => {
     }
   }
 
-  console.log("all =>");
   try {
     const result = await blogController.getAllBlogs();
 
